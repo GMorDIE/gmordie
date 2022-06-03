@@ -13,13 +13,18 @@ export const ConnectModal = () => {
   const { connect, isConnectModalOpen, closeConnectModal } = useWallet();
 
   const connectTo = useCallback(
-    (walletKey: string) => () => connect(walletKey),
+    (walletKey: string) => () => {
+      // only best frens may connect !
+      if (walletKey !== "talisman")
+        window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+      else connect(walletKey);
+    },
     [connect]
   );
 
   const nonTalismanWalletKeys = useMemo(() => {
     if (!isWeb3Injected) return [];
-    // frens appear first
+    // pjs appears first
     const frenWalletKeys = ["polkadot-js"].filter(
       (key) => injectedWindow.injectedWeb3[key]
     );

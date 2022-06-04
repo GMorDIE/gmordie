@@ -45,5 +45,5 @@ export const useBalance = (address: string, tokenId: string) => {
       });
   }, [address, api, tokenIndex, blockNumber, tokenId]);
 
-  return { free, tokenDecimals: decimals };
+  return { free, decimals };
 };

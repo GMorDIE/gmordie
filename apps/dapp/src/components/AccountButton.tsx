@@ -9,6 +9,7 @@ import { useCallback } from "react";
 
 import { ReactComponent as TalismanIcon } from "../assets/talisman.svg";
 import { formatAddressShort } from "../lib/formatAddressShort";
+import { useIsMounted } from "../lib/useIsMounted";
 import { useWallet } from "../lib/WalletContext";
 import { Button } from "./Button";
 
@@ -16,10 +17,14 @@ const identiconStyle: CSSProperties = { cursor: "inherit" };
 
 export const ConnectButton = () => {
   const { openConnectModal } = useWallet();
+  const isMounted = useIsMounted();
 
   return (
     <Button
-      className="flex items-center p-0 py-0 px-4"
+      className={clsx(
+        "flex items-center p-0 py-0 px-4 opacity-0 transition-opacity",
+        isMounted && "opacity-100"
+      )}
       onClick={openConnectModal}
     >
       Connect
@@ -28,6 +33,7 @@ export const ConnectButton = () => {
 };
 
 export const AccountSwitchButton = () => {
+  const isMounted = useIsMounted();
   const {
     account: currentAccount,
     connectedAccounts,
@@ -65,7 +71,12 @@ export const AccountSwitchButton = () => {
     <Popover className="h-full">
       {({ close }) => (
         <>
-          <Popover.Button className="flex items-center p-2 py-0 px-3 h-full outline-none hover:bg-salmon-400">
+          <Popover.Button
+            className={clsx(
+              "flex items-center p-2 py-0 px-3 h-full outline-none hover:bg-salmon-400 opacity-0 transition-opacity",
+              isMounted && "opacity-100"
+            )}
+          >
             <Identicon
               value={currentAccount.address}
               size={32}

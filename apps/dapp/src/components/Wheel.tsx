@@ -19,7 +19,7 @@ export const Wheel = ({ className }: WheelProps) => {
   const [allowEndSpin, setAllowEndSpin] = useState(false);
   useEffect(() => {
     // disk must spin at least 1 second
-    const timeout = setTimeout(() => setAllowEndSpin(true), 500);
+    const timeout = setTimeout(() => setAllowEndSpin(true), 0);
 
     return () => clearTimeout(timeout);
   });

@@ -13,16 +13,20 @@ export const useBalance = (address: string, tokenId: string) => {
   const [free, setFree] = useState<string>();
 
   const tokenIndex = useMemo(
-    () => api.registry.chainTokens.indexOf(tokenId),
-    [api.registry.chainTokens, tokenId]
+    () => api?.registry.chainTokens.indexOf(tokenId),
+    [api, tokenId]
   );
 
   const decimals = useMemo(
-    () => api.registry.chainDecimals[tokenIndex],
-    [api.registry.chainDecimals, tokenIndex]
+    () =>
+      tokenIndex !== undefined
+        ? api?.registry.chainDecimals[tokenIndex]
+        : undefined,
+    [api, tokenIndex]
   );
 
   useEffect(() => {
+    if (!api) return;
     if (tokenIndex)
       api.query.tokens.accounts(address, tokenId).then((accountData) => {
         const { free } = api.createType<OrmlAccountData>(

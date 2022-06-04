@@ -11,6 +11,8 @@ const useGmTimeProvider = () => {
   const api = useApi();
 
   useEffect(() => {
+    if (!api) return;
+
     const unsubscribePromise = api.rpc.chain.subscribeNewHeads(
       (blockHeader) => {
         setBlockNumber(blockHeader.number.toNumber());
@@ -46,10 +48,10 @@ const useGmTimeProvider = () => {
   }, [blockNumber]);
 
   useEffect(() => {
-    api.query.currencies.currentTimePeriod().then((period) => {
+    api?.query.currencies.currentTimePeriod().then((period) => {
       setPeriod(period.toString());
     });
-  }, [blockNumber, api.query.currencies]);
+  }, [blockNumber, api]);
 
   return { blockNumber, day, timeRatio, canGm, canGn, time, period };
 };

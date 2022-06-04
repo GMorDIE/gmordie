@@ -14,6 +14,7 @@ export const BurnButton = () => {
   const api = useApi();
 
   const handleBurn = useCallback(async () => {
+    if (!api) return;
     try {
       setWorking(true);
       if (!account) {
@@ -84,13 +85,7 @@ export const BurnButton = () => {
       console.error(err);
       setWorking(false);
     }
-  }, [
-    account,
-    api.registry.chainDecimals,
-    api.registry.chainSS58,
-    api.tx.currencies,
-    openConnectModal,
-  ]);
+  }, [account, api, openConnectModal]);
 
   const label = useMemo(() => {
     if (!isReady) return null;

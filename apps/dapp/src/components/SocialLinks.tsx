@@ -24,9 +24,14 @@ const Link = ({
   </a>
 );
 
-export const SocialLinks = () => {
+export const SocialLinks = ({ show }: { show: boolean }) => {
   return (
-    <div className="flex gap-3 justify-center">
+    <div
+      className={clsx(
+        "flex gap-3 justify-center opacity-0 transition-opacity",
+        show && "opacity-100"
+      )}
+    >
       <Link
         href={THE_URL}
         className="opacity-50"

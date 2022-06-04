@@ -13,6 +13,7 @@ export const Balance = ({
   token: string;
 }) => {
   const { free, tokenDecimals } = useBalance(address, token);
+  if (tokenDecimals === undefined) return null;
   return (
     <div className="items-center text-base">
       {token === "FREN" && <FrenCoin className="inline h-10" />}

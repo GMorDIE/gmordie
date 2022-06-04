@@ -15,11 +15,11 @@ export const Balance = ({
   const { free, tokenDecimals } = useBalance(address, token);
   if (tokenDecimals === undefined) return null;
   return (
-    <div className="items-center text-base">
-      {token === "FREN" && <FrenCoin className="inline h-10" />}
-      {token === "GM" && <GmCoin className="inline h-10" />}
-      {token === "GN" && <GnCoin className="inline h-10" />}
-      <span className="text-xl font-bold" title={free}>
+    <div className=" text-base flex items-center gap-1">
+      {token === "FREN" && <FrenCoin className="inline h-6 w-6" />}
+      {token === "GM" && <GmCoin className="inline h-6 w-6" />}
+      {token === "GN" && <GnCoin className="inline h-6 w-6" />}
+      <span className="text-xl font-bold ml-1 mb-1" title={free}>
         {free ? `${formatBalance(free, tokenDecimals)}` : "-"}
       </span>{" "}
       <span className="font-normal text-zinc-300">{token}</span>
@@ -33,7 +33,7 @@ export const Balances = () => {
   if (!account) return null;
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col gap-1">
       <Balance address={account.address} token="FREN" />
       <Balance address={account.address} token="GM" />
       <Balance address={account.address} token="GN" />

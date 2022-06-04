@@ -140,7 +140,9 @@ export const AccountSwitchButton = () => {
 };
 
 export const AccountButton = () => {
-  const { account } = useWallet();
+  const { account, isReady } = useWallet();
+
+  if (!isReady) return null;
 
   return account ? <AccountSwitchButton /> : <ConnectButton />;
 };

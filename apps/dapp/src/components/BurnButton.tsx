@@ -1,6 +1,6 @@
 import { encodeAddress } from "@polkadot/keyring";
 import { BN } from "@polkadot/util";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { useApi } from "../lib/ApiContext";
@@ -10,7 +10,7 @@ import { ToastContent } from "./ToastContent";
 
 export const BurnButton = () => {
   const [working, setWorking] = useState(false);
-  const { account, openConnectModal } = useWallet();
+  const { account, openConnectModal, isReady } = useWallet();
   const api = useApi();
 
   const handleBurn = useCallback(async () => {
@@ -92,14 +92,19 @@ export const BurnButton = () => {
     openConnectModal,
   ]);
 
+  const label = useMemo(() => {
+    if (!isReady) return null;
+    return account ? "Sacrifice 10 $FREN" : "Connect Wallet";
+  }, [account, isReady]);
+
   return (
     <Button
-      className="my-4 w-full"
+      className="my-4 w-full h-10"
       color="salmon"
       onClick={handleBurn}
       disabled={working}
     >
-      {account ? "Sacrifice 10 $FREN" : "Connect Wallet"}
+      {label}
     </Button>
   );
 };

@@ -1,17 +1,15 @@
+import { useWallet } from "../lib/WalletContext";
+import { formatAddressShort } from "../lib/formatAddressShort";
+import { useIsMounted } from "../lib/useIsMounted";
+import { Button } from "./Button";
 import { Popover, Transition } from "@headlessui/react";
-import { LogoutIcon, PlusCircleIcon } from "@heroicons/react/solid";
+import { LogoutIcon } from "@heroicons/react/solid";
 import { InjectedAccount } from "@polkadot/extension-inject/types";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
 import { CSSProperties, useMemo } from "react";
 import { Fragment } from "react";
 import { useCallback } from "react";
-
-import { ReactComponent as TalismanIcon } from "../assets/talisman.svg";
-import { formatAddressShort } from "../lib/formatAddressShort";
-import { useIsMounted } from "../lib/useIsMounted";
-import { useWallet } from "../lib/WalletContext";
-import { Button } from "./Button";
 
 const identiconStyle: CSSProperties = { cursor: "inherit" };
 
@@ -38,7 +36,6 @@ export const AccountSwitchButton = () => {
     account: currentAccount,
     connectedAccounts,
     select,
-    openConnectModal,
     disconnect,
   } = useWallet();
 
@@ -115,11 +112,6 @@ export const AccountSwitchButton = () => {
                   </div>
                   <div className={clsx("flex overflow-hidden flex-col grow")}>
                     <div className="overflow-hidden max-w-full text-ellipsis whitespace-nowrap flex items-center">
-                      <div className="flex flex-col justify-center">
-                        {wallet === "talisman" && (
-                          <TalismanIcon className="w-4 h-4 inline mr-1" />
-                        )}
-                      </div>
                       <div className="grow overflow-hidden max-w-full text-ellipsis whitespace-nowrap ">
                         {account.name}
                       </div>
@@ -130,12 +122,6 @@ export const AccountSwitchButton = () => {
                   </div>
                 </button>
               ))}
-              <button
-                onClick={openConnectModal}
-                className="flex overflow-hidden gap-3 items-center p-3 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base"
-              >
-                <PlusCircleIcon className="h-8 text-zinc-300" /> Add wallet
-              </button>
               <button
                 onClick={disconnect}
                 className="flex overflow-hidden gap-3 items-center p-3 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base"

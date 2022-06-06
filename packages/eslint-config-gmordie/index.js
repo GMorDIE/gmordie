@@ -18,11 +18,8 @@ module.exports = {
     "plugin:jsx-a11y/recommended",
     "prettier",
   ],
-  plugins: ["simple-import-sort", "import"],
-  rules: {
-    "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error",
-  },
+  plugins: ["import"],
+
   // typescript specifics
   overrides: [
     {
@@ -36,11 +33,7 @@ module.exports = {
         "prettier",
       ],
       parser: "@typescript-eslint/parser",
-      plugins: ["simple-import-sort", "import"],
-      rules: {
-        "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error",
-      },
+      plugins: ["import"],
     },
   ],
 };

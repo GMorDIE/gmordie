@@ -11,9 +11,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "7.30.0",
-    "eslint-plugin-react-hooks": "^4.5.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
-    "eslint-plugin-tailwindcss": "^3.5.0"
+    "eslint-plugin-react-hooks": "^4.5.0"
   },
   "scripts": {
     "clean": "rm -rf node_modules"

@@ -1,5 +1,9 @@
+import { useWallet } from "../lib/WalletContext";
+import { formatAddressShort } from "../lib/formatAddressShort";
+import { useIsMounted } from "../lib/useIsMounted";
+import { Button } from "./Button";
 import { Popover, Transition } from "@headlessui/react";
-import { LogoutIcon, PlusCircleIcon } from "@heroicons/react/solid";
+import { LogoutIcon } from "@heroicons/react/solid";
 import { InjectedAccount } from "@polkadot/extension-inject/types";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
@@ -7,19 +11,18 @@ import { CSSProperties, useMemo } from "react";
 import { Fragment } from "react";
 import { useCallback } from "react";
 
-import { ReactComponent as TalismanIcon } from "../assets/talisman.svg";
-import { formatAddressShort } from "../lib/formatAddressShort";
-import { useWallet } from "../lib/WalletContext";
-import { Button } from "./Button";
-
 const identiconStyle: CSSProperties = { cursor: "inherit" };
 
 export const ConnectButton = () => {
   const { openConnectModal } = useWallet();
+  const isMounted = useIsMounted();
 
   return (
     <Button
-      className="flex items-center p-0 py-0 px-4"
+      className={clsx(
+        "flex items-center p-0 py-0 px-4 opacity-0 transition-opacity",
+        isMounted && "opacity-100"
+      )}
       onClick={openConnectModal}
     >
       Connect
@@ -27,12 +30,31 @@ export const ConnectButton = () => {
   );
 };
 
+const AccountIcon = ({ account }: { account: InjectedAccount }) => {
+  const acc = account as InjectedAccount & { avatar?: string };
+  return acc?.avatar ? (
+    <img
+      width={32}
+      height={32}
+      src={acc.avatar}
+      alt={acc.name ?? acc.address}
+    />
+  ) : (
+    <Identicon
+      value={acc.address}
+      size={32}
+      theme="polkadot"
+      style={identiconStyle}
+    />
+  );
+};
+
 export const AccountSwitchButton = () => {
+  const isMounted = useIsMounted();
   const {
     account: currentAccount,
     connectedAccounts,
     select,
-    openConnectModal,
     disconnect,
   } = useWallet();
 
@@ -65,13 +87,13 @@ export const AccountSwitchButton = () => {
     <Popover className="h-full">
       {({ close }) => (
         <>
-          <Popover.Button className="flex items-center p-2 py-0 px-3 h-full outline-none hover:bg-salmon-400">
-            <Identicon
-              value={currentAccount.address}
-              size={32}
-              theme="polkadot"
-              style={identiconStyle}
-            />
+          <Popover.Button
+            className={clsx(
+              "flex items-center p-2 py-0 px-3 h-full outline-none hover:bg-salmon-400 opacity-0 transition-opacity",
+              isMounted && "opacity-100"
+            )}
+          >
+            <AccountIcon account={currentAccount} />
           </Popover.Button>
           <Transition
             as={Fragment}
@@ -94,21 +116,11 @@ export const AccountSwitchButton = () => {
                   )}
                   onClick={handleSelectAccount(account, close)}
                 >
-                  <div className="flex flex-col justify-center relative">
-                    <Identicon
-                      value={account.address}
-                      size={32}
-                      theme="polkadot"
-                      style={identiconStyle}
-                    />
+                  <div className="flex flex-col justify-center relative min-w-fit">
+                    <AccountIcon account={account} />
                   </div>
                   <div className={clsx("flex overflow-hidden flex-col grow")}>
                     <div className="overflow-hidden max-w-full text-ellipsis whitespace-nowrap flex items-center">
-                      <div className="flex flex-col justify-center">
-                        {wallet === "talisman" && (
-                          <TalismanIcon className="w-4 h-4 inline mr-1" />
-                        )}
-                      </div>
                       <div className="grow overflow-hidden max-w-full text-ellipsis whitespace-nowrap ">
                         {account.name}
                       </div>
@@ -119,12 +131,6 @@ export const AccountSwitchButton = () => {
                   </div>
                 </button>
               ))}
-              <button
-                onClick={openConnectModal}
-                className="flex overflow-hidden gap-3 items-center p-3 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base"
-              >
-                <PlusCircleIcon className="h-8 text-zinc-300" /> Add wallet
-              </button>
               <button
                 onClick={disconnect}
                 className="flex overflow-hidden gap-3 items-center p-3 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base"
@@ -140,7 +146,9 @@ export const AccountSwitchButton = () => {
 };
 
 export const AccountButton = () => {
-  const { account } = useWallet();
+  const { account, isReady } = useWallet();
+
+  if (!isReady) return null;
 
   return account ? <AccountSwitchButton /> : <ConnectButton />;
 };

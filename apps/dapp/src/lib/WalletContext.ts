@@ -4,7 +4,7 @@ import {
   InjectedAccount,
   InjectedWindow,
 } from "@polkadot/extension-inject/types";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "react-use";
 
 import { useApi } from "./ApiContext";
@@ -46,16 +46,16 @@ const useWalletProvider = () => {
     close: closeConnectModal,
   } = useOpenClose();
 
-  const api = useApi();
-
   const [enabledWallets, setEnabledWallets] =
     useState<Record<string, Injected>>();
 
   const [connectedAccounts = {}, setConnectedAccounts] =
     useState<Record<string, InjectedAccount[]>>();
 
+  // assign signer account to api
+  const api = useApi();
   useEffect(() => {
-    if (!enabledWallets || !signerAccount) return;
+    if (!enabledWallets || !signerAccount || !api) return;
     const injectedWallet = enabledWallets[signerAccount.walletKey];
     if (!injectedWallet) clearSignerAccount();
     else api.setSigner(injectedWallet.signer);
@@ -107,14 +107,18 @@ const useWalletProvider = () => {
     [closeConnectModal, setConnectedWallets, setSignerAccount]
   );
 
+  const [isReady, setIsReady] = useState(false);
+  const initialize = useCallback(async () => {
+    if (isReady || !api) return;
+    if (connectedWallets.length)
+      await Promise.all(connectedWallets.map(connect));
+    setIsReady(true);
+  }, [api, connect, connectedWallets, isReady]);
+
   // auto connect (only once)
-  const refInit = useRef(false);
   useEffect(() => {
-    if (!refInit.current && connectedWallets.length) {
-      refInit.current = true;
-      connectedWallets.forEach(connect);
-    }
-  }, [connect, connectedWallets, enabledWallets]);
+    initialize();
+  }, [initialize]);
 
   // maintain connected accounts object
   useEffect(() => {
@@ -167,6 +171,7 @@ const useWalletProvider = () => {
     isConnectModalOpen,
     closeConnectModal,
     openConnectModal,
+    isReady,
   };
 };
 

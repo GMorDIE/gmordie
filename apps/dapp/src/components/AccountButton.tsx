@@ -30,6 +30,25 @@ export const ConnectButton = () => {
   );
 };
 
+const AccountIcon = ({ account }: { account: InjectedAccount }) => {
+  const acc = account as InjectedAccount & { avatar?: string };
+  return acc?.avatar ? (
+    <img
+      width={32}
+      height={32}
+      src={acc.avatar}
+      alt={acc.name ?? acc.address}
+    />
+  ) : (
+    <Identicon
+      value={acc.address}
+      size={32}
+      theme="polkadot"
+      style={identiconStyle}
+    />
+  );
+};
+
 export const AccountSwitchButton = () => {
   const isMounted = useIsMounted();
   const {
@@ -74,12 +93,7 @@ export const AccountSwitchButton = () => {
               isMounted && "opacity-100"
             )}
           >
-            <Identicon
-              value={currentAccount.address}
-              size={32}
-              theme="polkadot"
-              style={identiconStyle}
-            />
+            <AccountIcon account={currentAccount} />
           </Popover.Button>
           <Transition
             as={Fragment}
@@ -102,13 +116,8 @@ export const AccountSwitchButton = () => {
                   )}
                   onClick={handleSelectAccount(account, close)}
                 >
-                  <div className="flex flex-col justify-center relative">
-                    <Identicon
-                      value={account.address}
-                      size={32}
-                      theme="polkadot"
-                      style={identiconStyle}
-                    />
+                  <div className="flex flex-col justify-center relative min-w-fit">
+                    <AccountIcon account={account} />
                   </div>
                   <div className={clsx("flex overflow-hidden flex-col grow")}>
                     <div className="overflow-hidden max-w-full text-ellipsis whitespace-nowrap flex items-center">

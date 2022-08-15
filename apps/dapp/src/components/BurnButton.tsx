@@ -22,7 +22,7 @@ export const BurnButton = () => {
         const frenDecimals = api.registry.chainDecimals[0];
 
         // always burn 10
-        const tokenAmount = new BN("9");
+        const tokenAmount = new BN("10");
         const tokenDecimals = new BN(frenDecimals);
         const base = new BN("10");
 

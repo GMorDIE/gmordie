@@ -67,8 +67,7 @@ const useWalletProvider = () => {
       else {
         const { address } = account;
         const [walletKey] =
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          Object.entries(connectedAccounts ?? {}).find(([_, accounts]) =>
+          Object.entries(connectedAccounts ?? {}).find(([, accounts]) =>
             accounts.includes(account)
           ) ?? [];
         if (!walletKey) clearSignerAccount();
@@ -124,7 +123,7 @@ const useWalletProvider = () => {
   useEffect(() => {
     if (!enabledWallets) return;
 
-    // remove accounts from wallets that are not enbaled
+    // remove accounts from wallets that are not enabled
     const validKeys = Object.keys(enabledWallets);
     setConnectedAccounts((prev = {}) => {
       for (const key of Object.keys(prev))

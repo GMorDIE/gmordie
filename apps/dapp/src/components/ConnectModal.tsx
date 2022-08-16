@@ -7,6 +7,7 @@ import { ReactComponent as TalismanLogo } from "../assets/talisman-white.svg";
 import { useWallet } from "../lib/WalletContext";
 import { Button } from "./Button";
 
+const ELON_MUSK_WALLET_KEY = "elon-musk-wallet"
 const injectedWindow = window as Window & InjectedWindow;
 
 export const ConnectModal = () => {
@@ -14,8 +15,7 @@ export const ConnectModal = () => {
 
   const connectTo = useCallback(
     (walletKey: string) => () => {
-      // only best frens may connect !
-      if (walletKey !== "talisman")
+      if (walletKey === ELON_MUSK_WALLET_KEY)
         window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
       else connect(walletKey);
     },
@@ -84,6 +84,13 @@ export const ConnectModal = () => {
                       😢 {key}
                     </Button>
                   ))}
+                  <Button
+                    key={ELON_MUSK_WALLET_KEY}
+                    onClick={connectTo(ELON_MUSK_WALLET_KEY)}
+                    className="h-12 text-xl normal-case  flex items-center justify-center gap-2 px-3 "
+                  >
+                    ✨ Elon Musk wallet
+                  </Button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

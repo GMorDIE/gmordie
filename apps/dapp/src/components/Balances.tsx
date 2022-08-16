@@ -1,9 +1,9 @@
 import { ReactComponent as FrenCoin } from "../assets/fren-coin.svg";
 import { ReactComponent as GmCoin } from "../assets/gm-coin.svg";
 import { ReactComponent as GnCoin } from "../assets/gn-coin.svg";
+import { useWallet } from "../lib/WalletContext";
 import { formatBalance } from "../lib/formatBalance";
 import { useBalance } from "../lib/useBalance";
-import { useWallet } from "../lib/WalletContext";
 
 export const Balance = ({
   address,
@@ -12,8 +12,7 @@ export const Balance = ({
   address: string;
   token: string;
 }) => {
-  const { free, decimals: tokenDecimals } = useBalance(address, token);
-  if (tokenDecimals === undefined) return null;
+  const { free, decimals: tokenDecimals = 0 } = useBalance(address, token);
   return (
     <div className=" text-base flex gap-1">
       {token === "FREN" && <FrenCoin className="inline h-6 w-6" />}

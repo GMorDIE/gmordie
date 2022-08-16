@@ -1,38 +1,45 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { isWeb3Injected } from "@polkadot/extension-dapp";
-import { InjectedWindow } from "@polkadot/extension-inject/types";
-import { Fragment, useCallback, useMemo } from "react";
-
-import { ReactComponent as TalismanLogo } from "../assets/talisman-white.svg";
 import { useWallet } from "../lib/WalletContext";
+import { injectedWindow } from "../lib/injectedWindow";
+import { KnownWallet, knownWallets } from "../lib/knownWallets";
 import { Button } from "./Button";
-
-const ELON_MUSK_WALLET_KEY = "elon-musk-wallet"
-const injectedWindow = window as Window & InjectedWindow;
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useCallback, useMemo } from "react";
 
 export const ConnectModal = () => {
   const { connect, isConnectModalOpen, closeConnectModal } = useWallet();
 
-  const connectTo = useCallback(
-    (walletKey: string) => () => {
-      if (walletKey === ELON_MUSK_WALLET_KEY)
-        window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-      else connect(walletKey);
+  const connectWallet = useCallback(
+    (wallet: KnownWallet) => () => {
+      console.log("condition", wallet.condition);
+      // if there is a condition, check for it
+      if (wallet.condition !== undefined && !wallet.condition) {
+        window.open(wallet.downloadUrl, "_blank");
+      }
+      // if wallet isn't injected, redirect to download url
+      else if (!injectedWindow.injectedWeb3[wallet.injectedKey]) {
+        window.open(wallet.downloadUrl, "_blank");
+      } else {
+        connect(wallet.injectedKey);
+      }
     },
     [connect]
   );
 
-  const nonTalismanWalletKeys = useMemo(() => {
-    if (!isWeb3Injected) return [];
-    // pjs appears first
-    const frenWalletKeys = ["polkadot-js"].filter(
-      (key) => injectedWindow.injectedWeb3[key]
+  const connectTo = useCallback(
+    (walletKey: string) => () => {
+      connect(walletKey);
+    },
+    [connect]
+  );
+
+  const unknownWalletKeys = useMemo(() => {
+    return Object.keys(injectedWindow.injectedWeb3 ?? {}).filter(
+      (key) => !knownWallets.find((wallet) => wallet.injectedKey === key)
     );
-    const otherWalletKeys = Object.keys(injectedWindow.injectedWeb3).filter(
-      (key) => !frenWalletKeys.includes(key) && key !== "talisman"
-    );
-    return [...frenWalletKeys, ...otherWalletKeys];
-  }, []);
+    // some wallets (ex parallel) inject after this component renders
+    // adding this dep ensures the list is up to date when displayed
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnectModalOpen]);
 
   return (
     <Transition appear show={isConnectModalOpen} as={Fragment}>
@@ -68,29 +75,28 @@ export const ConnectModal = () => {
                   Best frens connect using Talisman!
                 </p>
                 <div className="flex flex-col gap-4">
-                  <Button
-                    onClick={connectTo("talisman")}
-                    className="h-12 text-xl normal-case  flex items-center justify-center gap-2 px-3 "
-                  >
-                    <TalismanLogo className=" text-2xl" />
-                    Talisman
-                  </Button>
-                  {nonTalismanWalletKeys.map((key) => (
+                  {knownWallets.map((wallet) => {
+                    const { id, name, logo: Logo } = wallet;
+                    return (
+                      <Button
+                        key={id}
+                        onClick={connectWallet(wallet)}
+                        className="h-12 text-xl normal-case flex items-center justify-center gap-2 px-3 "
+                      >
+                        {Logo ? <Logo className="text-2xl w-6 h-6" /> : null}{" "}
+                        {name}
+                      </Button>
+                    );
+                  })}
+                  {unknownWalletKeys.map((key, idx) => (
                     <Button
-                      key={key}
+                      key={`${key}-${idx}`}
                       onClick={connectTo(key)}
                       className="h-12 text-xl normal-case  flex items-center justify-center gap-2 px-3 "
                     >
-                      😢 {key}
+                      {key}
                     </Button>
                   ))}
-                  <Button
-                    key={ELON_MUSK_WALLET_KEY}
-                    onClick={connectTo(ELON_MUSK_WALLET_KEY)}
-                    className="h-12 text-xl normal-case  flex items-center justify-center gap-2 px-3 "
-                  >
-                    ✨ Elon Musk wallet
-                  </Button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

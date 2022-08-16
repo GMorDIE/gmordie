@@ -104,15 +104,15 @@ export const AccountSwitchButton = () => {
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Popover.Panel className="flex fixed top-14 right-1 z-10 flex-col max-w-[250px] bg-zinc-900 rounded-md sm:max-w-[300px]">
+            <Popover.Panel className="flex fixed right-1 z-10 flex-col max-w-[250px] bg-zinc-900 rounded-md sm:max-w-[300px] h-full overflow-scroll pb-12">
               {walletAccounts?.map(({ key, wallet, account }) => (
                 <button
                   key={key}
                   className={clsx(
-                    "flex overflow-hidden gap-3 items-center p-3 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base",
+                    "flex gap-3 items-center p-3 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base",
                     account.address === currentAccount?.address &&
-                      wallet === currentAccount.source &&
-                      "font-bold bg-zinc-800 cursor-default"
+                    wallet === currentAccount.source &&
+                    "font-bold bg-zinc-800 cursor-default"
                   )}
                   onClick={handleSelectAccount(account, close)}
                 >
@@ -133,9 +133,21 @@ export const AccountSwitchButton = () => {
               ))}
               <button
                 onClick={disconnect}
-                className="flex overflow-hidden gap-3 items-center p-3 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base"
+                className="flex gap-3 items-center p-3 text-sm font-bold text-left hover:bg-zinc-800 rounded-md sm:text-base"
               >
-                <LogoutIcon className="h-8 text-zinc-300" /> Disconnect
+                <div className="flex flex-col justify-center relative min-w-fit">
+                  <LogoutIcon className="h-8 text-zinc-300" />
+                </div>
+                <div className={clsx("flex overflow-hidden flex-col grow")}>
+                  <div className="overflow-hidden max-w-full text-ellipsis whitespace-nowrap flex items-center">
+                    <div className="grow overflow-hidden max-w-full text-ellipsis whitespace-nowrap ">
+                      Disconnect
+                    </div>
+                  </div>
+                  <div className="font-mono text-zinc-500">
+                    GN!
+                  </div>
+                </div>
               </button>
             </Popover.Panel>
           </Transition>

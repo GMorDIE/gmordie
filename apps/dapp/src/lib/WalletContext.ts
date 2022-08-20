@@ -74,7 +74,11 @@ const useWalletProvider = () => {
         const validAccounts = accounts.filter(
           ({ type }) => type !== "ethereum"
         );
-        if (validAccounts.length)
+        // select first account if none is selected
+        if (
+          validAccounts.length &&
+          !validAccounts.some((va) => va.address === signerAccount?.address)
+        )
           setSignerAccount({
             walletKey: key,
             address: validAccounts[0].address,
@@ -82,7 +86,12 @@ const useWalletProvider = () => {
         closeConnectModal();
       }
     },
-    [closeConnectModal, setConnectedWallets, setSignerAccount]
+    [
+      closeConnectModal,
+      setConnectedWallets,
+      setSignerAccount,
+      signerAccount?.address,
+    ]
   );
 
   const [isReady, setIsReady] = useState(false);

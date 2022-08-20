@@ -13,7 +13,7 @@ export const Balance = ({
   address: string;
   token: TOKEN_ID;
 }) => {
-  const { free, decimals } = useBalance(address, token);
+  const { free, decimals } = useBalance(token, address);
   return (
     <div className=" text-base flex gap-1">
       {token === "FREN" && <FrenCoin className="inline h-6 w-6" />}

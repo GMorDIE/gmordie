@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useMemo } from "react";
 
-export const useBalance = (address: string, tokenId: TOKEN_ID) => {
+export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
   const { blockNumber } = useGmTime();
   const api = useApi();
   const [free, setFree] = useState<string>();
@@ -15,7 +15,12 @@ export const useBalance = (address: string, tokenId: TOKEN_ID) => {
   const decimals = useMemo(() => TOKEN_DECIMALS[tokenId], [tokenId]);
 
   useEffect(() => {
-    if (!api) return;
+    // clear if address changes
+    setFree(undefined);
+  }, [address]);
+
+  useEffect(() => {
+    if (!api || !address) return;
 
     if (tokenId === NATIVE_TOKEN)
       api.query.system.account(address).then((accountInfo) => {

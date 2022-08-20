@@ -1,5 +1,7 @@
 import { useApi } from "../lib/ApiContext";
 import { useWallet } from "../lib/WalletContext";
+import { tokensToPlanck } from "../lib/tokensToPlanck";
+import { useBalance } from "../lib/useBalance";
 import { Button } from "./Button";
 import { ToastContent } from "./ToastContent";
 import { encodeAddress } from "@polkadot/keyring";
@@ -10,6 +12,7 @@ import { toast } from "react-hot-toast";
 export const BurnButton = () => {
   const [working, setWorking] = useState(false);
   const { account, openConnectModal, isReady } = useWallet();
+  const { free, decimals } = useBalance("FREN", account?.address);
   const api = useApi();
 
   const handleBurn = useCallback(async () => {
@@ -19,19 +22,17 @@ export const BurnButton = () => {
       if (!account) {
         await openConnectModal();
       } else {
-        const frenDecimals = api.registry.chainDecimals[0];
-
         // always burn 10
-        const tokenAmount = new BN("10");
-        const tokenDecimals = new BN(frenDecimals);
-        const base = new BN("10");
+        const amountToBurn = tokensToPlanck("10", decimals);
 
-        const amount = tokenAmount.mul(base.pow(tokenDecimals));
+        // check if account has enough to burn
+        if (!free || new BN(free ?? "0").lte(amountToBurn))
+          throw new Error("You don't have enough FRENs!");
 
         let waitingToast = "";
 
         const unsubscribe = await api.tx.currencies
-          .burnFren(amount.toString())
+          .burnFren(amountToBurn.toString())
           .signAndSend(
             encodeAddress(account.address, api.registry.chainSS58),
             (result) => {
@@ -119,7 +120,7 @@ export const BurnButton = () => {
       console.error(err);
       setWorking(false);
     }
-  }, [account, api, openConnectModal]);
+  }, [account, api, decimals, free, openConnectModal]);
 
   const label = useMemo(() => {
     if (!isReady) return null;

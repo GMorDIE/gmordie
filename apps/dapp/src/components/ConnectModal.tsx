@@ -10,7 +10,6 @@ export const ConnectModal = () => {
 
   const connectWallet = useCallback(
     (wallet: KnownWallet) => () => {
-      console.log("condition", wallet.condition);
       // if there is a condition, check for it
       if (wallet.condition !== undefined && !wallet.condition) {
         window.open(wallet.downloadUrl, "_blank");

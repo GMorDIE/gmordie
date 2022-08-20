@@ -36,7 +36,6 @@ export const BurnButton = () => {
             encodeAddress(account.address, api.registry.chainSS58),
             (result) => {
               if (waitingToast) toast.dismiss(waitingToast);
-              console.log("result", result.toHuman(true));
 
               const fail = result.findRecord("system", "ExtrinsicFailed");
               if (fail || result.dispatchError || result.isError) {
@@ -44,7 +43,7 @@ export const BurnButton = () => {
                   <ToastContent
                     t={t}
                     title="Doh !"
-                    description="Dunno why but it failed 😭"
+                    description="Transaction failed 😭"
                     type="error"
                   />
                 ));

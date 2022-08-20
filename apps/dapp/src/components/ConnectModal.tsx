@@ -2,14 +2,16 @@ import { useWallet } from "../lib/WalletContext";
 import { injectedWindow } from "../lib/injectedWindow";
 import { KnownWallet, knownWallets } from "../lib/knownWallets";
 import { Button } from "./Button";
+import { ToastContent } from "./ToastContent";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useMemo } from "react";
+import { toast } from "react-hot-toast";
 
 export const ConnectModal = () => {
   const { connect, isConnectModalOpen, closeConnectModal } = useWallet();
 
   const connectWallet = useCallback(
-    (wallet: KnownWallet) => () => {
+    (wallet: KnownWallet) => async () => {
       // if there is a condition, check for it
       if (wallet.condition !== undefined && !wallet.condition) {
         window.open(wallet.downloadUrl, "_blank");
@@ -18,15 +20,40 @@ export const ConnectModal = () => {
       else if (!injectedWindow.injectedWeb3[wallet.injectedKey]) {
         window.open(wallet.downloadUrl, "_blank");
       } else {
-        connect(wallet.injectedKey);
+        try {
+          console.log("connecting to", wallet.injectedKey);
+          await connect(wallet.injectedKey);
+        } catch (err) {
+          console.error(err);
+          toast.custom((t) => (
+            <ToastContent
+              t={t}
+              title="Failed to connect"
+              description={(err as Error).message}
+              type="error"
+            />
+          ));
+        }
       }
     },
     [connect]
   );
 
   const connectTo = useCallback(
-    (walletKey: string) => () => {
-      connect(walletKey);
+    (walletKey: string) => async () => {
+      try {
+        await connect(walletKey);
+      } catch (err) {
+        console.error(err);
+        toast.custom((t) => (
+          <ToastContent
+            t={t}
+            title="Failed to connect"
+            description={(err as Error).message}
+            type="error"
+          />
+        ));
+      }
     },
     [connect]
   );

@@ -117,7 +117,6 @@ export const BurnButton = () => {
           description={description}
         />
       ));
-      console.log("WTF", { err });
       console.error(err);
       setWorking(false);
     }

@@ -1,9 +1,8 @@
+import { ReactComponent as SvgWheel } from "../assets/wheel.svg";
+import { useGmTime } from "../lib/GmTimeContext";
 import clsx from "clsx";
 import { motion, useMotionValue } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
-
-import { ReactComponent as SvgWheel } from "../assets/wheel.svg";
-import { useGmTime } from "../lib/GmTimeContext";
 
 type WheelProps = {
   className?: string;
@@ -45,7 +44,6 @@ export const Wheel = ({ className }: WheelProps) => {
 
         // target reached, exit
         if (degreesPerTick.current === 1 && targetRotate === target) {
-          console.log("finished");
           clearInterval(interval);
         }
 
@@ -56,7 +54,6 @@ export const Wheel = ({ className }: WheelProps) => {
           (target < targetRotate || target > current) &&
           (targetRotate <= current || target > current)
         ) {
-          console.log("start last turn");
           // start last turn
           refIsLastTurn.current = true;
         } else if (refIsLastTurn.current) {

@@ -1,6 +1,6 @@
 import { useWallet } from "../lib/WalletContext";
-import { formatAddressShort } from "../lib/formatAddressShort";
 import { useIsMounted } from "../lib/useIsMounted";
+import { Address } from "./Address";
 import { Button } from "./Button";
 import { Popover, Transition } from "@headlessui/react";
 import { LogoutIcon } from "@heroicons/react/solid";
@@ -126,7 +126,7 @@ export const AccountSwitchButton = () => {
                       </div>
                     </div>
                     <div className="font-mono text-zinc-500">
-                      {formatAddressShort(account.address, 6)}
+                      <Address address={account.address} keep={6} />
                     </div>
                   </div>
                 </button>

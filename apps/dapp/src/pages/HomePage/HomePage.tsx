@@ -9,7 +9,7 @@ import clsx from "clsx";
 
 export const HomePage = () => {
   const { time } = useGmTime();
-  console.log({ time });
+
   return (
     <Layout>
       <div className="container py-4 mx-auto max-w-3xl md:py-8">

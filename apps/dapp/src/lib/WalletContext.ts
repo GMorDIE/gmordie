@@ -1,30 +1,11 @@
-import { isWeb3Injected } from "@polkadot/extension-dapp";
-import {
-  Injected,
-  InjectedAccount,
-  InjectedWindow,
-} from "@polkadot/extension-inject/types";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocalStorage } from "react-use";
-
 import { useApi } from "./ApiContext";
+import { injectedWindow } from "./injectedWindow";
 import { provideContext } from "./provideContext";
 import { APP_NAME } from "./settings";
 import { useOpenClose } from "./useOpenClose";
-
-const downloadTalisman = () => {
-  let store =
-    "https://chrome.google.com/webstore/detail/talisman-wallet/fijngjgcjhjmmpcmkeiomlglpeiijkld";
-
-  if (navigator.userAgent.indexOf("Firefox") != -1) {
-    store =
-      "https://addons.mozilla.org/en-GB/firefox/addon/talisman-wallet-extension/";
-  }
-
-  window.open(store, "_blank", "noopener,noreferrer");
-};
-
-const injectedWindow = window as Window & InjectedWindow;
+import { Injected, InjectedAccount } from "@polkadot/extension-inject/types";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocalStorage } from "react-use";
 
 type SignerAccount = {
   walletKey: string;
@@ -79,28 +60,26 @@ const useWalletProvider = () => {
 
   const connect = useCallback(
     async (key: string) => {
-      if (!isWeb3Injected) downloadTalisman();
-      else {
-        const wallet = injectedWindow.injectedWeb3[key];
-        if (!wallet && key === "talisman") downloadTalisman();
-        else {
-          const enabledWallet = await wallet.enable(APP_NAME);
-          setConnectedWallets((prev = []) => [
-            ...prev.filter((k) => k !== key),
-            key,
-          ]);
-          setEnabledWallets((prev = {}) => ({ ...prev, [key]: enabledWallet }));
-          const accounts = await enabledWallet.accounts.get();
-          const validAccounts = accounts.filter(
-            ({ type }) => type !== "ethereum"
-          );
-          if (validAccounts.length)
-            setSignerAccount({
-              walletKey: key,
-              address: validAccounts[0].address,
-            });
-          closeConnectModal();
-        }
+      const injectedWallet = injectedWindow.injectedWeb3[key];
+      if (!injectedWallet) {
+        console.error("Wallet not found", key);
+      } else {
+        const enabledWallet = await injectedWallet.enable(APP_NAME);
+        setConnectedWallets((prev = []) => [
+          ...prev.filter((k) => k !== key),
+          key,
+        ]);
+        setEnabledWallets((prev = {}) => ({ ...prev, [key]: enabledWallet }));
+        const accounts = await enabledWallet.accounts.get();
+        const validAccounts = accounts.filter(
+          ({ type }) => type !== "ethereum"
+        );
+        if (validAccounts.length)
+          setSignerAccount({
+            walletKey: key,
+            address: validAccounts[0].address,
+          });
+        closeConnectModal();
       }
     },
     [closeConnectModal, setConnectedWallets, setSignerAccount]
@@ -159,6 +138,7 @@ const useWalletProvider = () => {
   const disconnect = useCallback(() => {
     setSignerAccount(null);
     clearConnectedWallets();
+    setEnabledWallets({});
   }, [clearConnectedWallets, setSignerAccount]);
 
   return {

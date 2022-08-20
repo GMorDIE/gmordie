@@ -21,7 +21,6 @@ export const ConnectModal = () => {
         window.open(wallet.downloadUrl, "_blank");
       } else {
         try {
-          console.log("connecting to", wallet.injectedKey);
           await connect(wallet.injectedKey);
         } catch (err) {
           console.error(err);

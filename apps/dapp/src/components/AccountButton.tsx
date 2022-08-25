@@ -89,10 +89,16 @@ export const AccountSwitchButton = () => {
         <>
           <Popover.Button
             className={clsx(
-              "flex items-center p-2 py-0 px-3 h-full outline-none hover:bg-salmon-400 opacity-0 transition-opacity",
+              "flex items-center p-2 py-0 px-3 gap-2 h-full outline-none hover:bg-salmon-400 opacity-0 transition-opacity",
               isMounted && "opacity-100"
             )}
           >
+            <div className="hidden sm:flex max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap flex-col text-right">
+              <div className="text-sm">{currentAccount.name}</div>
+              <div className="text-xs opacity-50">
+                <Address address={currentAccount.address} />
+              </div>
+            </div>
             <AccountIcon account={currentAccount} />
           </Popover.Button>
           <Transition
@@ -111,8 +117,8 @@ export const AccountSwitchButton = () => {
                   className={clsx(
                     "flex gap-3 items-center p-3 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base",
                     account.address === currentAccount?.address &&
-                    wallet === currentAccount.source &&
-                    "font-bold bg-zinc-800 cursor-default"
+                      wallet === currentAccount.source &&
+                      "font-bold bg-zinc-800 cursor-default"
                   )}
                   onClick={handleSelectAccount(account, close)}
                 >
@@ -144,9 +150,7 @@ export const AccountSwitchButton = () => {
                       Disconnect
                     </div>
                   </div>
-                  <div className="font-mono text-zinc-500">
-                    GN!
-                  </div>
+                  <div className="font-mono text-zinc-500">GN!</div>
                 </div>
               </button>
             </Popover.Panel>

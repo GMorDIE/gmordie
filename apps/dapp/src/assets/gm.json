@@ -4,11 +4,12 @@
   "chainType": "Live",
   "bootNodes": [
   	"/ip4/136.243.93.11/tcp/30333/ws/p2p/12D3KooWHr2Qt2kfhR3YvcruVGfTrLcDG4AfuCmu7qq6n6w1Dtcn",
-  	"/ip4/149.102.128.37/tcp/30333/ws/p2p/12D3KooWJqRDxZM7CeJ8ivpbLWSzmEe3AyEzo2Je9Ew9Mnaa9T1j"
+  	"/ip4/149.102.128.37/tcp/30333/ws/p2p/12D3KooWJqRDxZM7CeJ8ivpbLWSzmEe3AyEzo2Je9Ew9Mnaa9T1j",
+  	"/ip4/95.217.87.220/tcp/30377/ws/p2p/12D3KooWP2Lr5pCrFZwHffJ5WuhtPgJ62QVDTAruEnSd3CRjWbBF"
   ],
   "protocolId": "its_a_vibe",
   "properties": {
-    "ss58Format": 7013,
+    "ss58Format": 42,
     "tokenDecimals": [12, 0, 0],
     "tokenSymbol": ["FREN", "GM", "GN"]
   },

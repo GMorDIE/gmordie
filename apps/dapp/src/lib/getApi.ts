@@ -7,7 +7,7 @@ import {
     ScProvider,
     WellKnownChain,
 } from "@polkadot/rpc-provider/substrate-connect";
-import jsonParachainSpec from '../assets/gm-noleemo.json';
+import jsonParachainSpec from '../assets/gm.json';
 
 export const getApi = async () => {
 

@@ -1,10 +1,10 @@
-import clsx from "clsx";
-import { ReactNode } from "react";
-
 import { useGmTime } from "../lib/GmTimeContext";
 import { useIsMounted } from "../lib/useIsMounted";
 import { AccountButton } from "./AccountButton";
+import { ClientToggle } from "./ClientToggle";
 import { ConnectModal } from "./ConnectModal";
+import clsx from "clsx";
+import { ReactNode } from "react";
 
 type LayoutProps = {
   children: ReactNode;
@@ -22,7 +22,9 @@ export const Layout = ({ children }: LayoutProps) => {
           time && "opacity-100"
         )}
       >
-        <div className="grow px-4">GM OR DIE</div>
+        <div className="grow px-4">
+          <a href="https://gmordie.com">GM OR DIE</a>
+        </div>
         <AccountButton />
       </header>
       <main
@@ -41,7 +43,7 @@ export const Layout = ({ children }: LayoutProps) => {
       >
         <div className="text-xs">
           <div>Block number : {blockNumber}</div>
-          <div>GM Central Time : {time?.toLocaleTimeString()}</div>
+          <div>GM Time : {time?.toLocaleTimeString()}</div>
         </div>
       </footer>
       <ConnectModal />

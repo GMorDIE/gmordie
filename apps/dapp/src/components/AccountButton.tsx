@@ -104,7 +104,7 @@ export const AccountSwitchButton = () => {
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Popover.Panel className="flex fixed right-1 z-10 flex-col max-w-[250px] bg-zinc-900 rounded-md sm:max-w-[300px] h-full overflow-scroll pb-12">
+            <Popover.Panel className="flex fixed right-1 z-10 flex-col max-w-[250px] bg-zinc-900 rounded-md sm:max-w-[300px] max-h-[calc(100%_-_3rem)] overflow-auto">
               {walletAccounts?.map(({ key, wallet, account }) => (
                 <button
                   key={key}

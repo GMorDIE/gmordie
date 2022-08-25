@@ -1,7 +1,6 @@
 import { useGmTime } from "../lib/GmTimeContext";
 import { useIsMounted } from "../lib/useIsMounted";
 import { AccountButton } from "./AccountButton";
-import { ClientToggle } from "./ClientToggle";
 import { ConnectModal } from "./ConnectModal";
 import clsx from "clsx";
 import { ReactNode } from "react";

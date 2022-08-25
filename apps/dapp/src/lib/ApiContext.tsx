@@ -1,16 +1,17 @@
-import { ApiPromise } from "@polkadot/api";
-import { useEffect, useState } from "react";
-
+import { useSettings } from "./SettingsContext";
 import { getApi } from "./getApi";
 import { provideContext } from "./provideContext";
+import { ApiPromise } from "@polkadot/api";
+import { useEffect, useState } from "react";
 
 const useApiProvider = () => {
   const [api, setApi] = useState<ApiPromise>();
   const [error, setError] = useState<Error>();
+  const { lightClient } = useSettings();
 
   useEffect(() => {
-    getApi().then(setApi).catch(setError);
-  }, []);
+    getApi(lightClient).then(setApi).catch(setError);
+  }, [lightClient]);
 
   // failed to connect
   if (error) throw error;

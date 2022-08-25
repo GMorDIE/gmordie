@@ -1,6 +1,7 @@
 import { useGmTime } from "../lib/GmTimeContext";
 import { useIsMounted } from "../lib/useIsMounted";
 import { AccountButton } from "./AccountButton";
+import { ClientToggle } from "./ClientToggle";
 import { ConnectModal } from "./ConnectModal";
 import clsx from "clsx";
 import { ReactNode } from "react";
@@ -23,6 +24,9 @@ export const Layout = ({ children }: LayoutProps) => {
       >
         <div className="grow px-4">
           <a href="https://gmordie.com">GM OR DIE</a>
+        </div>
+        <div>
+          <ClientToggle />
         </div>
         <AccountButton />
       </header>

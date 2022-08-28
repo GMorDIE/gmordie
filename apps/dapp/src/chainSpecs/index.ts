@@ -1,4 +1,4 @@
-import gm from "./gm-parachain.json";
+import gm from "./gm.json";
 import kusama from "./kusama.json";
 
 export const kusamaChainSpec = kusama;

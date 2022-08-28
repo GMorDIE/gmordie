@@ -31,25 +31,32 @@ const getProvider = (
   });
 
 const getLightClientApi = async () => {
-  console.time("connected to kusama");
-  const relayProvider = await getProvider(
-    "kusama",
-    JSON.stringify(kusamaChainSpec)
-  );
-  console.debug("relay provider connected");
-  console.timeEnd("connected to kusama");
+  const relayProvider = new ScProvider(JSON.stringify(kusamaChainSpec));
+  //await relayProvider.connect();
+  //console.debug("connected to kusama");
+  const gmProvider = new ScProvider(JSON.stringify(gmChainSpec), relayProvider);
+  await gmProvider.connect();
+  //console.debug("connected to GM parachain");
 
-  // const apiKusama = await ApiPromise.create({ provider: relayProvider });
-  // const kusamaBlock = await apiKusama.rpc.chain.getBlock();
-  // console.log("kusama block", kusamaBlock.toHuman());
+  // console.time("connected to kusama");
+  // const relayProvider = await getProvider(
+  //   "kusama",
+  //   JSON.stringify(kusamaChainSpec)
+  // );
+  // console.debug("relay provider connected");
+  // console.timeEnd("connected to kusama");
 
-  console.time("connected to GM");
-  const gmProvider = await getProvider(
-    "GM",
-    JSON.stringify(gmChainSpec),
-    relayProvider
-  );
-  console.timeEnd("connected to GM");
+  // // const apiKusama = await ApiPromise.create({ provider: relayProvider });
+  // // const kusamaBlock = await apiKusama.rpc.chain.getBlock();
+  // // console.log("kusama block", kusamaBlock.toHuman());
+
+  // console.time("connected to GM");
+  // const gmProvider = await getProvider(
+  //   "GM",
+  //   JSON.stringify(gmChainSpec),
+  //   relayProvider
+  // );
+  // console.timeEnd("connected to GM");
 
   const api = await ApiPromise.create({ provider: gmProvider });
   console.debug("api created");

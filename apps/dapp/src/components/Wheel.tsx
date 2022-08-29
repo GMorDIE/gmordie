@@ -1,5 +1,6 @@
 import { ReactComponent as SvgWheel } from "../assets/wheel.svg";
 import { useGmTime } from "../lib/GmTimeContext";
+import { LightClientConnecting } from "./LightClientConnecting";
 import clsx from "clsx";
 import { motion, useMotionValue } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -78,13 +79,16 @@ export const Wheel = ({ className }: WheelProps) => {
   }, [rotate, targetRotate]);
 
   return (
-    <div className={clsx("w-64 h-64 ", className)}>
-      <motion.div
-        style={{ rotate }}
-        className="flex overflow-hidden  w-full h-full flex-col justify-center items-center rounded-full"
-      >
-        <SvgWheel className="transition-transform" />
-      </motion.div>
+    <div>
+      <div className={clsx("w-64 h-64 ", className)}>
+        <motion.div
+          style={{ rotate }}
+          className="flex overflow-hidden  w-full h-full flex-col justify-center items-center rounded-full"
+        >
+          <SvgWheel className="transition-transform" />
+        </motion.div>
+      </div>
+      <LightClientConnecting />
     </div>
   );
 };

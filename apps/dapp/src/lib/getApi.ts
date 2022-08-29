@@ -26,7 +26,7 @@ const getRpcApi = async () => {
   return api;
 };
 
-export const getApi = async (withLightClient?: boolean) => {
+export const getApi = (withLightClient?: boolean) => {
   if (withLightClient) {
     if (!apiCache.lightClient) apiCache.lightClient = getLightClientApi();
     return apiCache.lightClient;

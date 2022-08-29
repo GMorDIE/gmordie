@@ -1,13 +1,14 @@
-import clsx from "clsx";
-import { AnchorHTMLAttributes } from "react";
-
 import {
+  IconBip,
   IconDiscord,
   IconLeaderboard,
   IconSubsocial,
   IconTwitter,
   IconWallet,
+  IconYoutube,
 } from "../assets/social";
+import clsx from "clsx";
+import { AnchorHTMLAttributes } from "react";
 
 const THE_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
 
@@ -54,6 +55,20 @@ export const SocialLinks = ({ show }: { show: boolean }) => {
         title="Twitter"
       >
         <IconTwitter />
+      </Link>
+      <Link
+        href={"https://www.youtube.com/channel/UChMjLOYCSZqEABkB_RfOC1Q"}
+        className="text-salmon hover:text-salmon-300"
+        title="Youtube"
+      >
+        <IconYoutube />
+      </Link>
+      <Link
+        href={"https://bip.so/@gmordie/What-is-the-GM-Parachain-LxOBJ"}
+        className="text-salmon hover:text-salmon-300"
+        title="Build In Public"
+      >
+        <IconBip />
       </Link>
     </div>
   );

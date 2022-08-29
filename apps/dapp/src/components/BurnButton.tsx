@@ -40,6 +40,11 @@ export const BurnButton = () => {
 
               const fail = result.findRecord("system", "ExtrinsicFailed");
               if (fail || result.dispatchError || result.isError) {
+                console.error(
+                  "Transaction failed",
+                  fail?.toHuman(true),
+                  result?.toHuman(true)
+                );
                 toast.custom((t) => (
                   <ToastContent
                     t={t}

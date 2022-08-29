@@ -27,9 +27,8 @@ const useSettingsProvider = () => {
       ...settings,
       lightClient: !settings?.lightClient,
     });
+    window.location.reload();
   }, [settings, setSettings]);
-
-  console.log(lightClient);
 
   return { lightClient, toggleLightClient };
 };

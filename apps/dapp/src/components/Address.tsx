@@ -9,11 +9,12 @@ export const Address = ({
   address: string;
   keep?: number;
 }) => {
-  const api = useApi();
+  //const api = useApi();
 
   const prefix = useMemo(
-    () => api?.registry.chainSS58,
-    [api?.registry.chainSS58]
+    // hardcode until fixed chain side
+    () => 7013, // api?.registry.chainSS58,
+    []
   );
 
   return <>{formatAddressShort(address, keep, prefix)}</>;

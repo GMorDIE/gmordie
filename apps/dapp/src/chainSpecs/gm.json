@@ -9,7 +9,7 @@
   ],
   "protocolId": "its_a_vibe",
   "properties": {
-    "ss58Format": 7013,
+    "ss58Format": 42,
     "tokenDecimals": [12, 0, 0],
     "tokenSymbol": ["FREN", "GM", "GN"]
   },

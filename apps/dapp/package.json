@@ -16,6 +16,7 @@
     "@polkadot/api": "^9.2.3",
     "@polkadot/extension-dapp": "^0.44.6",
     "@polkadot/react-identicon": "^2.9.7",
+    "@substrate/smoldot-light": "0.6.31",
     "clsx": "^1.1.1",
     "framer-motion": "^7.2.1",
     "react": "^18.0.0",
@@ -42,5 +43,8 @@
     "extends": [
       "gmordie"
     ]
+  },
+  "resolutions": {
+    "@substrate/smoldot-light": "0.6.31"
   }
 }

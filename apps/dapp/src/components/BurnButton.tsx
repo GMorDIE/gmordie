@@ -31,13 +31,59 @@ export const BurnButton = () => {
 
         let waitingToast = "";
 
+        //const test = await api.tx.currencies.burnFren(amountToBurn.toString()).sign()
+
         const unsubscribe = await api.tx.currencies
           .burnFren(amountToBurn.toString())
-          .signAndSend(
-            encodeAddress(account.address, api.registry.chainSS58),
-            (result) => {
-              if (waitingToast) toast.dismiss(waitingToast);
+          .signAndSend(account.address, (result) => {
+            if (waitingToast) toast.dismiss(waitingToast);
 
+            if (result.status.isInBlock) {
+              waitingToast = toast.custom((t) => (
+                <ToastContent
+                  t={t}
+                  title="Success"
+                  description="Well done fren!"
+                  type="success"
+                />
+              ));
+              unsubscribe();
+            } else if (result.status.isFinalized) {
+              toast.custom((t) => (
+                <ToastContent
+                  t={t}
+                  title="Success"
+                  description="Well done fren!"
+                  type="success"
+                />
+              ));
+              unsubscribe();
+            } else if (result.status.isDropped) {
+              toast.custom((t) => (
+                <ToastContent
+                  t={t}
+                  title="Oops"
+                  description="Transaction was dropped"
+                  type="error"
+                />
+              ));
+              unsubscribe();
+            } else if (result.status.isFinalityTimeout) {
+              toast.custom((t) => (
+                <ToastContent
+                  t={t}
+                  title="Oops"
+                  description="This looks like a timeout"
+                  type="error"
+                />
+              ));
+              unsubscribe();
+            } else if (result.status.isInvalid) {
+              toast.custom((t) => (
+                <ToastContent type="error" t={t} title="Transaction invalid" />
+              ));
+              unsubscribe();
+            } else {
               const fail = result.findRecord("system", "ExtrinsicFailed");
               if (fail || result.dispatchError || result.isError) {
                 console.error(
@@ -56,59 +102,8 @@ export const BurnButton = () => {
                 unsubscribe();
                 return;
               }
-
-              if (result.status.isInBlock) {
-                waitingToast = toast.custom((t) => (
-                  <ToastContent
-                    t={t}
-                    title="Success"
-                    description="Well done fren!"
-                    type="success"
-                  />
-                ));
-                unsubscribe();
-              } else if (result.status.isFinalized) {
-                toast.custom((t) => (
-                  <ToastContent
-                    t={t}
-                    title="Success"
-                    description="Well done fren!"
-                    type="success"
-                  />
-                ));
-                unsubscribe();
-              } else if (result.status.isDropped) {
-                toast.custom((t) => (
-                  <ToastContent
-                    t={t}
-                    title="Oops"
-                    description="Your transaction was dropped"
-                    type="error"
-                  />
-                ));
-                unsubscribe();
-              } else if (result.status.isFinalityTimeout) {
-                toast.custom((t) => (
-                  <ToastContent
-                    t={t}
-                    title="Oops"
-                    description="This looks like a timeout"
-                    type="error"
-                  />
-                ));
-                unsubscribe();
-              } else if (result.status.isInvalid) {
-                toast.custom((t) => (
-                  <ToastContent
-                    type="error"
-                    t={t}
-                    title="Transaction invalid"
-                  />
-                ));
-                unsubscribe();
-              }
             }
-          );
+          });
       }
       setWorking(false);
     } catch (err) {

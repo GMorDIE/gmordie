@@ -3,7 +3,7 @@ import { ApiProvider } from "./lib/ApiContext";
 import { GmTimeProvider } from "./lib/GmTimeContext";
 import { WalletProvider } from "./lib/WalletContext";
 import { HomePage } from "./pages/HomePage/HomePage";
-import { LeaderboardPage } from "./pages/Leaderboard/LeaderboardPage";
+import { LeaderboardPage } from "./pages/LeaderboardPage/LeaderboardPage";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 

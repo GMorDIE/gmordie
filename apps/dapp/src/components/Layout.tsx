@@ -7,9 +7,10 @@ import { ReactNode } from "react";
 
 type LayoutProps = {
   children: ReactNode;
+  requiresTime?: boolean;
 };
 
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = ({ requiresTime, children }: LayoutProps) => {
   const { blockNumber, time } = useGmTime();
   const isMounted = useIsMounted();
 
@@ -18,7 +19,7 @@ export const Layout = ({ children }: LayoutProps) => {
       <header
         className={clsx(
           "flex fixed top-0 left-0 z-10 items-center w-full h-12 text-xl font-extrabold text-white shadow-xl bg-salmon opacity-0 transition-opacity",
-          time && "opacity-100"
+          (!requiresTime || time) && "opacity-100"
         )}
       >
         <div className="grow px-4">
@@ -37,7 +38,7 @@ export const Layout = ({ children }: LayoutProps) => {
       <footer
         className={clsx(
           "flex items-center px-4 h-12 text-white shadow-xl bg-salmon opacity-0 transition-opacity",
-          time && "opacity-100"
+          (!requiresTime || time) && "opacity-100"
         )}
       >
         <div className="text-xs">

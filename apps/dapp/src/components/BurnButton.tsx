@@ -108,7 +108,7 @@ export const BurnButton = () => {
       setWorking(false);
     } catch (err) {
       const { message, cause } = err as Error;
-      const description = typeof cause === "string" ? cause : cause?.message;
+      const description = typeof cause === "string" ? cause : undefined;
       toast.custom((t) => (
         <ToastContent
           type="error"

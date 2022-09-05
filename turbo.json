@@ -10,6 +10,7 @@
     "dev": {
       "cache": false
     },
+    "preview": {},
     "clean": {
       "cache": false
     }

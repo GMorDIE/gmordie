@@ -54,11 +54,6 @@ export const HomePage = () => {
             <Wheel className="xs:w-80 xs:h-80 md:rotate-[270deg]" />
           </div>
         </div>
-        <div>
-          <Link to="/leaderboard">
-            <Button>LeaderBoard</Button>
-          </Link>
-        </div>
         <SocialLinks show={Boolean(time)} />
       </div>
     </Layout>

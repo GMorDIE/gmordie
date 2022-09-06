@@ -6,8 +6,8 @@ import {
   IconWallet,
 } from "../assets/social";
 import clsx from "clsx";
-import { AnchorHTMLAttributes } from "react";
-import { Link } from "react-router-dom";
+import { AnchorHTMLAttributes, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LinkButton = ({
   className,
@@ -16,13 +16,25 @@ const LinkButton = ({
 }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
   <a
     {...props}
-    className={clsx(className, "text-salmon hover:text-salmon-300")}
+    className={clsx(
+      className,
+      "text-salmon hover:text-salmon-300 cursor-pointer"
+    )}
   >
     {children}
   </a>
 );
 
 export const SocialLinks = ({ show }: { show: boolean }) => {
+  const navigate = useNavigate();
+
+  const handleLinkClick = useCallback(
+    (to: string) => () => {
+      navigate(to);
+    },
+    [navigate]
+  );
+
   return (
     <div
       className={clsx(
@@ -30,11 +42,12 @@ export const SocialLinks = ({ show }: { show: boolean }) => {
         show && "opacity-100"
       )}
     >
-      <Link to="/leaderboard">
-        <LinkButton title="Leaderboard - coming soon">
-          <IconLeaderboard />
-        </LinkButton>
-      </Link>
+      <LinkButton
+        onClick={handleLinkClick("/leaderboard")}
+        title="Leaderboard - coming soon"
+      >
+        <IconLeaderboard />
+      </LinkButton>
       <LinkButton href={"https://talisman.xyz/"} title="Talisman">
         <IconWallet />
       </LinkButton>

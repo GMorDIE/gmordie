@@ -1,9 +1,11 @@
 import {
+  IconBip,
   IconDiscord,
   IconLeaderboard,
   IconSubsocial,
   IconTwitter,
   IconWallet,
+  IconYoutube,
 } from "../assets/social";
 import clsx from "clsx";
 import { AnchorHTMLAttributes, useCallback } from "react";
@@ -42,10 +44,7 @@ export const SocialLinks = ({ show }: { show: boolean }) => {
         show && "opacity-100"
       )}
     >
-      <LinkButton
-        onClick={handleLinkClick("/leaderboard")}
-        title="Leaderboard - coming soon"
-      >
+      <LinkButton onClick={handleLinkClick("/leaderboard")} title="Leaderboard">
         <IconLeaderboard />
       </LinkButton>
       <LinkButton href={"https://talisman.xyz/"} title="Talisman">
@@ -66,6 +65,20 @@ export const SocialLinks = ({ show }: { show: boolean }) => {
         title="Twitter"
       >
         <IconTwitter />
+      </LinkButton>
+      <LinkButton
+        href={"https://www.youtube.com/channel/UChMjLOYCSZqEABkB_RfOC1Q"}
+        className="text-salmon hover:text-salmon-300"
+        title="Youtube"
+      >
+        <IconYoutube />
+      </LinkButton>
+      <LinkButton
+        href={"https://bip.so/@gmordie/What-is-the-GM-Parachain-LxOBJ"}
+        className="text-salmon hover:text-salmon-300"
+        title="Build In Public"
+      >
+        <IconBip />
       </LinkButton>
     </div>
   );

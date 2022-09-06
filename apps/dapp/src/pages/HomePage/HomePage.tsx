@@ -1,19 +1,17 @@
 import { ReactComponent as ArrowIcon } from "../../assets/arrow.svg";
 import { Balances } from "../../components/Balances";
 import { BurnButton } from "../../components/BurnButton";
-import { Button } from "../../components/Button";
 import { Layout } from "../../components/Layout";
 import { SocialLinks } from "../../components/SocialLinks";
 import { Wheel } from "../../components/Wheel";
 import { useGmTime } from "../../lib/GmTimeContext";
 import clsx from "clsx";
-import { Link } from "react-router-dom";
 
 export const HomePage = () => {
   const { time } = useGmTime();
 
   return (
-    <Layout requiresTime>
+    <Layout requiresTime title="Say it back!">
       <div className="container py-4 mx-auto max-w-3xl md:py-8">
         {/* horizontal layout on desktop, vertical on mobile */}
         <div className="flex w-full text-center flex-col md:flex-row justify-center items-center">

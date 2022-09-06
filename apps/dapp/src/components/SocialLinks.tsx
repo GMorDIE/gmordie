@@ -1,6 +1,3 @@
-import clsx from "clsx";
-import { AnchorHTMLAttributes } from "react";
-
 import {
   IconDiscord,
   IconLeaderboard,
@@ -8,10 +5,11 @@ import {
   IconTwitter,
   IconWallet,
 } from "../assets/social";
+import clsx from "clsx";
+import { AnchorHTMLAttributes } from "react";
+import { Link } from "react-router-dom";
 
-const THE_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-
-const Link = ({
+const LinkButton = ({
   className,
   children,
   ...props
@@ -32,29 +30,30 @@ export const SocialLinks = ({ show }: { show: boolean }) => {
         show && "opacity-100"
       )}
     >
-      <Link
-        href={THE_URL}
-        className="opacity-50"
-        title="Leaderboard - coming soon"
-      >
-        <IconLeaderboard />
+      <Link to="/leaderboard">
+        <LinkButton title="Leaderboard - coming soon">
+          <IconLeaderboard />
+        </LinkButton>
       </Link>
-      <Link href={"https://talisman.xyz/"} title="Talisman">
+      <LinkButton href={"https://talisman.xyz/"} title="Talisman">
         <IconWallet />
-      </Link>
-      <Link href={"https://discord.gg/JFzD2b5P2B"} title="Join us on Discord !">
+      </LinkButton>
+      <LinkButton
+        href={"https://discord.gg/JFzD2b5P2B"}
+        title="Join us on Discord !"
+      >
         <IconDiscord />
-      </Link>
-      <Link href={"https://app.subsocial.network/6882"} title="Subsocial">
+      </LinkButton>
+      <LinkButton href={"https://app.subsocial.network/6882"} title="Subsocial">
         <IconSubsocial />
-      </Link>
-      <Link
+      </LinkButton>
+      <LinkButton
         href={"https://twitter.com/GmOrDie_"}
         className="text-salmon hover:text-salmon-300"
         title="Twitter"
       >
         <IconTwitter />
-      </Link>
+      </LinkButton>
     </div>
   );
 };

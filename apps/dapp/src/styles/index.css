@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ui--IdentityIcon {
+  cursor: inherit !important;
+}

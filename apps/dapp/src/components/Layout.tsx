@@ -4,13 +4,17 @@ import { AccountButton } from "./AccountButton";
 import { ConnectModal } from "./ConnectModal";
 import clsx from "clsx";
 import { ReactNode } from "react";
+import { Link } from "react-router-dom";
+import { useTitle } from "react-use";
 
 type LayoutProps = {
+  title: string;
   children: ReactNode;
   requiresTime?: boolean;
 };
 
-export const Layout = ({ requiresTime, children }: LayoutProps) => {
+export const Layout = ({ requiresTime, children, title }: LayoutProps) => {
+  useTitle(`GM - ${title}`);
   const { blockNumber, time } = useGmTime();
   const isMounted = useIsMounted();
 
@@ -23,7 +27,7 @@ export const Layout = ({ requiresTime, children }: LayoutProps) => {
         )}
       >
         <div className="grow px-4">
-          <a href="https://gmordie.com">GM OR DIE</a>
+          <Link to="/">GM OR DIE</Link>
         </div>
         <AccountButton />
       </header>

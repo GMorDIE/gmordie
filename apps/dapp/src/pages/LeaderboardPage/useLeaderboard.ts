@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import request, { gql } from "graphql-request";
 import { useMemo } from "react";
 
@@ -17,40 +17,36 @@ type RequestResult = {
 
 export const useLeaderboard = (
   sortBy: keyof LeaderboardAccount = "sentGMGN",
-  ascending = false
+  ascending = false,
+  limit = 50
 ) => {
   const orderBy = useMemo(
     () => `${sortBy}_${ascending ? "ASC" : "DESC"}`,
     [ascending, sortBy]
   );
 
-  return useQuery(["leaderboard", sortBy, ascending], async () => {
-    const result = await request<RequestResult>(
-      SUBSQUID_URL,
-      gql`
+  return useInfiniteQuery(
+    ["leaderboard", orderBy, limit],
+    ({ pageParam = 0 }) => {
+      return request<RequestResult>(
+        SUBSQUID_URL,
+        gql`
         query Accounts {
-          accounts(orderBy: ${orderBy}) {
+          accounts(orderBy: ${orderBy}, limit: ${limit}, offset: ${pageParam}) {
             id
             balanceGMGN
-            # balanceFREN
-            # balanceGM
-            # balanceGN
-            # burnedForGM
             burnedForGMGN
-            # burnedForGN
             burnedForNothing
-            # burnedTotal
-            # receivedGM
             receivedGMGN
-            # receivedGN
-            # sentGM
             sentGMGN
-            # sentGN
           }
         }
       `
-    );
-    console.log(result);
-    return result;
-  });
+      );
+    },
+    {
+      getNextPageParam: (lastPage, pages) =>
+        lastPage.accounts.length === limit ? pages.length * limit : null,
+    }
+  );
 };

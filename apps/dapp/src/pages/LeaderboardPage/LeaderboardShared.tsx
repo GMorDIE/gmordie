@@ -1,7 +1,12 @@
 import { LeaderboardAccount } from "./useLeaderboard";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
 import clsx from "clsx";
-import { DetailedHTMLProps, TdHTMLAttributes, ThHTMLAttributes } from "react";
+import {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  TdHTMLAttributes,
+  ThHTMLAttributes,
+} from "react";
 
 export type LeaderboardSort = {
   orderBy: keyof LeaderboardAccount;
@@ -40,6 +45,21 @@ export const BodyCell = (props: BodyCellProps) => (
   <th
     {...props}
     className={clsx("py-2 px-4 whitespace-nowrap", props.className)}
+  />
+);
+
+type BodyRowProps = DetailedHTMLProps<
+  HTMLAttributes<HTMLTableRowElement>,
+  HTMLTableRowElement
+>;
+
+export const BodyRow = (props: BodyRowProps) => (
+  <tr
+    {...props}
+    className={clsx(
+      "bg-zinc-700 odd:bg-zinc-800 hover:bg-zinc-600 font-bold",
+      props.className
+    )}
   />
 );
 

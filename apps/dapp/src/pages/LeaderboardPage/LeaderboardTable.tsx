@@ -9,7 +9,8 @@ import {
   LeaderboardSort,
   LEADERBOARD_PAGING_LIMIT,
   SortIndicator,
-} from "./LeaderboardTableItems";
+  BodyRow,
+} from "./LeaderboardShared";
 import { LeaderboardAccount, useLeaderboard } from "./useLeaderboard";
 import { SunIcon } from "@heroicons/react/solid";
 import Identicon from "@polkadot/react-identicon";
@@ -113,12 +114,9 @@ export const LeaderboardTable = () => {
               <Fragment key={i}>
                 {page.accounts?.map(
                   ({ id, receivedGMGN, sentGMGN, balanceGMGN }, j) => (
-                    <tr
+                    <BodyRow
                       key={id}
-                      className={clsx(
-                        "bg-zinc-700 odd:bg-zinc-800 hover:bg-zinc-600 font-bold",
-                        id === address && "text-salmon-500"
-                      )}
+                      className={id === address ? "text-salmon-500" : ""}
                     >
                       <BodyCell className="text-center">
                         {i * LEADERBOARD_PAGING_LIMIT + j + 1}
@@ -141,7 +139,7 @@ export const LeaderboardTable = () => {
                         {receivedGMGN}
                       </BodyCell>
                       <BodyCell className="text-center">{balanceGMGN}</BodyCell>
-                    </tr>
+                    </BodyRow>
                   )
                 )}
               </Fragment>

@@ -1,4 +1,4 @@
-# Monorepo for GM or DIE dapp
+# Monorepo for GM dapp
 
 ## Getting started
 

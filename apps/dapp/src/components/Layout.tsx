@@ -27,7 +27,7 @@ export const Layout = ({ requiresTime, children, title }: LayoutProps) => {
         )}
       >
         <div className="grow px-4">
-          <Link to="/">GM OR DIE</Link>
+          <Link to="/">GM</Link>
         </div>
         <AccountButton />
       </header>

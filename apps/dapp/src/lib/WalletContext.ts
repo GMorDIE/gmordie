@@ -4,6 +4,7 @@ import { provideContext } from "./provideContext";
 import { APP_NAME } from "./settings";
 import { useOpenClose } from "./useOpenClose";
 import { Injected, InjectedAccount } from "@polkadot/extension-inject/types";
+import { encodeAddress } from "@polkadot/util-crypto";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "react-use";
 
@@ -150,10 +151,22 @@ const useWalletProvider = () => {
     setEnabledWallets({});
   }, [clearConnectedWallets, setSignerAccount]);
 
+  const avatar = useMemo(
+    () => (account ? (account as { avatar?: string })?.avatar : undefined),
+    [account]
+  );
+
+  const address = useMemo(
+    () => (account ? encodeAddress(account.address, 7013) : undefined),
+    [account]
+  );
+
   return {
     connect,
     disconnect,
     account,
+    address,
+    avatar,
     connectedAccounts,
     select,
     isConnectModalOpen,

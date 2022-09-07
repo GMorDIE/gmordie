@@ -1,85 +1,24 @@
 import { Address } from "../../components/Address";
-import { ToastContent } from "../../components/ToastContent";
 import { useWallet } from "../../lib/WalletContext";
+import { copyToClipboard } from "../../lib/copyToClipboard";
+import { LeaderboardUserRow } from "./LeaderBoardUserRow";
+import {
+  BodyCell,
+  LEADERBOARD_DEFAULT_SORT,
+  HeaderCell,
+  LeaderboardSort,
+  LEADERBOARD_PAGING_LIMIT,
+  SortIndicator,
+} from "./LeaderboardTableItems";
 import { LeaderboardAccount, useLeaderboard } from "./useLeaderboard";
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  SunIcon,
-} from "@heroicons/react/solid";
+import { SunIcon } from "@heroicons/react/solid";
 import Identicon from "@polkadot/react-identicon";
-import { encodeAddress } from "@polkadot/util-crypto";
 import clsx from "clsx";
-import {
-  DetailedHTMLProps,
-  Fragment,
-  TdHTMLAttributes,
-  ThHTMLAttributes,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import toast from "react-hot-toast";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useIntersection } from "react-use";
 
-type LeaderboardSort = {
-  orderBy: keyof LeaderboardAccount;
-  ascending: boolean;
-};
-const DEFAULT_SORT: LeaderboardSort = {
-  orderBy: "sentGMGN",
-  ascending: false,
-};
-
-type HeaderCellProps = DetailedHTMLProps<
-  ThHTMLAttributes<HTMLTableCellElement>,
-  HTMLTableCellElement
->;
-
-const HeaderCell = (props: HeaderCellProps) => (
-  <th
-    {...props}
-    className={clsx(
-      "bg-zinc-900 py-2 px-4 whitespace-nowrap",
-      props.className,
-      props.onClick && "cursor-pointer"
-    )}
-  >
-    {props.children}
-  </th>
-);
-
-type BodyCellProps = DetailedHTMLProps<
-  TdHTMLAttributes<HTMLTableCellElement>,
-  HTMLTableCellElement
->;
-
-const BodyCell = (props: BodyCellProps) => (
-  <th
-    {...props}
-    className={clsx("py-2 px-4 whitespace-nowrap", props.className)}
-  />
-);
-
-type SortIndicatorProps = LeaderboardSort & {
-  field: keyof LeaderboardAccount;
-};
-const SortIndicator = (props: SortIndicatorProps) => {
-  if (props.field === props.orderBy)
-    return props.ascending ? (
-      <ChevronUpIcon className="inline w-8 h-8 mr-[-6px]" />
-    ) : (
-      <ChevronDownIcon className="inline w-8 h-8 mr-[-6px]" />
-    );
-  return <ChevronDownIcon className="inline w-8 h-8 mr-[-6px] invisible" />;
-};
-
-const PAGING_LIMIT = 50;
-
 export const LeaderboardTable = () => {
-  const [sort, setSort] = useState<LeaderboardSort>(DEFAULT_SORT);
+  const [sort, setSort] = useState<LeaderboardSort>(LEADERBOARD_DEFAULT_SORT);
   const leaderboard = useLeaderboard(sort.orderBy, sort.ascending);
 
   const {
@@ -91,15 +30,7 @@ export const LeaderboardTable = () => {
     fetchNextPage,
   } = leaderboard;
 
-  const { account } = useWallet();
-  const avatar = useMemo(
-    () => (account as { avatar?: string })?.avatar,
-    [account]
-  );
-  const gmAddress = useMemo(
-    () => (account?.address ? encodeAddress(account.address, 7013) : null),
-    [account?.address]
-  );
+  const { avatar, address } = useWallet();
 
   const handleHeaderClick = useCallback(
     (field: keyof LeaderboardAccount) => () => {
@@ -130,27 +61,8 @@ export const LeaderboardTable = () => {
   ]);
 
   const handleAccountClick = useCallback(
-    (id: string) => async () => {
-      try {
-        await navigator.clipboard.writeText(id);
-        toast.custom((t) => (
-          <ToastContent
-            t={t}
-            title="Copied to clipboard"
-            description={<Address address={id} />}
-            type="success"
-          />
-        ));
-      } catch (err) {
-        toast.custom((t) => (
-          <ToastContent
-            t={t}
-            title="Failed to copy address"
-            description={(err as Error)?.message}
-            type="error"
-          />
-        ));
-      }
+    (id: string) => () => {
+      copyToClipboard(id);
     },
     []
   );
@@ -194,6 +106,9 @@ export const LeaderboardTable = () => {
             </tr>
           </thead>
           <tbody>
+            {address && (
+              <LeaderboardUserRow address={address} avatar={avatar} />
+            )}
             {data?.pages.map((page, i) => (
               <Fragment key={i}>
                 {page.accounts?.map(
@@ -201,19 +116,19 @@ export const LeaderboardTable = () => {
                     <tr
                       key={id}
                       className={clsx(
-                        "bg-zinc-800 odd:bg-zinc-700 hover:bg-zinc-600 font-bold",
-                        id === gmAddress && "text-salmon-500"
+                        "bg-zinc-700 odd:bg-zinc-800 hover:bg-zinc-600 font-bold",
+                        id === address && "text-salmon-500"
                       )}
                     >
                       <BodyCell className="text-center">
-                        {i * PAGING_LIMIT + j + 1}
+                        {i * LEADERBOARD_PAGING_LIMIT + j + 1}
                       </BodyCell>
                       <BodyCell
                         className="text-left cursor-pointer"
                         onClick={handleAccountClick(id)}
                       >
                         <div className="flex align-middle gap-2 ">
-                          {id === gmAddress && avatar ? (
+                          {id === address && avatar ? (
                             <img width={24} height={24} src={avatar} alt="" />
                           ) : (
                             <Identicon value={id} size={24} theme="polkadot" />

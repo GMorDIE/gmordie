@@ -11,10 +11,12 @@ export const LeaderboardHeader = () => {
 
   return (
     <div className="text-center mb-4 text-white">
-      <h1 className="text-3xl font-medium uppercase">Leaderboard</h1>
+      <h1 className="text-3xl uppercase font-light">
+        <span className="font-black ">GM</span> Leaderboard
+      </h1>
       <p
         className={clsx(
-          "text-lg opacity-0 transition-opacity text-zinc-300",
+          "text-lg opacity-0 transition-opacity text-zinc-300 font-medium",
           data && "opacity-100"
         )}
       >

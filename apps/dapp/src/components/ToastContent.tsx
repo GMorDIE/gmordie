@@ -1,6 +1,7 @@
 import { ReactComponent as Spinner } from "../assets/spinner.svg";
 import { XIcon, CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import clsx from "clsx";
+import { ReactNode } from "react";
 import toast, { Toast } from "react-hot-toast";
 
 type ToastType = "success" | "error" | "loading";
@@ -33,8 +34,8 @@ const TypeIcon = ({ type }: { type?: ToastType }) => {
 
 type ToastProps = {
   t: Toast;
-  title: string;
-  description?: string;
+  title: ReactNode;
+  description?: ReactNode;
   type?: ToastType;
 };
 

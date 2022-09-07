@@ -7,11 +7,9 @@ import { LogoutIcon } from "@heroicons/react/solid";
 import { InjectedAccount } from "@polkadot/extension-inject/types";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
-import { CSSProperties, useMemo } from "react";
+import { useMemo } from "react";
 import { Fragment } from "react";
 import { useCallback } from "react";
-
-const identiconStyle: CSSProperties = { cursor: "inherit" };
 
 export const ConnectButton = () => {
   const { openConnectModal } = useWallet();
@@ -40,12 +38,7 @@ const AccountIcon = ({ account }: { account: InjectedAccount }) => {
       alt={acc.name ?? acc.address}
     />
   ) : (
-    <Identicon
-      value={acc.address}
-      size={32}
-      theme="polkadot"
-      style={identiconStyle}
-    />
+    <Identicon value={acc.address} size={32} theme="polkadot" />
   );
 };
 

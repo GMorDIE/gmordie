@@ -11,7 +11,7 @@ export const HomePage = () => {
   const { time } = useGmTime();
 
   return (
-    <Layout>
+    <Layout requiresTime title="Say it back!">
       <div className="container py-4 mx-auto max-w-3xl md:py-8">
         {/* horizontal layout on desktop, vertical on mobile */}
         <div className="flex w-full text-center flex-col md:flex-row justify-center items-center">

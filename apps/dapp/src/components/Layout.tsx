@@ -4,12 +4,17 @@ import { AccountButton } from "./AccountButton";
 import { ConnectModal } from "./ConnectModal";
 import clsx from "clsx";
 import { ReactNode } from "react";
+import { Link } from "react-router-dom";
+import { useTitle } from "react-use";
 
 type LayoutProps = {
+  title: string;
   children: ReactNode;
+  requiresTime?: boolean;
 };
 
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = ({ requiresTime, children, title }: LayoutProps) => {
+  useTitle(`GM - ${title}`);
   const { blockNumber, time } = useGmTime();
   const isMounted = useIsMounted();
 
@@ -18,11 +23,11 @@ export const Layout = ({ children }: LayoutProps) => {
       <header
         className={clsx(
           "flex fixed top-0 left-0 z-10 items-center w-full h-12 text-xl font-extrabold text-white shadow-xl bg-salmon opacity-0 transition-opacity",
-          time && "opacity-100"
+          (!requiresTime || time) && "opacity-100"
         )}
       >
         <div className="grow px-4">
-          <a href="https://gmordie.com">GM OR DIE</a>
+          <Link to="/">GM</Link>
         </div>
         <AccountButton />
       </header>
@@ -37,7 +42,7 @@ export const Layout = ({ children }: LayoutProps) => {
       <footer
         className={clsx(
           "flex items-center px-4 h-12 text-white shadow-xl bg-salmon opacity-0 transition-opacity",
-          time && "opacity-100"
+          (!requiresTime || time) && "opacity-100"
         )}
       >
         <div className="text-xs">

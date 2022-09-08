@@ -1,7 +1,7 @@
 import { Button } from "../../components/Button";
 import { useWallet } from "../../lib/WalletContext";
 import { SendModal } from "./SendModal";
-import { SendModalProvider, useSendModal } from "./SendModalContext";
+import { SendModalProvider, useSendModal } from "./context";
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
 
 const SendButtonInner = () => {

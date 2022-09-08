@@ -1,4 +1,6 @@
-import { useSendModal } from "./SendModalContext";
+import { SendForm } from "./SendForm";
+import { TokenButton } from "./TokenButton";
+import { useSendModal } from "./context";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
@@ -35,7 +37,7 @@ export const SendModal = () => {
                 <Dialog.Title as="h3" className="text-2xl font-bold leading-6">
                   Send GM or GN
                 </Dialog.Title>
-                <p className="py-4 text-lg"></p>
+                <SendForm />
               </Dialog.Panel>
             </Transition.Child>
           </div>

@@ -99,7 +99,7 @@ const useWalletProvider = () => {
   const initialize = useCallback(async () => {
     if (isReady || !api) return;
     if (connectedWallets.length)
-      await Promise.all(connectedWallets.map(connect));
+      await Promise.allSettled(connectedWallets.map(connect));
     setIsReady(true);
   }, [api, connect, connectedWallets, isReady]);
 

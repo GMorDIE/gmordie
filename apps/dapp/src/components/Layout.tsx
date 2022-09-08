@@ -1,3 +1,4 @@
+import { SendButton } from "../features/send/SendButton";
 import { useGmTime } from "../lib/GmTimeContext";
 import { useIsMounted } from "../lib/useIsMounted";
 import { AccountButton } from "./AccountButton";
@@ -29,6 +30,7 @@ export const Layout = ({ requiresTime, children, title }: LayoutProps) => {
         <div className="grow px-4">
           <Link to="/">GM</Link>
         </div>
+        <SendButton />
         <AccountButton />
       </header>
       <main

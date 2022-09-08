@@ -1,10 +1,8 @@
-import { ReactComponent as FrenCoin } from "../assets/fren-coin.svg";
-import { ReactComponent as GmCoin } from "../assets/gm-coin.svg";
-import { ReactComponent as GnCoin } from "../assets/gn-coin.svg";
 import { useWallet } from "../lib/WalletContext";
 import { TOKEN_ID } from "../lib/constants";
 import { formatBalance } from "../lib/formatBalance";
 import { useBalance } from "../lib/useBalance";
+import { TokenIcon } from "./TokenIcon";
 import { useMemo } from "react";
 
 export const Balance = ({
@@ -22,9 +20,7 @@ export const Balance = ({
 
   return (
     <div className=" text-base flex gap-1">
-      {token === "FREN" && <FrenCoin className="inline h-6 w-6" />}
-      {token === "GM" && <GmCoin className="inline h-6 w-6" />}
-      {token === "GN" && <GnCoin className="inline h-6 w-6" />}
+      <TokenIcon symbol={token} className="inline h-6 w-6" />
       <span className="text-xl font-bold ml-1 leading-none" title={free}>
         {free ? `${formatBalance(free, decimals)}` : "-"}
         {formattedLocked !== "0" ? ` (+${formattedLocked})` : ""}

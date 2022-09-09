@@ -23,19 +23,23 @@ export const Layout = ({ requiresTime, children, title }: LayoutProps) => {
     <div className="flex flex-col pt-12 min-h-screen">
       <header
         className={clsx(
-          "flex fixed top-0 left-0 z-10 items-center w-full h-12 text-xl font-extrabold text-white shadow-xl bg-salmon opacity-0 transition-opacity",
+          "overflow-hidden flex fixed top-0 left-0 z-10 items-center w-full h-12 text-xl font-extrabold text-white shadow-xl bg-salmon opacity-0 transition-opacity",
           (!requiresTime || time) && "opacity-100"
         )}
       >
         <div className="grow px-4">
           <Link to="/">GM</Link>
         </div>
-        <SendButton />
-        <AccountButton />
+        <div>
+          <SendButton />
+        </div>
+        <div>
+          <AccountButton />
+        </div>
       </header>
       <main
         className={clsx(
-          "grow p-4 opacity-0 transition-opacity",
+          "grow p-4 opacity-0 transition-opacity overflow-x-auto",
           isMounted && "opacity-100"
         )}
       >

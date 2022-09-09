@@ -1,44 +1,49 @@
-import { Button } from "../../components/Button";
 import { SendFormData } from "./shared";
-import { PlusIcon, TrashIcon } from "@heroicons/react/solid";
+import { TrashIcon } from "@heroicons/react/solid";
+import { isAddress } from "@polkadot/util-crypto";
 import clsx from "clsx";
 import { useCallback } from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { FieldError, useFieldArray, useFormContext } from "react-hook-form";
 
 export const SendRecipients = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+    getValues,
+    trigger,
+  } = useFormContext<SendFormData>();
 
-  const { fields, append, remove } = useFieldArray<SendFormData>({
+  const { fields, append, remove, update } = useFieldArray<SendFormData>({
     name: "recipients",
   });
 
-  const handleAddRecipient = useCallback(() => {
-    append({ address: "", name: "" }, { shouldFocus: true });
-  }, [append]);
+  const autoAppend = useCallback(() => {
+    const { recipients } = getValues();
+    if (recipients.every((field) => isAddress(field.address)))
+      append({ address: "", name: "" });
+    trigger();
+  }, [append, getValues, trigger]);
 
   const handleRemove = useCallback(
-    (index: number) => () => {
-      remove(index);
+    (index: number, isLast: boolean) => () => {
+      if (isLast) update(index, { address: "", name: "" });
+      else remove(index);
+      autoAppend();
     },
-    [remove]
+    [autoAppend, remove, update]
   );
-
-  console.log({ errors });
-
-  console.log("field 0", (errors.recipients as any)?.[0]);
-  console.log("field 1", (errors.recipients as any)?.[1]);
 
   return (
     <div className="flex flex-col w-full gap-2 mb-4">
-      {fields.map((field, index) => (
+      <div>Target frens :</div>
+      {fields.map((field, index, arr) => (
         <div
           key={field.id}
           className={clsx(
-            "flex w-full border focus-within:border-zinc-100 rounded",
-            (errors.recipients as any)?.[index] && "!border-red-500"
+            "flex w-full border rounded",
+            "border-zinc-500 hover:border-zinc-400 focus-within:border-salmon-500 ",
+            (errors.recipients as Record<number, FieldError>)?.[index] &&
+              "!border-red-500"
           )}
         >
           <input
@@ -50,20 +55,18 @@ export const SendRecipients = () => {
             data-lpignore
             spellCheck={false}
             autoComplete="off"
-            {...register(`recipients[${index}].address`)}
+            {...register(`recipients.${index}.address`, {
+              onChange: autoAppend,
+            })}
           />
           <button
-            className="px-2 outline-none opacity-80 focus:opacity-100"
-            onClick={handleRemove(index)}
+            className="px-2 outline-none opacity-80 focus:opacity-100 hover:opacity-100 disabled:opacity-50"
+            onClick={handleRemove(index, arr.length === index + 1)}
           >
             <TrashIcon className="w-5 h-5" />
           </button>
         </div>
       ))}
-      <button className="flex items-center gap-1" onClick={handleAddRecipient}>
-        <PlusIcon className="w-5 h-5" />
-        <span>Add fren</span>
-      </button>
     </div>
   );
 };

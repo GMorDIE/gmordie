@@ -1,7 +1,7 @@
 import { IconSend } from "../../assets/icons";
 import { Button } from "../../components/Button";
 import { useWallet } from "../../lib/WalletContext";
-import { SendModal } from "./SendModal";
+import { SendPane } from "./SendPane";
 import { SendModalProvider, useSendModal } from "./context";
 
 const SendButtonInner = () => {
@@ -26,7 +26,7 @@ export const SendButton = () => {
   return (
     <SendModalProvider>
       <SendButtonInner />
-      <SendModal />
+      <SendPane />
     </SendModalProvider>
   );
 };

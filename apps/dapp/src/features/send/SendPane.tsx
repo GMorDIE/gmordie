@@ -1,14 +1,20 @@
+import { Drawer } from "../../components/Drawer";
 import { SendForm } from "./SendForm";
-import { TokenButton } from "./TokenButton";
 import { useSendModal } from "./context";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
-export const SendModal = () => {
+export const SendPane = () => {
   const { isOpen, close } = useSendModal();
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
+    <Drawer onDismiss={close} show={isOpen} title="Send it!">
+      <SendForm />
+    </Drawer>
+  );
+
+  return (
+    <Transition show={isOpen} as={Fragment}>
       <Dialog open onClose={close}>
         <Transition.Child
           as={Fragment}

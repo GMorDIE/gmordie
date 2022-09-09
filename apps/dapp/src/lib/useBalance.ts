@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useMemo } from "react";
 
+// TODO : use getTokenBalance.ts
+
 export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
   const { blockNumber } = useGmTime();
   const api = useApi();

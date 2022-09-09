@@ -39,7 +39,7 @@ export const Layout = ({ requiresTime, children, title }: LayoutProps) => {
       </header>
       <main
         className={clsx(
-          "grow p-4 opacity-0 transition-opacity overflow-x-auto",
+          "grow p-4 opacity-0 transition-opacity overflow-x-auto overflow-y-hidden",
           isMounted && "opacity-100"
         )}
       >

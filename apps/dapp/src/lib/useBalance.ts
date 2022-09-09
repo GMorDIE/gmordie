@@ -7,16 +7,20 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useMemo } from "react";
 
+// TODO : use getTokenBalance.ts
+
 export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
   const { blockNumber } = useGmTime();
   const api = useApi();
   const [free, setFree] = useState<string>();
+  const [locked, setLocked] = useState<string>();
 
   const decimals = useMemo(() => TOKEN_DECIMALS[tokenId], [tokenId]);
 
   useEffect(() => {
     // clear if address changes
     setFree(undefined);
+    setLocked(undefined);
   }, [address]);
 
   useEffect(() => {
@@ -28,17 +32,20 @@ export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
           "AccountInfo",
           accountInfo
         );
+
         setFree(accountData.free.toString());
+        setLocked(accountData.reserved.toString());
       });
     else
       api.query.tokens.accounts(address, tokenId).then((accountData) => {
-        const { free } = api.createType<OrmlAccountData>(
+        const { free, frozen, reserved } = api.createType<OrmlAccountData>(
           "OrmlAccountData",
           accountData
         );
         setFree(free.toString());
+        setLocked(frozen.add(reserved).toString());
       });
   }, [address, api, blockNumber, tokenId]);
 
-  return { free, decimals };
+  return { free, locked, decimals };
 };

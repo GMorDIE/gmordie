@@ -46,13 +46,13 @@ export const LeaderboardTable = () => {
   const intersectionRef = useRef<HTMLDivElement>(null);
   const intersection = useIntersection(intersectionRef, {
     root: null,
-    rootMargin: "0px",
+    rootMargin: "400px",
     threshold: 1,
   });
 
   useEffect(() => {
     if (isFetching || isFetchingNextPage || !hasNextPage) return;
-    if (intersection && intersection.intersectionRatio > 0) fetchNextPage();
+    if (intersection && intersection.intersectionRatio === 1) fetchNextPage();
   }, [
     fetchNextPage,
     hasNextPage,

@@ -7,6 +7,5 @@ export const formatBalance = (planck: string, decimals: number) => {
     withUnit: false,
     forceUnit: "unit",
   });
-  const num = parseFloat(formatted);
-  return num.toLocaleString();
+  return formatted.replace(/(\.|,)0+$/, "");
 };

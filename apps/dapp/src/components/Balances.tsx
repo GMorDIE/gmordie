@@ -8,13 +8,16 @@ import { useMemo } from "react";
 export const Balance = ({
   address,
   token,
+  showLocked,
 }: {
   address: string;
   token: TOKEN_ID;
+  showLocked?: boolean;
 }) => {
   const { free, locked, decimals } = useBalance(token, address);
   const formattedLocked = useMemo(
-    () => (locked ? formatBalance(locked, decimals) : "0"),
+    () => (showLocked && locked ? formatBalance(locked, decimals) : "0"),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [decimals, locked]
   );
 
@@ -23,7 +26,7 @@ export const Balance = ({
       <TokenIcon symbol={token} className="inline h-6 w-6" />
       <span className="text-xl font-bold ml-1 leading-none" title={free}>
         {free ? `${formatBalance(free, decimals)}` : "-"}
-        {formattedLocked !== "0" ? ` (+${formattedLocked})` : ""}
+        {showLocked && formattedLocked !== "0" ? ` (+${formattedLocked})` : ""}
       </span>{" "}
       <span className="font-normal text-zinc-300">{token}</span>
     </div>
@@ -38,8 +41,8 @@ export const Balances = () => {
   return (
     <div className="flex flex-col gap-2">
       <Balance address={account.address} token="FREN" />
-      <Balance address={account.address} token="GM" />
-      <Balance address={account.address} token="GN" />
+      <Balance address={account.address} token="GM" showLocked />
+      <Balance address={account.address} token="GN" showLocked />
     </div>
   );
 };

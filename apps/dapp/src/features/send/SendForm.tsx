@@ -1,7 +1,7 @@
 import { Button } from "../../components/Button";
-import { ToastContent } from "../../components/ToastContent";
 import { useApi } from "../../lib/ApiContext";
 import { useWallet } from "../../lib/WalletContext";
+import { getSignAndSendCallback } from "../../lib/getSignAndSendCallback";
 import { getTokenBalance } from "../../lib/getTokenBalance";
 import { tokensToPlanck } from "../../lib/tokensToPlanck";
 import { SendRecipients } from "./SendRecipients";
@@ -12,7 +12,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { isAddress, encodeAddress } from "@polkadot/util-crypto";
 import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as yup from "yup";
 
 const schema = yup
@@ -97,36 +96,11 @@ export const SendForm = () => {
                 )
               );
 
-        const unsubscribe = await tx.signAndSend(
+        await tx.signAndSend(
           encodeAddress(address, 7013),
-          (result) => {
-            const fail = result.findRecord("system", "ExtrinsicFailed");
-            if (fail || result.dispatchError || result.isError) {
-              toast.custom((t) => (
-                <ToastContent
-                  t={t}
-                  title="Doh !"
-                  description="Transaction failed 😭"
-                  type="error"
-                />
-              ));
-              unsubscribe();
-              return;
-            }
-
-            if (result.status.isInBlock) {
-              toast.custom((t) => (
-                <ToastContent
-                  t={t}
-                  title="Success"
-                  description="Nailed it! 🤘"
-                  type="success"
-                />
-              ));
-              unsubscribe();
-            }
-          }
+          getSignAndSendCallback()
         );
+
         close();
       } catch (err) {
         console.error(err);

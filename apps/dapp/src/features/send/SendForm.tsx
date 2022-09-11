@@ -116,17 +116,20 @@ export const SendForm = () => {
   return (
     <form className="flex flex-col h-full" onSubmit={handleSubmit(submit)}>
       <FormProvider {...methods}>
-        <div className="p-4 text-lg flex w-full justify-between flex-col sm:flex-row gap-2">
-          <TokenButton
-            symbol="GM"
-            selected={coin === "GM"}
-            onClick={handleSelectCoin("GM")}
-          />
-          <TokenButton
-            symbol="GN"
-            selected={coin === "GN"}
-            onClick={handleSelectCoin("GN")}
-          />
+        <div className="p-4 ">
+          <div>Coin to send :</div>
+          <div className="mt-2 flex w-full justify-between flex-col sm:flex-row gap-2 text-lg">
+            <TokenButton
+              symbol="GM"
+              selected={coin === "GM"}
+              onClick={handleSelectCoin("GM")}
+            />
+            <TokenButton
+              symbol="GN"
+              selected={coin === "GN"}
+              onClick={handleSelectCoin("GN")}
+            />
+          </div>
         </div>
         <div className="grow p-4 overflow-y-auto">
           <SendRecipients />

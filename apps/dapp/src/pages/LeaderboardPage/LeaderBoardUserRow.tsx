@@ -31,7 +31,7 @@ export const LeaderboardUserRow = ({
           ) : (
             <Identicon value={address} size={24} theme="polkadot" />
           )}
-          <Address keep={6} address={address} />
+          <Address keep={6} address={address} withIdentity />
         </div>
       </BodyCell>
       <BodyCell className="text-center">{data.accountById.sentGMGN}</BodyCell>

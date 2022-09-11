@@ -3,8 +3,12 @@ import { ISubmittableResult } from "@polkadot/types/types";
 
 export const getSignAndSendCallback = () => {
   let id = "";
+  let finished = false;
 
   return async (result: ISubmittableResult) => {
+    // prevents error to be displayed multiple times
+    if (finished) return;
+
     if (!id) {
       id = showToast(
         {
@@ -37,6 +41,7 @@ export const getSignAndSendCallback = () => {
           duration: Infinity,
         }
       );
+      finished = true;
     } else if (result.isInBlock) {
       showToast(
         {
@@ -61,6 +66,7 @@ export const getSignAndSendCallback = () => {
           duration: 2000,
         }
       );
+      finished = true;
     }
   };
 };

@@ -41,7 +41,7 @@ export const Drawer = ({
       {/* Sliding sidebar */}
       <Transition.Child
         data-testid="sidepanel-panel"
-        className="z-50 max-w-[100vw] shadow-2xl fixed top-0 right-0 h-screen bg-zinc-700 flex flex-col w-full sm:w-96"
+        className="z-50 max-w-[100vw] shadow-2xl fixed top-0 right-0 h-screen bg-zinc-800 flex flex-col w-full sm:w-96"
         enter="transition ease-in-out duration-300 transform"
         enterFrom="translate-x-full"
         enterTo="translate-x-0"

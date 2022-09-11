@@ -960,10 +960,10 @@
     pako "^2.0.4"
     ws "^8.8.1"
 
-"@substrate/smoldot-light@0.6.31":
-  version "0.6.31"
-  resolved "https://registry.yarnpkg.com/@substrate/smoldot-light/-/smoldot-light-0.6.31.tgz#f8a5aa8cb0dfe27eaab84fea3ec6c189e38d5c5b"
-  integrity sha512-NkrdERL7otXsnF/HXrPi98/39vStC08KqaoUELtZwarP1dEAecRBkpLVMGWbQX8aGg8WyaIs5XXeTN5UJHCMPA==
+"@substrate/smoldot-light@0.6.32":
+  version "0.6.32"
+  resolved "https://registry.yarnpkg.com/@substrate/smoldot-light/-/smoldot-light-0.6.32.tgz#2c770369edbd823cd56c3992f59a16aae122bc42"
+  integrity sha512-c4F5nLositWoyDgtVANsbKFlYZC1unuZxfiJtReFuK2OV96fZ1Auu1+ou+228O4Vw4eIO3D8D8fvQXHxESaWTg==
   dependencies:
     pako "^2.0.4"
     ws "^8.8.1"

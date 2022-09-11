@@ -14,8 +14,8 @@ export const LeaderboardPage = () => {
   }, []);
 
   return (
-    <Layout title="Leaderboard">
-      <div className="container py-2 mx-auto max-w-3xl md:py-4">
+    <Layout title="Leaderboard" noPadding>
+      <div className="container py-4 mx-auto max-w-3xl md:py-4">
         <LeaderboardHeader />
         <LeaderboardTable />
       </div>

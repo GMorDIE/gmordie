@@ -1,14 +1,14 @@
 import { useApi } from "../lib/ApiContext";
 import { useWallet } from "../lib/WalletContext";
+import { SS58_PREFIX } from "../lib/constants";
 import { getSignAndSendCallback } from "../lib/getSignAndSendCallback";
+import { showToast } from "../lib/showToast";
 import { tokensToPlanck } from "../lib/tokensToPlanck";
 import { useBalance } from "../lib/useBalance";
 import { Button } from "./Button";
-import { ToastContent } from "./ToastContent";
 import { BN } from "@polkadot/util";
 import { encodeAddress } from "@polkadot/util-crypto";
 import { useCallback, useMemo, useState } from "react";
-import { toast } from "react-hot-toast";
 
 export const BurnButton = () => {
   const [working, setWorking] = useState(false);
@@ -35,21 +35,21 @@ export const BurnButton = () => {
 
         await api.tx.currencies
           .burnFren(amountToBurn.toString())
-          .signAndSend(encodeAddress(address, 7013), getSignAndSendCallback());
+          .signAndSend(
+            encodeAddress(address, SS58_PREFIX),
+            getSignAndSendCallback()
+          );
       }
       setWorking(false);
     } catch (err) {
+      console.error(err);
       const { message, cause } = err as Error;
       const description = typeof cause === "string" ? cause : undefined;
-      toast.custom((t) => (
-        <ToastContent
-          type="error"
-          t={t}
-          title={message}
-          description={description}
-        />
-      ));
-      console.error(err);
+      showToast({
+        title: message,
+        description,
+        type: "error",
+      });
       setWorking(false);
     }
   }, [account, address, api, decimals, free, openConnectModal]);

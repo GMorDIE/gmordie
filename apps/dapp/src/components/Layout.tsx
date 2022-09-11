@@ -3,6 +3,7 @@ import { useGmTime } from "../lib/GmTimeContext";
 import { useIsMounted } from "../lib/useIsMounted";
 import { AccountButton } from "./AccountButton";
 import { ConnectModal } from "./ConnectModal";
+import { CopyAddressButton } from "./CopyAddressButton";
 import clsx from "clsx";
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
@@ -12,9 +13,15 @@ type LayoutProps = {
   title: string;
   children: ReactNode;
   requiresTime?: boolean;
+  noPadding?: boolean;
 };
 
-export const Layout = ({ requiresTime, children, title }: LayoutProps) => {
+export const Layout = ({
+  requiresTime,
+  children,
+  title,
+  noPadding,
+}: LayoutProps) => {
   useTitle(`GM - ${title}`);
   const { blockNumber, time } = useGmTime();
   const isMounted = useIsMounted();
@@ -30,16 +37,23 @@ export const Layout = ({ requiresTime, children, title }: LayoutProps) => {
         <div className="grow px-4">
           <Link to="/">GM</Link>
         </div>
-        <div>
-          <SendButton />
-        </div>
-        <div>
-          <AccountButton />
+        <div className="flex gap-2 items-center">
+          <div>
+            <CopyAddressButton />
+          </div>
+          <div>
+            <SendButton />
+          </div>
+
+          <div>
+            <AccountButton />
+          </div>
         </div>
       </header>
       <main
         className={clsx(
-          "grow p-4 opacity-0 transition-opacity overflow-x-auto overflow-y-hidden",
+          "grow opacity-0 transition-opacity overflow-x-auto overflow-y-hidden",
+          !noPadding && "p-4",
           isMounted && "opacity-100"
         )}
       >

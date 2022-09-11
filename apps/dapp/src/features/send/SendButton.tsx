@@ -1,5 +1,6 @@
 import { IconSend } from "../../assets/icons";
 import { Button } from "../../components/Button";
+import { HeaderButton } from "../../components/HeaderButton";
 import { useWallet } from "../../lib/WalletContext";
 import { SendPane } from "./SendPane";
 import { SendModalProvider, useSendModal } from "./context";
@@ -11,14 +12,12 @@ const SendButtonInner = () => {
   if (!account) return null;
 
   return (
-    <Button
-      onClick={open}
+    <HeaderButton
+      text="Send it!"
       title="Send GM or GN"
-      className="flex gap-2 text-sm items-center border !py-1"
-    >
-      <span>Send it!</span>
-      <IconSend className="h-4 w-4" />
-    </Button>
+      onClick={open}
+      icon={IconSend}
+    />
   );
 };
 

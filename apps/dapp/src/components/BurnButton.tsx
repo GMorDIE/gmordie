@@ -5,11 +5,9 @@ import { showToast } from "../lib/showToast";
 import { tokensToPlanck } from "../lib/tokensToPlanck";
 import { useBalance } from "../lib/useBalance";
 import { Button } from "./Button";
-import { ToastContent } from "./ToastContent";
 import { BN } from "@polkadot/util";
 import { encodeAddress } from "@polkadot/util-crypto";
 import { useCallback, useMemo, useState } from "react";
-import { toast } from "react-hot-toast";
 
 export const BurnButton = () => {
   const [working, setWorking] = useState(false);

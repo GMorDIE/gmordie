@@ -3,6 +3,7 @@ import { useGmTime } from "../lib/GmTimeContext";
 import { useIsMounted } from "../lib/useIsMounted";
 import { AccountButton } from "./AccountButton";
 import { ConnectModal } from "./ConnectModal";
+import { CopyAddressButton } from "./CopyAddressButton";
 import clsx from "clsx";
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
@@ -36,11 +37,17 @@ export const Layout = ({
         <div className="grow px-4">
           <Link to="/">GM</Link>
         </div>
-        <div>
-          <SendButton />
-        </div>
-        <div>
-          <AccountButton />
+        <div className="flex gap-2 items-center">
+          <div>
+            <CopyAddressButton />
+          </div>
+          <div>
+            <SendButton />
+          </div>
+
+          <div>
+            <AccountButton />
+          </div>
         </div>
       </header>
       <main

@@ -31,7 +31,7 @@ export const useIdentityDisplayName = (address?: string) => {
         number,
         { knownGood?: null | boolean }
       ][]
-    )?.some(([, judgement]) => judgement?.knownGood);
+    )?.some(([, judgement]) => judgement?.knownGood === null);
 
     cache.set(address, display ? ({ display, verified } as Identity) : null);
 

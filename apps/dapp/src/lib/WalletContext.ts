@@ -1,4 +1,5 @@
 import { useApi } from "./ApiContext";
+import { SS58_PREFIX } from "./constants";
 import { injectedWindow } from "./injectedWindow";
 import { provideContext } from "./provideContext";
 import { APP_NAME } from "./settings";
@@ -157,7 +158,7 @@ const useWalletProvider = () => {
   );
 
   const address = useMemo(
-    () => (account ? encodeAddress(account.address, 7013) : undefined),
+    () => (account ? encodeAddress(account.address, SS58_PREFIX) : undefined),
     [account]
   );
 

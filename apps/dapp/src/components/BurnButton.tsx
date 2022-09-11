@@ -1,5 +1,6 @@
 import { useApi } from "../lib/ApiContext";
 import { useWallet } from "../lib/WalletContext";
+import { SS58_PREFIX } from "../lib/constants";
 import { getSignAndSendCallback } from "../lib/getSignAndSendCallback";
 import { showToast } from "../lib/showToast";
 import { tokensToPlanck } from "../lib/tokensToPlanck";
@@ -34,7 +35,10 @@ export const BurnButton = () => {
 
         await api.tx.currencies
           .burnFren(amountToBurn.toString())
-          .signAndSend(encodeAddress(address, 7013), getSignAndSendCallback());
+          .signAndSend(
+            encodeAddress(address, SS58_PREFIX),
+            getSignAndSendCallback()
+          );
       }
       setWorking(false);
     } catch (err) {

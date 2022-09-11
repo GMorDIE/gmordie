@@ -1,6 +1,7 @@
 import { Button } from "../../components/Button";
 import { useApi } from "../../lib/ApiContext";
 import { useWallet } from "../../lib/WalletContext";
+import { SS58_PREFIX } from "../../lib/constants";
 import { getSignAndSendCallback } from "../../lib/getSignAndSendCallback";
 import { getTokenBalance } from "../../lib/getTokenBalance";
 import { tokensToPlanck } from "../../lib/tokensToPlanck";
@@ -24,7 +25,8 @@ const schema = yup
           .test(
             "address",
             "invalid address",
-            (address) => address === "" || isAddress(address, false, 7013)
+            (address) =>
+              address === "" || isAddress(address, false, SS58_PREFIX)
           ),
         name: yup.string(),
       })
@@ -34,8 +36,9 @@ const schema = yup
     "min 1 address",
     "Requires 1 valid address minimum",
     ({ recipients }) =>
-      !!recipients?.filter(({ address }) => isAddress(address, false, 7013))
-        .length
+      !!recipients?.filter(({ address }) =>
+        isAddress(address, false, SS58_PREFIX)
+      ).length
   )
   .required();
 
@@ -97,7 +100,7 @@ export const SendForm = () => {
               );
 
         await tx.signAndSend(
-          encodeAddress(address, 7013),
+          encodeAddress(address, SS58_PREFIX),
           getSignAndSendCallback()
         );
 

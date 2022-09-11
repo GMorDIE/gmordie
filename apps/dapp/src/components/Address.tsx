@@ -1,3 +1,4 @@
+import { SS58_PREFIX } from "../lib/constants";
 import { formatAddressShort } from "../lib/formatAddressShort";
 
 export const Address = ({
@@ -7,12 +8,5 @@ export const Address = ({
   address: string;
   keep?: number;
 }) => {
-  //const api = useApi();
-
-  // const prefix = useMemo(
-  //   () => api?.registry.chainSS58,
-  //   []
-  // );
-
-  return <>{formatAddressShort(address, keep, 7013)}</>;
+  return <>{formatAddressShort(address, keep, SS58_PREFIX)}</>;
 };

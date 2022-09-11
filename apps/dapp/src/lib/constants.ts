@@ -1,3 +1,5 @@
+export const SS58_PREFIX = 7013;
+
 export const TOKEN_DECIMALS = {
   FREN: 12,
   GM: 0,

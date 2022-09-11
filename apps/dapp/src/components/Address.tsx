@@ -17,7 +17,7 @@ export const Address = ({
   return data ? (
     <span className="inline-flex items-center gap-1" title={address}>
       <span>{data.display}</span>
-      {data?.verified && <ShieldCheckIcon className="w-5 h-5 text-green-700" />}
+      {data?.verified && <ShieldCheckIcon className="w-5 h-5 text-green-600" />}
     </span>
   ) : (
     <>{formatAddressShort(address, keep, SS58_PREFIX)}</>

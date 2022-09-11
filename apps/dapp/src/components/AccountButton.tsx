@@ -108,7 +108,7 @@ export const AccountSwitchButton = () => {
                 <button
                   key={key}
                   className={clsx(
-                    "flex gap-3 items-center p-3 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base",
+                    "flex gap-3 items-center p-3 py-1 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base",
                     account.address === currentAccount?.address &&
                       wallet === currentAccount.source &&
                       "font-bold bg-zinc-800 cursor-default"

@@ -1,4 +1,5 @@
 import { Address } from "../../components/Address";
+import { Spinner } from "../../components/Spinner";
 import { useWallet } from "../../lib/WalletContext";
 import { copyToClipboard } from "../../lib/copyToClipboard";
 import { LeaderboardUserRow } from "./LeaderBoardUserRow";
@@ -12,7 +13,6 @@ import {
   BodyRow,
 } from "./LeaderboardShared";
 import { LeaderboardAccount, useLeaderboard } from "./useLeaderboard";
-import { SunIcon } from "@heroicons/react/solid";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
@@ -46,13 +46,13 @@ export const LeaderboardTable = () => {
   const intersectionRef = useRef<HTMLDivElement>(null);
   const intersection = useIntersection(intersectionRef, {
     root: null,
-    rootMargin: "400px",
-    threshold: 1,
+    rootMargin: "10%",
+    threshold: 0.9,
   });
 
   useEffect(() => {
     if (isFetching || isFetchingNextPage || !hasNextPage) return;
-    if (intersection && intersection.intersectionRatio === 1) fetchNextPage();
+    if (intersection && intersection.intersectionRatio >= 0.9) fetchNextPage();
   }, [
     fetchNextPage,
     hasNextPage,
@@ -154,7 +154,7 @@ export const LeaderboardTable = () => {
           "flex w-full justify-center py-4 animate-spin"
         )}
       >
-        <SunIcon className={clsx("w-8 h-8", isFetching && "animate-spin")} />
+        <Spinner className={clsx("w-8 h-8", isFetching && "animate-spin")} />
       </div>
     </>
   );

@@ -12,9 +12,15 @@ type LayoutProps = {
   title: string;
   children: ReactNode;
   requiresTime?: boolean;
+  noPadding: boolean;
 };
 
-export const Layout = ({ requiresTime, children, title }: LayoutProps) => {
+export const Layout = ({
+  requiresTime,
+  children,
+  title,
+  noPadding,
+}: LayoutProps) => {
   useTitle(`GM - ${title}`);
   const { blockNumber, time } = useGmTime();
   const isMounted = useIsMounted();
@@ -39,7 +45,8 @@ export const Layout = ({ requiresTime, children, title }: LayoutProps) => {
       </header>
       <main
         className={clsx(
-          "grow p-4 opacity-0 transition-opacity overflow-x-auto overflow-y-hidden",
+          "grow opacity-0 transition-opacity overflow-x-auto overflow-y-hidden",
+          !noPadding && "p-4",
           isMounted && "opacity-100"
         )}
       >

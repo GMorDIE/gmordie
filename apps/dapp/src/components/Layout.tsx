@@ -12,7 +12,7 @@ type LayoutProps = {
   title: string;
   children: ReactNode;
   requiresTime?: boolean;
-  noPadding: boolean;
+  noPadding?: boolean;
 };
 
 export const Layout = ({

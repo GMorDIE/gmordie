@@ -131,7 +131,7 @@ export const LeaderboardTable = () => {
                           ) : (
                             <Identicon value={id} size={24} theme="polkadot" />
                           )}
-                          <Address keep={6} address={id} />
+                          <Address keep={6} address={id} withIdentity />
                         </div>
                       </BodyCell>
                       <BodyCell className="text-center">{sentGMGN}</BodyCell>

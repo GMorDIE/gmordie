@@ -14,8 +14,6 @@ export const Address = ({
 }) => {
   const { data } = useIdentityDisplayName(withIdentity ? address : undefined);
 
-  if (data?.verified) console.log("verified", address, data);
-
   return data ? (
     <span className="inline-flex items-center gap-1" title={address}>
       <span>{data.display}</span>

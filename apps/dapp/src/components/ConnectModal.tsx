@@ -1,11 +1,10 @@
 import { useWallet } from "../lib/WalletContext";
 import { injectedWindow } from "../lib/injectedWindow";
 import { KnownWallet, knownWallets } from "../lib/knownWallets";
+import { showToast } from "../lib/showToast";
 import { Button } from "./Button";
-import { ToastContent } from "./ToastContent";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useMemo } from "react";
-import { toast } from "react-hot-toast";
 
 export const ConnectModal = () => {
   const { connect, isConnectModalOpen, closeConnectModal } = useWallet();
@@ -24,14 +23,11 @@ export const ConnectModal = () => {
           await connect(wallet.injectedKey);
         } catch (err) {
           console.error(err);
-          toast.custom((t) => (
-            <ToastContent
-              t={t}
-              title="Failed to connect"
-              description={(err as Error).message}
-              type="error"
-            />
-          ));
+          showToast({
+            title: "Failed to connect",
+            description: (err as Error).message,
+            type: "error",
+          });
         }
       }
     },
@@ -44,14 +40,11 @@ export const ConnectModal = () => {
         await connect(walletKey);
       } catch (err) {
         console.error(err);
-        toast.custom((t) => (
-          <ToastContent
-            t={t}
-            title="Failed to connect"
-            description={(err as Error).message}
-            type="error"
-          />
-        ));
+        showToast({
+          title: "Failed to connect",
+          description: (err as Error).message,
+          type: "error",
+        });
       }
     },
     [connect]

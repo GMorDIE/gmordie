@@ -1,6 +1,7 @@
 import { useApi } from "../lib/ApiContext";
 import { useWallet } from "../lib/WalletContext";
 import { getSignAndSendCallback } from "../lib/getSignAndSendCallback";
+import { showToast } from "../lib/showToast";
 import { tokensToPlanck } from "../lib/tokensToPlanck";
 import { useBalance } from "../lib/useBalance";
 import { Button } from "./Button";
@@ -39,17 +40,14 @@ export const BurnButton = () => {
       }
       setWorking(false);
     } catch (err) {
+      console.error(err);
       const { message, cause } = err as Error;
       const description = typeof cause === "string" ? cause : undefined;
-      toast.custom((t) => (
-        <ToastContent
-          type="error"
-          t={t}
-          title={message}
-          description={description}
-        />
-      ));
-      console.error(err);
+      showToast({
+        title: message,
+        description,
+        type: "error",
+      });
       setWorking(false);
     }
   }, [account, address, api, decimals, free, openConnectModal]);

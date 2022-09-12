@@ -18,6 +18,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
+const REGISTRATION_COST = new BN(150_000_000_000_000);
+
 type IdentityFormData = {
   display?: string;
   discord?: string;
@@ -63,7 +65,7 @@ export const IdentityForm = () => {
     if (!registration?.isSome)
       return {
         balanceChecked: true,
-        insufficientBalance: new BN(free) <= new BN(150_000_000_000_000), //150 FREN
+        insufficientBalance: new BN(free).lte(REGISTRATION_COST),
       };
     return { balanceChecked: true, insufficientBalance: false };
   }, [free, locked, registration?.isSome]);

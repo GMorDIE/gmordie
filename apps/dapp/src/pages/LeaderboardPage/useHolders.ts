@@ -1,7 +1,6 @@
+import { SUBSQUID_URL } from "../../lib/settings";
 import { useQuery } from "@tanstack/react-query";
 import request, { gql } from "graphql-request";
-
-const SUBSQUID_URL = "https://squid.subsquid.io/gmordie-frontend/v/v0/graphql";
 
 type RequestResult = {
   accountsConnection: {

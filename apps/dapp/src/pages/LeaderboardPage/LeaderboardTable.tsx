@@ -15,7 +15,14 @@ import {
 import { LeaderboardAccount, useLeaderboard } from "./useLeaderboard";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useIntersection } from "react-use";
 
 export const LeaderboardTable = () => {
@@ -41,6 +48,10 @@ export const LeaderboardTable = () => {
       }));
     },
     []
+  );
+  const userSortBy = useMemo(
+    () => sort.orderBy.replace("GMGN", "") as "sent" | "received",
+    [sort.orderBy]
   );
 
   const intersectionRef = useRef<HTMLDivElement>(null);
@@ -97,23 +108,21 @@ export const LeaderboardTable = () => {
                 Received
                 <SortIndicator field="receivedGMGN" {...sort} />
               </HeaderCell>
-              <HeaderCell
-                className="text-center"
-                onClick={handleHeaderClick("balanceGMGN")}
-              >
-                Balance
-                <SortIndicator field="balanceGMGN" {...sort} />
-              </HeaderCell>
             </tr>
           </thead>
           <tbody>
             {address && (
-              <LeaderboardUserRow address={address} avatar={avatar} />
+              <LeaderboardUserRow
+                address={address}
+                avatar={avatar}
+                sortBy={userSortBy}
+                ascending={sort.ascending}
+              />
             )}
             {data?.pages.map((page, i) => (
               <Fragment key={i}>
                 {page.accounts?.map(
-                  ({ id, receivedGMGN, sentGMGN, balanceGMGN }, j) => (
+                  ({ id, receivedGMGN, sentGMGN, display, verified }, j) => (
                     <BodyRow
                       key={id}
                       className={id === address ? "text-salmon-500" : ""}
@@ -131,14 +140,18 @@ export const LeaderboardTable = () => {
                           ) : (
                             <Identicon value={id} size={24} theme="polkadot" />
                           )}
-                          <Address keep={6} address={id} withIdentity />
+                          <Address
+                            keep={6}
+                            address={id}
+                            display={display}
+                            verified={verified}
+                          />
                         </div>
                       </BodyCell>
                       <BodyCell className="text-center">{sentGMGN}</BodyCell>
                       <BodyCell className="text-center">
                         {receivedGMGN}
                       </BodyCell>
-                      <BodyCell className="text-center">{balanceGMGN}</BodyCell>
                     </BodyRow>
                   )
                 )}

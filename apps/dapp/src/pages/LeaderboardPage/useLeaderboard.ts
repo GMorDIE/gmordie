@@ -1,15 +1,15 @@
+import { useWallet } from "../../lib/WalletContext";
+import { SUBSQUID_URL } from "../../lib/settings";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import request, { gql } from "graphql-request";
 import { useMemo } from "react";
 
-const SUBSQUID_URL = "https://squid.subsquid.io/gmordie-frontend/v/v0/graphql";
-
 export type LeaderboardAccount = {
   id: string;
   display: string;
+  verified: boolean;
   receivedGMGN: string;
   sentGMGN: string;
-  balanceGMGN: string;
 };
 
 type RequestResult = {
@@ -35,11 +35,10 @@ export const useLeaderboard = (
         query Accounts {
           accounts(orderBy: ${orderBy}, limit: ${limit}, offset: ${pageParam}) {
             id
-            balanceGMGN
-            burnedForGMGN
-            burnedForNothing
-            receivedGMGN
+            display
+            verified
             sentGMGN
+            receivedGMGN
           }
         }
       `

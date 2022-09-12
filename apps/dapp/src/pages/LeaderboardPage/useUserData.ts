@@ -1,25 +1,39 @@
+import { SUBSQUID_URL } from "../../lib/settings";
 import { LeaderboardAccount } from "./useLeaderboard";
 import { useQuery } from "@tanstack/react-query";
 import request, { gql } from "graphql-request";
-
-const SUBSQUID_URL = "https://squid.subsquid.io/gmordie-frontend/v/v0/graphql";
+import { useMemo } from "react";
 
 type RequestResult = {
-  accountById: Omit<LeaderboardAccount, "id">;
+  rankAccount: {
+    rank: number;
+    account: Omit<LeaderboardAccount, "id">;
+  };
 };
 
-export const useUserStats = (address: string) => {
-  return useQuery(["userstats", address], () => {
+export const useUserData = (
+  address: string,
+  sortBy: "sent" | "received",
+  ascending = false
+) => {
+  const orderDirection = useMemo(
+    () => (ascending ? "ASC" : "DESC"),
+    [ascending]
+  );
+
+  return useQuery(["userstats", address, sortBy, orderDirection], () => {
     return request<RequestResult>(
       SUBSQUID_URL,
       gql`
         query Accounts {
-          accountById(id: "${address}") {
-            balanceGMGN
-            # burnedForGMGN
-            # burnedForNothing
-            receivedGMGN
-            sentGMGN
+          rankAccount(id: "${address}", orderDirection: ${orderDirection}, rankedBy: ${sortBy}) {
+            rank
+            account {
+              receivedGMGN
+              sentGMGN
+              display
+              verified
+            }
           }
         }
       `

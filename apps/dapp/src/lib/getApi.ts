@@ -1,11 +1,20 @@
-import { WS_RPC_URL } from "./settings";
+import { WS_RPC_URLS } from "./settings";
 import { types } from "@open-web3/orml-type-definitions";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 
+const TIMEOUT = 10_000;
+
 export const getApi = async () => {
-  const wsProvider = new WsProvider(WS_RPC_URL);
-  const api = await ApiPromise.create({ provider: wsProvider });
-  // need the OrmlAccountData type
+  // Promise.any returns the fastest WsProvider to be ready
+  // This should spread the load on all available nodes
+  const provider = await Promise.any(
+    WS_RPC_URLS.map((url) => new WsProvider(url, TIMEOUT)).map((p) => p.isReady)
+  );
+
+  const api = await ApiPromise.create({ provider });
+
+  // register ORML types
   api.registerTypes(types);
+
   return api;
 };

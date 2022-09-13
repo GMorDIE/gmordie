@@ -237,14 +237,20 @@ export const IdentityForm = () => {
       <div className="p-4 flex flex-col gap-2">
         <div className="text-red-500">{errorMessage}</div>
         {registration?.isSome && (
-          <Button
-            type="button"
-            className="w-full"
-            onClick={handleClearIdentity}
-            disabled={!isValid || isSubmitting}
-          >
-            Clear Identity
-          </Button>
+          <>
+            <div className="text-zinc-400">
+              ⚠️ If you update your identity, your judgements will be lost and
+              will have to verify again.
+            </div>
+            <Button
+              type="button"
+              className="w-full"
+              onClick={handleClearIdentity}
+              disabled={!isValid || isSubmitting}
+            >
+              Clear Identity
+            </Button>
+          </>
         )}
         <Button
           type="submit"

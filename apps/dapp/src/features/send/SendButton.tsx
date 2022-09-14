@@ -1,11 +1,9 @@
 import { IconSend } from "../../assets/icons";
-import { Button } from "../../components/Button";
 import { HeaderButton } from "../../components/HeaderButton";
 import { useWallet } from "../../lib/WalletContext";
-import { SendPane } from "./SendPane";
-import { SendModalProvider, useSendModal } from "./context";
+import { useSendModal } from "./context";
 
-const SendButtonInner = () => {
+export const SendButton = () => {
   const { open } = useSendModal();
   const { account } = useWallet();
 
@@ -18,14 +16,5 @@ const SendButtonInner = () => {
       onClick={open}
       icon={IconSend}
     />
-  );
-};
-
-export const SendButton = () => {
-  return (
-    <SendModalProvider>
-      <SendButtonInner />
-      <SendPane />
-    </SendModalProvider>
   );
 };

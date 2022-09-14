@@ -1,5 +1,6 @@
 import { Address } from "../../components/Address";
 import { Spinner } from "../../components/Spinner";
+import { useSendPane } from "../../features/send/context";
 import { useWallet } from "../../lib/WalletContext";
 import { copyToClipboard } from "../../lib/copyToClipboard";
 import { LeaderboardUserRow } from "./LeaderBoardUserRow";
@@ -72,11 +73,14 @@ export const LeaderboardTable = () => {
     isFetchingNextPage,
   ]);
 
+  const { isOpen, sendToAddress } = useSendPane();
   const handleAccountClick = useCallback(
     (id: string) => () => {
-      copyToClipboard(id);
+      if (isOpen) sendToAddress(id);
+      else copyToClipboard(id);
+      return false;
     },
-    []
+    [isOpen, sendToAddress]
   );
 
   if (error)

@@ -1,14 +1,16 @@
+import { useSendPane } from "./context";
 import { SendFormData } from "./shared";
 import { TrashIcon } from "@heroicons/react/solid";
 import { isAddress } from "@polkadot/util-crypto";
 import clsx from "clsx";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { FieldError, useFieldArray, useFormContext } from "react-hook-form";
 
 export const SendRecipients = () => {
+  const { pullAddress } = useSendPane();
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     getValues,
     trigger,
   } = useFormContext<SendFormData>();
@@ -32,6 +34,23 @@ export const SendRecipients = () => {
     },
     [autoAppend, remove, update]
   );
+
+  useEffect(() => {
+    if (!isSubmitting) {
+      const address = pullAddress();
+      if (address) {
+        const { recipients } = getValues();
+        if (!recipients[recipients.length - 1].address) {
+          update(recipients.length - 1, { address, name: "" });
+          // append a new one
+          append({ address: "", name: "" });
+        } else {
+          append({ address, name: "" });
+          // this triggers autoAppend() automatically
+        }
+      }
+    }
+  }, [append, getValues, isSubmitting, pullAddress, update]);
 
   return (
     <div className="flex flex-col w-full gap-2 mb-4">

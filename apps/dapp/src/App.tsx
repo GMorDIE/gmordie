@@ -2,7 +2,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { IdentityPane } from "./features/identity/IdentityPane";
 import { IdentityPaneProvider } from "./features/identity/context";
 import { SendPane } from "./features/send/SendPane";
-import { SendModalProvider } from "./features/send/context";
+import { SendPaneProvider } from "./features/send/context";
 import { ApiProvider } from "./lib/ApiContext";
 import { GmTimeProvider } from "./lib/GmTimeContext";
 import { WalletProvider } from "./lib/WalletContext";
@@ -21,9 +21,9 @@ const AppProviders = ({ children }: { children: ReactNode }) => {
       <ApiProvider>
         <WalletProvider>
           <GmTimeProvider>
-            <SendModalProvider>
+            <SendPaneProvider>
               <IdentityPaneProvider>{children}</IdentityPaneProvider>
-            </SendModalProvider>
+            </SendPaneProvider>
           </GmTimeProvider>
         </WalletProvider>
       </ApiProvider>

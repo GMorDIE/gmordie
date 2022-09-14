@@ -4,19 +4,17 @@ import { useWallet } from "../../lib/WalletContext";
 import { SS58_PREFIX } from "../../lib/constants";
 import { getSignAndSendCallback } from "../../lib/getSignAndSendCallback";
 import { getTokenBalance } from "../../lib/getTokenBalance";
+import { isValidAddress } from "../../lib/isValidAddress";
 import { tokensToPlanck } from "../../lib/tokensToPlanck";
 import { SendRecipients } from "./SendRecipients";
 import { TokenButton } from "./TokenButton";
-import { useSendModal } from "./context";
+import { useSendPane } from "./context";
 import { DEFAULT_FORM_DATA, SendFormData, SendSymbol } from "./shared";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { isAddress, encodeAddress } from "@polkadot/util-crypto";
+import { encodeAddress } from "@polkadot/util-crypto";
 import { useCallback, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
-
-const isValidAddress = (address?: string) =>
-  isAddress(address, false, SS58_PREFIX);
 
 const schema = yup
   .object({
@@ -43,7 +41,7 @@ const schema = yup
   .required();
 
 export const SendForm = () => {
-  const { close } = useSendModal();
+  const { close } = useSendPane();
   const methods = useForm<SendFormData>({
     mode: "all",
     resolver: yupResolver(schema),

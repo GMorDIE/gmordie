@@ -1,10 +1,10 @@
 import { IconSend } from "../../assets/icons";
 import { HeaderButton } from "../../components/HeaderButton";
 import { useWallet } from "../../lib/WalletContext";
-import { useSendModal } from "./context";
+import { useSendPane } from "./context";
 
 export const SendButton = () => {
-  const { open } = useSendModal();
+  const { open } = useSendPane();
   const { account } = useWallet();
 
   if (!account) return null;

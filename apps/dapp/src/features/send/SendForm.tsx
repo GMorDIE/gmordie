@@ -11,9 +11,12 @@ import { useSendModal } from "./context";
 import { DEFAULT_FORM_DATA, SendFormData, SendSymbol } from "./shared";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { isAddress, encodeAddress } from "@polkadot/util-crypto";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
+
+const isValidAddress = (address?: string) =>
+  isAddress(address, false, SS58_PREFIX);
 
 const schema = yup
   .object({
@@ -25,8 +28,7 @@ const schema = yup
           .test(
             "address",
             "invalid address",
-            (address) =>
-              address === "" || isAddress(address, false, SS58_PREFIX)
+            (address) => address === "" || isValidAddress(address)
           ),
         name: yup.string(),
       })
@@ -36,9 +38,7 @@ const schema = yup
     "min 1 address",
     "Requires 1 valid address minimum",
     ({ recipients }) =>
-      !!recipients?.filter(({ address }) =>
-        isAddress(address, false, SS58_PREFIX)
-      ).length
+      !!recipients?.filter(({ address }) => isValidAddress(address)).length
   )
   .required();
 
@@ -71,7 +71,9 @@ export const SendForm = () => {
   const submit = useCallback(
     async (data: SendFormData) => {
       try {
-        const recipients = data.recipients.filter((r) => r.address);
+        const recipients = data.recipients.filter(({ address }) =>
+          isValidAddress(address)
+        );
         if (!api) throw new Error("API isn't ready");
         if (!address) throw new Error("From account is not defined");
         if (!data.coin || !recipients?.length)
@@ -114,7 +116,13 @@ export const SendForm = () => {
     [address, api, close, setError]
   );
 
-  const coin = watch("coin");
+  const [coin, recipients] = watch(["coin", "recipients"]);
+  const btnSendSuffix = useMemo(() => {
+    const count = recipients.filter(({ address }) =>
+      isValidAddress(address)
+    ).length;
+    return count ? ` (${count})` : null;
+  }, [recipients]);
 
   return (
     <form className="flex flex-col h-full" onSubmit={handleSubmit(submit)}>
@@ -144,7 +152,7 @@ export const SendForm = () => {
             className="w-full"
             disabled={!isValid || isSubmitting}
           >
-            Spread love
+            Spread love{btnSendSuffix}
           </Button>
         </div>
       </FormProvider>

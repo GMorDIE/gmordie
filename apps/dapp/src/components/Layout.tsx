@@ -1,4 +1,3 @@
-import { IdentityPane } from "../features/identity/IdentityPane";
 import { SendButton } from "../features/send/SendButton";
 import { useGmTime } from "../lib/GmTimeContext";
 import { useIsMounted } from "../lib/useIsMounted";
@@ -72,7 +71,6 @@ export const Layout = ({
         </div>
       </footer>
       <ConnectModal />
-      <IdentityPane />
     </div>
   );
 };

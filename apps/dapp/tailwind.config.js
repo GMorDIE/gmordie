@@ -17,7 +17,9 @@ module.exports = {
       black: colors.black,
       zinc: colors.zinc,
       red: colors.red,
+      teal: colors.teal,
       green: colors.green,
+      sky: colors.sky,
       salmon: {
         300: "#e19c71",
         400: "#e18e5a",

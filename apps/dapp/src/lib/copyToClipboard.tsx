@@ -1,9 +1,11 @@
 import { Address } from "../components/Address";
 import { showToast } from "./showToast";
+import copy from "copy-to-clipboard";
 
-export const copyToClipboard = async (text: string) => {
+export const copyToClipboard = (text: string) => {
   try {
-    await navigator.clipboard.writeText(text);
+    if (!copy(text)) throw new Error("Unknown error 🤷‍♂️");
+
     showToast(
       {
         title: "Copied to clipboard",
@@ -14,7 +16,7 @@ export const copyToClipboard = async (text: string) => {
     );
   } catch (err) {
     showToast({
-      title: "Failed to copy address",
+      title: "Failed to copy",
       description: (err as Error)?.message,
       type: "error",
     });

@@ -171,7 +171,7 @@ export const LeaderboardTable = () => {
           "flex w-full justify-center py-4 animate-spin"
         )}
       >
-        <Spinner className={clsx("w-8 h-8", isFetching && "animate-spin")} />
+        <Spinner className={clsx("w-8 h-8 animate-spin")} />
       </div>
     </>
   );

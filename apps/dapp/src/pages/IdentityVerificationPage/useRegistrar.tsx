@@ -12,7 +12,7 @@ const DEFAULT_OPTIONS = {
 };
 
 export const useRegistrar = (address?: string, options = DEFAULT_OPTIONS) => {
-  const registrars = useRegistrars();
+  const { data: registrars, isLoading } = useRegistrars();
   //const { data } = useRegistrars();
 
   const { registrar, index }: { registrar?: RegistrarInfo; index: number } =
@@ -29,5 +29,5 @@ export const useRegistrar = (address?: string, options = DEFAULT_OPTIONS) => {
       //const registrar = Array.from(data?.values.).find
     }, [address, registrars]);
 
-  return { isRegistrar: !!registrar, index, registrar };
+  return { isLoading, isRegistrar: !!registrar, index, registrar };
 };

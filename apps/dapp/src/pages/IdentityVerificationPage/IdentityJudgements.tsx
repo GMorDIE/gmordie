@@ -1,64 +1,42 @@
-import { KnownGoodJudgement } from "./KnownGoodJudgement";
+import { IdentityKnownGoodJudgement } from "./IdentityKnownGoodJudgement";
+import { WellKnownJudgementRegistrar } from "./useIdentityVerification";
 import { useRegistrars } from "./useRegistrars";
+import { ShieldCheckIcon } from "@heroicons/react/solid";
 import {
   Registration,
   RegistrarInfo,
 } from "@polkadot/types/interfaces/identity";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 
 type IdentityVerificationProps = {
-  registration?: Registration;
+  knownGoodRegistrars: WellKnownJudgementRegistrar[];
 };
 
 export const IdentityJudgements = ({
-  registration,
+  knownGoodRegistrars,
 }: IdentityVerificationProps) => {
-  const registrars = useRegistrars();
-  // keep only known good ones
-  const knownGoodRegistrarIndexs = useMemo(
-    () =>
-      registration?.judgements
-        ?.filter(([, j]) => j.isKnownGood)
-        ?.map(([i]) => i) ?? [],
-
-    [registration?.judgements]
-  );
-
-  const knownGoodRegistrars = useMemo(() => {
-    return (
-      (knownGoodRegistrarIndexs
-        .map((ri) => {
-          return registrars?.find((_, idx) => idx === ri.toNumber())?.value;
-        })
-        .filter(Boolean) as RegistrarInfo[]) ?? []
-    );
-  }, [knownGoodRegistrarIndexs, registrars]);
-
-  console.log({
-    knownGoodRegistrars,
-  });
-  // const validJudgementRegistrars = useMemo(() => {
-
-  // }, [])
-
-  // console.log({
-  //   registration: registration?.toHuman(),
-  //   validJudgements,
-  //   //regJudgements: validJudgements?.toHuman?.(),
-  // });
-
-  if (!knownGoodRegistrars) return null;
-
   if (!knownGoodRegistrars.length) return <div>Unverified</div>;
 
   return (
-    <>
-      {knownGoodRegistrars?.map((registrarInfo) => (
-        <KnownGoodJudgement
-          key={registrarInfo.account.toString()}
-          registrar={registrarInfo}
-        />
-      ))}
-    </>
+    <div className="font-bold text-white leading-7 align-middle ">
+      {/* <span className="inline-flex flex-col justify-center"></span> */}
+      <ShieldCheckIcon className="inline w-6 h-6 text-green-600 mb-1" />
+      <span>
+        {" "}
+        Verified by{" "}
+        {[
+          ...knownGoodRegistrars,
+          ...knownGoodRegistrars,
+          ...knownGoodRegistrars,
+          ...knownGoodRegistrars,
+        ]?.map((r, i, arr) => (
+          <Fragment key={i + r.registrar.account.toString()}>
+            {i > 0 && arr.length === i + 1 && " and "}
+            {i > 0 && arr.length > i + 1 && ", "}
+            <IdentityKnownGoodJudgement {...r} />
+          </Fragment>
+        ))}
+      </span>
+    </div>
   );
 };

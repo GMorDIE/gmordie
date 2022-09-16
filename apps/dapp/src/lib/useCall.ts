@@ -7,7 +7,14 @@ import type { PromiseResult, QueryableStorageEntry } from "@polkadot/api/types";
 import type { StorageEntryTypeLatest } from "@polkadot/types/interfaces";
 import type { AnyFunction, Codec } from "@polkadot/types/types";
 import { isFunction, isNull, isUndefined, nextTick } from "@polkadot/util";
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 export type CallParam = unknown;
 
@@ -195,7 +202,10 @@ export function useCall<T>(
   fn: TrackFn | undefined | null | false,
   params?: CallParams | null,
   options?: CallOptions<T>
-): T | undefined {
+): {
+  data: T | undefined;
+  isLoading: boolean;
+} {
   const api = useApi();
   const mountedRef = useIsMountedRef();
   const tracker = useRef<Tracker>({
@@ -206,13 +216,23 @@ export function useCall<T>(
     subscriber: null,
     type: "useCall",
   });
+  const [isLoading, setIsLoading] = useState(true);
   const [value, setValue] = useState<T | undefined>(
     (options || {}).defaultValue
   );
 
+  const setValueFromSubscription: Dispatch<
+    React.SetStateAction<T | undefined>
+  > = useCallback((action) => {
+    setValue(action);
+    setIsLoading(false);
+  }, []);
+
   // initial effect, we need an un-subscription
   useEffect((): (() => void) => {
-    return () => unsubscribe(tracker);
+    return () => {
+      unsubscribe(tracker);
+    };
   }, []);
 
   // on changes, re-subscribe
@@ -231,6 +251,8 @@ export function useCall<T>(
       ) {
         tracker.current.fn = fn;
         tracker.current.serialized = serialized;
+        //refIsLoading.current = true;
+        setIsLoading(true);
 
         subscribe(
           api,
@@ -238,12 +260,12 @@ export function useCall<T>(
           tracker,
           fn,
           mappedParams,
-          setValue,
+          setValueFromSubscription,
           options
         );
       }
     }
-  }, [api, fn, options, mountedRef, params]);
+  }, [api, fn, options, mountedRef, params, setValueFromSubscription]);
 
-  return value;
+  return { data: value, isLoading };
 }

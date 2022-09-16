@@ -68,7 +68,7 @@ export const SendRecipients = () => {
           <input
             type="text"
             className={clsx(
-              "grow my-1 p-1 px-2 rounded bg-transparent text-white outline-none"
+              "grow my-1 p-1 px-2 rounded bg-transparent text-white font-mono border-none outline-none focus:ring-0 focus:shadow-none focus:outline-none active:outline-none focus:border-none"
             )}
             placeholder="GM address"
             data-lpignore

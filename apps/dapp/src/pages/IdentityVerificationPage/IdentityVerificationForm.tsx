@@ -24,7 +24,6 @@ const schema = yup.object({
 });
 
 export const IdentityVerificationForm = () => {
-  //const ref = useRef<HTMLInputElement>(null);
   const {
     register,
     setFocus,
@@ -47,7 +46,7 @@ export const IdentityVerificationForm = () => {
   }, [isValid]);
 
   const submit = useCallback(() => {
-    // nothing :)
+    // nothing, we use the form only for validation
   }, []);
 
   const address = watch("address");
@@ -84,7 +83,7 @@ export const IdentityVerificationForm = () => {
           </button>
         </div>
       </form>
-      <IdentityDisplay address={isValid ? address : ""} />
+      <IdentityDisplay address={isValid ? address : undefined} />
     </div>
   );
 };

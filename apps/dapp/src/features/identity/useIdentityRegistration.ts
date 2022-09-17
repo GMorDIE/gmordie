@@ -24,7 +24,6 @@ export const useIdentityRegistration = (
   return useQuery(
     ["identity", address, api],
     async () => {
-      console.log(address);
       if (!address) return null;
       if (!api) return null;
 

@@ -6,7 +6,7 @@ export const IdentityVerificationPage = () => {
   useForceDocumentScroll();
 
   return (
-    <Layout title="ID Verification" noPadding>
+    <Layout title="ID Verification">
       <div className="container mx-auto max-w-2xl md:py-4">
         <div className="text-white text-center py-8">
           <h1 className="text-3xl uppercase font-light">

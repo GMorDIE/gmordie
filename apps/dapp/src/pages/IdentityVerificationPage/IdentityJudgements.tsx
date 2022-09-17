@@ -77,8 +77,6 @@ const IdentityJudgementActions = ({
     [judgement, verify]
   );
 
-  console.log({ judgement });
-
   if (!canVerify || registration?.isEmpty) return null;
 
   return (

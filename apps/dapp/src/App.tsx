@@ -5,6 +5,7 @@ import { SendPane } from "./features/send/SendPane";
 import { SendPaneProvider } from "./features/send/context";
 import { ApiProvider } from "./lib/ApiContext";
 import { GmTimeProvider } from "./lib/GmTimeContext";
+import { NavigationMenuProvider } from "./lib/NavigationMenuContext";
 import { WalletProvider } from "./lib/WalletContext";
 import { Pages } from "./pages";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -19,9 +20,11 @@ const AppProviders = ({ children }: { children: ReactNode }) => {
       <ApiProvider>
         <WalletProvider>
           <GmTimeProvider>
-            <SendPaneProvider>
-              <IdentityPaneProvider>{children}</IdentityPaneProvider>
-            </SendPaneProvider>
+            <NavigationMenuProvider>
+              <SendPaneProvider>
+                <IdentityPaneProvider>{children}</IdentityPaneProvider>
+              </SendPaneProvider>
+            </NavigationMenuProvider>
           </GmTimeProvider>
         </WalletProvider>
       </ApiProvider>

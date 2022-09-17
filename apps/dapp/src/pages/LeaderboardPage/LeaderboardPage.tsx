@@ -9,7 +9,7 @@ export const LeaderboardPage = () => {
 
   return (
     <Layout title="Leaderboard" noPadding>
-      <div className="container py-4 mx-auto max-w-3xl md:py-4">
+      <div className="container py-4 mx-auto max-w-3xl">
         <LeaderboardHeader />
         <LeaderboardTable />
       </div>

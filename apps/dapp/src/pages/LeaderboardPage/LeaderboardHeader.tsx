@@ -10,7 +10,7 @@ export const LeaderboardHeader = () => {
   }, [error]);
 
   return (
-    <div className="text-center mb-4 text-white">
+    <div className="text-center py-8 text-white">
       <h1 className="text-3xl uppercase font-light">
         <span className="font-black ">GM</span> Leaderboard
       </h1>

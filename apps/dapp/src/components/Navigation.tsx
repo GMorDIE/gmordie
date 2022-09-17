@@ -1,5 +1,6 @@
 import { IconTransfers, IconTrophy } from "../assets/icons";
 import { IconTokenGM } from "../assets/tokens";
+import { useNavigationMenu } from "../lib/NavigationMenuContext";
 import {
   ArrowsExpandIcon,
   ArrowSmLeftIcon,
@@ -8,8 +9,8 @@ import {
   ShieldCheckIcon,
 } from "@heroicons/react/outline";
 import clsx from "clsx";
-import { FC, SVGProps, useCallback } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { FC, SVGProps, useCallback, useEffect } from "react";
+import { Link, NavLink, useLocation, useNavigation } from "react-router-dom";
 
 type NavigationItemProps = {
   to: string;
@@ -47,6 +48,11 @@ type NavigationProps = {
 };
 
 export const Navigation = ({ className }: NavigationProps) => {
+  const { close } = useNavigationMenu();
+  const location = useLocation();
+
+  useEffect(close, [location]);
+
   return (
     <div className={clsx("bg-zinc-800 p-2 py-4", className)}>
       <ul className="space-y-2">

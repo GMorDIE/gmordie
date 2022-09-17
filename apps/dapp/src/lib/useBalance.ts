@@ -28,7 +28,6 @@ export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
 
     if (tokenId === NATIVE_TOKEN)
       api.query.system.account(address).then((accountInfo) => {
-        console.log("native result");
         const { data: accountData } = api.createType<AccountInfo>(
           "AccountInfo",
           accountInfo
@@ -39,7 +38,6 @@ export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
       });
     else {
       api.query.tokens.accounts(address, tokenId).then((accountData) => {
-        console.log("orm result");
         const { free, frozen, reserved } = api.createType<OrmlAccountData>(
           "OrmlAccountData",
           accountData

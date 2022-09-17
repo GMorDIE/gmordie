@@ -101,7 +101,7 @@ export const TransactionsList = () => {
     hasNextPage,
     fetchNextPage,
   } = useTransactions();
-  console.log({ data });
+
   const intersectionRef = useRef<HTMLDivElement>(null);
   const intersection = useIntersection(intersectionRef, {
     root: null,

@@ -2,7 +2,6 @@ import { Layout } from "../../components/Layout";
 import { useForceDocumentScroll } from "../../lib/useForceDocumentScroll";
 import { LeaderboardHeader } from "./LeaderboardHeader";
 import { LeaderboardTable } from "./LeaderboardTable";
-import { useEffect } from "react";
 
 export const LeaderboardPage = () => {
   useForceDocumentScroll();

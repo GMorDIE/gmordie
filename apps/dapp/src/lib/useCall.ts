@@ -135,6 +135,7 @@ function subscribe<T>(
   tracker: TrackerRef,
   fn: TrackFn | undefined,
   params: CallParams,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setValue: (value: any) => void,
   {
     transform = transformIdentity,

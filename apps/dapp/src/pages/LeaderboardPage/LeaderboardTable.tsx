@@ -1,22 +1,17 @@
-import { Address } from "../../components/Address";
 import { Spinner } from "../../components/Spinner";
 import { useSendPane } from "../../features/send/context";
 import { useWallet } from "../../lib/WalletContext";
 import { copyToClipboard } from "../../lib/copyToClipboard";
-import { LeaderboardUserRow } from "./LeaderBoardUserRow";
 import {
-  BodyCell,
   LEADERBOARD_DEFAULT_SORT,
   HeaderCell,
   LeaderboardSort,
   LEADERBOARD_PAGING_LIMIT,
   SortIndicator,
-  BodyRow,
   LeaderboardRow,
 } from "./LeaderboardShared";
 import { LeaderboardAccount, useLeaderboard } from "./useLeaderboard";
 import { useUserData } from "./useUserData";
-import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
 import {
   Fragment,

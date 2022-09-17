@@ -1,4 +1,3 @@
-import { Button } from "../../components/Button";
 import { IconButton } from "../../components/IconButton";
 import { IdentityJudgement } from "./IdentityJudgement";
 import { IdentityVerification } from "./useIdentityVerification";

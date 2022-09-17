@@ -3,14 +3,7 @@ import { useWallet } from "../../lib/WalletContext";
 import { SS58_PREFIX } from "../../lib/constants";
 import { getSignAndSendCallback } from "../../lib/getSignAndSendCallback";
 import { useRegistrar } from "./useRegistrar";
-import { ApiBase } from "@polkadot/api/base";
-import { Option } from "@polkadot/types-codec";
-import { Vec } from "@polkadot/types/codec";
-import {
-  RegistrarInfo,
-  IdentityJudgement,
-  Registration,
-} from "@polkadot/types/interfaces/identity";
+import { Registration } from "@polkadot/types/interfaces/identity";
 import { encodeAddress } from "@polkadot/util-crypto";
 import { useCallback, useMemo } from "react";
 

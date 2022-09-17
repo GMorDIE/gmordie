@@ -1,5 +1,4 @@
 import { Address, DisplayJudgement } from "../../components/Address";
-import { JudgementType } from "../IdentityVerificationPage/useIdentityVerify";
 import { LeaderboardAccount } from "./useLeaderboard";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
 import Identicon from "@polkadot/react-identicon";

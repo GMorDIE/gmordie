@@ -1,4 +1,3 @@
-import { useIdentityRegistration } from "../../features/identity/useIdentityRegistration";
 import { isValidAddress } from "../../lib/isValidAddress";
 import { IdentityDisplay } from "./IdentityDisplay";
 import { XIcon } from "@heroicons/react/solid";

@@ -22,6 +22,7 @@ interface TrackerRef {
 
 interface CallOptions<T> {
   defaultValue?: T;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transform?: (value: any, api: ApiPromise) => T;
 }
 

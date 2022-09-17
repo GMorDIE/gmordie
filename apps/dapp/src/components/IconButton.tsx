@@ -24,7 +24,7 @@ const getColorClass = (
       return clsx(
         "text-white border-salmon",
         !checked && !disabled && "hover:border-white/70",
-        checked && "border-salmon-400 !cursor-default"
+        checked && "!border-salmon-400 !cursor-default"
       );
     default:
       throw new Error("Unsupported color " + color);

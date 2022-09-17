@@ -9,7 +9,7 @@ const JudgementIcon = ({
   judgement,
   className,
 }: {
-  judgement: DisplayJudgement;
+  judgement?: DisplayJudgement;
   className?: string;
 }) => {
   let color = "";
@@ -30,7 +30,7 @@ export const Address = ({
   address: string;
   keep?: number;
   display?: string;
-  judgement: DisplayJudgement;
+  judgement?: DisplayJudgement;
 }) => {
   return (
     <span

@@ -1,8 +1,5 @@
 import { Spinner } from "../../components/Spinner";
-import { useApi } from "../../lib/ApiContext";
-import { useCall } from "../../lib/useCall";
 import { IdentityJudgements } from "./IdentityJudgements";
-import { IdentityVerifyButton } from "./IdentityVerify";
 import { useIdentityVerification } from "./useIdentityVerification";
 import { useMemo } from "react";
 

@@ -1,3 +1,4 @@
+import { DisplayJudgement } from "../../components/Address";
 import { SUBSQUID_URL } from "../../lib/settings";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import request, { gql } from "graphql-request";
@@ -5,7 +6,7 @@ import request, { gql } from "graphql-request";
 export type HistoryAccount = {
   id: string;
   display: string;
-  verified: boolean;
+  judgement: DisplayJudgement;
 };
 export type HistoryTx = {
   id: string;
@@ -67,12 +68,12 @@ export const useTransactions = (address?: string) => {
                   from {
                     id
                     display
-                    verified
+                    judgement
                   }
                   to {
                     id
                     display
-                    verified
+                    judgement
                   }
                 }
               }

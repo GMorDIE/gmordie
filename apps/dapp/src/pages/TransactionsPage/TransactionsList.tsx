@@ -22,7 +22,7 @@ const TransactionAccount = ({
   className?: string;
 }) => {
   const { avatar, address } = useWallet();
-  const { id, display, verified } = account;
+  const { id, display, judgement } = account;
   return (
     <div className={clsx("flex align-middle gap-2", className)}>
       <div className="flex flex-col justify-center">
@@ -32,13 +32,13 @@ const TransactionAccount = ({
           <Identicon value={id} size={24} theme="polkadot" />
         )}
       </div>
-      <div
-        className={clsx(
-          "flex flex-col justify-center",
-          !verified && "font-normal"
-        )}
-      >
-        <Address keep={6} address={id} display={display} />
+      <div className={clsx("flex flex-col justify-center")}>
+        <Address
+          keep={6}
+          address={id}
+          display={display}
+          judgement={judgement}
+        />
         {/* oh purée cest beaucoup plus long que je pensais */}
       </div>
     </div>

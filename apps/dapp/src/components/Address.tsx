@@ -31,17 +31,12 @@ export const Address = ({
   keep?: number;
   display?: string;
   judgement?: DisplayJudgement;
-}) => {
-  return (
-    <span
-      className={clsx(
-        "inline-flex items-center gap-1",
-        !display && "font-mono"
-      )}
-      title={address}
-    >
-      <span>{display || formatAddressShort(address, keep, SS58_PREFIX)}</span>
-      <JudgementIcon judgement={judgement} className="w-5 h-5" />
-    </span>
-  );
-};
+}) => (
+  <span
+    className={clsx("inline-flex items-center gap-1", !display && "font-mono")}
+    title={address}
+  >
+    <span>{display || formatAddressShort(address, keep, SS58_PREFIX)}</span>
+    <JudgementIcon judgement={judgement} className="w-5 h-5" />
+  </span>
+);

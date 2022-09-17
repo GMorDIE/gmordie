@@ -1,3 +1,4 @@
+import { Address } from "../../components/Address";
 import { Judge as IdentityJudge } from "./useIdentityVerification";
 import { Registration } from "@polkadot/types/interfaces/identity";
 import { useMemo } from "react";
@@ -20,8 +21,7 @@ export const IdentityJudgement = ({
     else if (judgement?.isReasonable) className = "text-white";
 
     const account = judge.registrar?.account?.toString();
-    const display =
-      (judge.registration?.info.display?.value?.toHuman() as string) ?? account;
+    const display = judge.registration?.info?.display?.value?.toHuman();
 
     return {
       account,
@@ -30,11 +30,9 @@ export const IdentityJudgement = ({
     };
   }, [judge, registration]);
 
-  if (!display) return null;
-
   return (
     <span className={className} title={account}>
-      {display}
+      <>{display || <Address address={account} />}</>
     </span>
   );
 };

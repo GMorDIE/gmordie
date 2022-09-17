@@ -12,8 +12,10 @@ import {
   LEADERBOARD_PAGING_LIMIT,
   SortIndicator,
   BodyRow,
+  LeaderboardRow,
 } from "./LeaderboardShared";
 import { LeaderboardAccount, useLeaderboard } from "./useLeaderboard";
+import { useUserData } from "./useUserData";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
 import {
@@ -62,8 +64,22 @@ export const LeaderboardTable = () => {
     threshold: 0.9,
   });
 
+  // we want to check only once for user's isFetched,
+  // because in case of page refresh or direct page access, user might not be authenticated yet
+  // we don't want authentication to hide the whole content
+  const { data: user, isFetched: isUserFetched } = useUserData(
+    address,
+    userSortBy,
+    sort.ascending
+  );
+  const [hasUserBeenFetched, setHasUserBeenFetched] = useState(isUserFetched);
+  useEffect(() => {
+    setHasUserBeenFetched((prev) => prev || isUserFetched);
+  }, [isUserFetched]);
+
   useEffect(() => {
     if (isFetching || isFetchingNextPage || !hasNextPage) return;
+    if (!hasUserBeenFetched) return;
     if (intersection && intersection.intersectionRatio >= 0.9) fetchNextPage();
   }, [
     fetchNextPage,
@@ -71,11 +87,13 @@ export const LeaderboardTable = () => {
     intersection,
     isFetching,
     isFetchingNextPage,
+    hasUserBeenFetched,
   ]);
 
   const { isOpen, sendToAddress } = useSendPane();
   const handleAccountClick = useCallback(
-    (id: string) => () => {
+    (id?: string) => () => {
+      if (!id) return false;
       if (isOpen) sendToAddress(id);
       else copyToClipboard(id);
       return false;
@@ -92,11 +110,11 @@ export const LeaderboardTable = () => {
 
   return (
     <>
-      {data && (
+      {data && hasUserBeenFetched && (
         <table className="table-auto w-full">
           <thead>
             <tr>
-              <HeaderCell className="text-center">Rank</HeaderCell>
+              <HeaderCell className="text-center rounded-tl">Rank</HeaderCell>
               <HeaderCell className="text-left w-full">Account</HeaderCell>
               <HeaderCell
                 className="text-center"
@@ -106,7 +124,7 @@ export const LeaderboardTable = () => {
                 <SortIndicator field="sentGMGN" {...sort} />
               </HeaderCell>
               <HeaderCell
-                className="text-center"
+                className="text-center rounded-tr"
                 onClick={handleHeaderClick("receivedGMGN")}
               >
                 Received
@@ -115,55 +133,40 @@ export const LeaderboardTable = () => {
             </tr>
           </thead>
           <tbody>
-            {address && (
+            {/* {address && (
               <LeaderboardUserRow
                 address={address}
                 avatar={avatar}
                 sortBy={userSortBy}
                 ascending={sort.ascending}
               />
+            )} */}
+            {user?.rankAccount.account && (
+              <LeaderboardRow
+                {...user.rankAccount.account}
+                address={address}
+                rank={user.rankAccount.rank}
+                onClick={handleAccountClick(address)}
+                className="border-b-salmon-500 border-b-2"
+              />
             )}
             {data?.pages.map((page, i) => (
               <Fragment key={i}>
-                {page.accounts?.map(
-                  ({ id, receivedGMGN, sentGMGN, display, verified }, j) => (
-                    <BodyRow
-                      key={id}
-                      className={id === address ? "text-salmon-500" : ""}
-                    >
-                      <BodyCell className="text-center">
-                        {i * LEADERBOARD_PAGING_LIMIT + j + 1}
-                      </BodyCell>
-                      <BodyCell
-                        className="text-left cursor-pointer"
-                        onClick={handleAccountClick(id)}
-                      >
-                        <div className="flex align-middle gap-2 ">
-                          {id === address && avatar ? (
-                            <img width={24} height={24} src={avatar} alt="" />
-                          ) : (
-                            <Identicon value={id} size={24} theme="polkadot" />
-                          )}
-                          <Address
-                            keep={6}
-                            address={id}
-                            display={display}
-                            verified={verified}
-                          />
-                        </div>
-                      </BodyCell>
-                      <BodyCell className="text-center">{sentGMGN}</BodyCell>
-                      <BodyCell className="text-center">
-                        {receivedGMGN}
-                      </BodyCell>
-                    </BodyRow>
-                  )
-                )}
+                {page.accounts?.map((acc, j) => (
+                  <LeaderboardRow
+                    key={acc.id}
+                    {...acc}
+                    address={address}
+                    rank={i * LEADERBOARD_PAGING_LIMIT + j + 1}
+                    onClick={handleAccountClick(acc.id)}
+                  />
+                ))}
               </Fragment>
             ))}
           </tbody>
         </table>
       )}
+
       <div
         ref={intersectionRef}
         className={clsx(

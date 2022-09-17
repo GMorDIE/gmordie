@@ -1,5 +1,8 @@
+import { Address, DisplayJudgement } from "../../components/Address";
+import { JudgementType } from "../IdentityVerificationPage/useIdentityVerify";
 import { LeaderboardAccount } from "./useLeaderboard";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
+import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
 import {
   DetailedHTMLProps,
@@ -75,3 +78,53 @@ export const SortIndicator = (props: SortIndicatorProps) => {
     );
   return <ChevronDownIcon className="inline w-8 h-8 mr-[-6px] invisible" />;
 };
+
+type LeaderboardRowProps = {
+  id: string;
+  address?: string;
+  rank: number;
+  avatar?: string;
+  display: string;
+  judgement: DisplayJudgement;
+  sentGMGN: string;
+  receivedGMGN: string;
+  className?: string;
+  onClick?: () => void;
+};
+
+export const LeaderboardRow = ({
+  id, // account for the row
+  address, // current user
+  rank,
+  avatar,
+  display,
+  judgement,
+  sentGMGN,
+  receivedGMGN,
+  onClick,
+  className,
+}: LeaderboardRowProps) => (
+  <BodyRow
+    key={id}
+    className={clsx(id === address ? "text-salmon-500" : "", className)}
+  >
+    <BodyCell className="text-center">{rank}</BodyCell>
+    <BodyCell className="text-left cursor-pointer" onClick={onClick}>
+      <div className="flex align-middle gap-2 ">
+        {id === address && avatar ? (
+          <img width={24} height={24} src={avatar} alt="" />
+        ) : (
+          <Identicon value={id} size={24} theme="polkadot" />
+        )}
+        <Address
+          keep={6}
+          address={id}
+          display={display}
+          judgement={judgement}
+        />
+      </div>
+    </BodyCell>
+    <BodyCell className="text-center">{sentGMGN}</BodyCell>
+    <BodyCell className="text-center">{receivedGMGN}</BodyCell>
+  </BodyRow>
+);

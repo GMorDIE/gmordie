@@ -1,4 +1,4 @@
-import { useWallet } from "../../lib/WalletContext";
+import { DisplayJudgement } from "../../components/Address";
 import { SUBSQUID_URL } from "../../lib/settings";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import request, { gql } from "graphql-request";
@@ -8,6 +8,7 @@ export type LeaderboardAccount = {
   id: string;
   display: string;
   verified: boolean;
+  judgement: DisplayJudgement;
   receivedGMGN: string;
   sentGMGN: string;
 };
@@ -39,6 +40,7 @@ export const useLeaderboard = (
             verified
             sentGMGN
             receivedGMGN
+            judgement
           }
         }
       `

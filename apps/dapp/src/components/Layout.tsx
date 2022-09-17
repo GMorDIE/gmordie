@@ -4,6 +4,7 @@ import { useIsMounted } from "../lib/useIsMounted";
 import { AccountButton } from "./AccountButton";
 import { ConnectModal } from "./ConnectModal";
 import { CopyAddressButton } from "./CopyAddressButton";
+import { Navigation } from "./Navigation";
 import clsx from "clsx";
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
@@ -50,18 +51,29 @@ export const Layout = ({
           </div>
         </div>
       </header>
-      <main
-        className={clsx(
-          "grow opacity-0 transition-opacity overflow-x-auto overflow-y-hidden",
-          !noPadding && "p-4",
-          isMounted && "opacity-100"
-        )}
-      >
-        {children}
-      </main>
+      <div className="grow flex relative">
+        <Navigation
+          className={clsx(
+            "w-72 hidden 2xl:block fixed top-12 bottom-0 left-0 drop-shadow-lg opacity-0",
+            (!requiresTime || time) && "opacity-100"
+          )}
+        />
+        <main
+          className={clsx(
+            "grow opacity-0 transition-opacity overflow-x-auto overflow-y-hidden",
+            !noPadding && "p-4",
+            isMounted && "opacity-100",
+
+            // margin if navigation is displayed
+            (!requiresTime || time) && "2xl:ml-72"
+          )}
+        >
+          {children}
+        </main>
+      </div>
       <footer
         className={clsx(
-          "flex items-center px-4 h-12 text-white shadow-xl bg-salmon opacity-0 transition-opacity",
+          "flex items-center px-4 h-12 text-white shadow-xl bg-salmon opacity-0 transition-opacity z-0",
           (!requiresTime || time) && "opacity-100"
         )}
       >

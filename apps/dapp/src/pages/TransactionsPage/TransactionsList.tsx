@@ -39,7 +39,6 @@ const TransactionAccount = ({
           display={display}
           judgement={judgement}
         />
-        {/* oh purée cest beaucoup plus long que je pensais */}
       </div>
     </div>
   );

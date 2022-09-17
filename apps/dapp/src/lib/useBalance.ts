@@ -28,6 +28,7 @@ export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
 
     if (tokenId === NATIVE_TOKEN)
       api.query.system.account(address).then((accountInfo) => {
+        console.log("native result");
         const { data: accountData } = api.createType<AccountInfo>(
           "AccountInfo",
           accountInfo
@@ -36,8 +37,9 @@ export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
         setFree(accountData.free.toString());
         setLocked(accountData.reserved.toString());
       });
-    else
+    else {
       api.query.tokens.accounts(address, tokenId).then((accountData) => {
+        console.log("orm result");
         const { free, frozen, reserved } = api.createType<OrmlAccountData>(
           "OrmlAccountData",
           accountData
@@ -45,6 +47,7 @@ export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
         setFree(free.toString());
         setLocked(frozen.add(reserved).toString());
       });
+    }
   }, [address, api, blockNumber, tokenId]);
 
   return { free, locked, decimals };

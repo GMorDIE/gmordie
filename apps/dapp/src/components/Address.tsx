@@ -37,6 +37,6 @@ export const Address = ({
     title={address}
   >
     <span>{display || formatAddressShort(address, keep, SS58_PREFIX)}</span>
-    <JudgementIcon judgement={judgement} className="w-5 h-5" />
+    <JudgementIcon judgement={judgement} className="w-5 h-5 min-w-min" />
   </span>
 );

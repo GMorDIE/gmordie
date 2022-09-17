@@ -91,7 +91,7 @@ export function useCallMulti<T>(
     subscriber: null,
     type: "useCallMulti",
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!!calls && !!calls?.length);
   const [value, setValue] = useState<T>(
     () =>
       (isUndefined((options || {}).defaultValue)
@@ -119,7 +119,10 @@ export function useCallMulti<T>(
       if (serialized !== tracker.current.serialized) {
         tracker.current.serialized = serialized;
 
-        setIsLoading(true);
+        setIsLoading(!!calls.length);
+
+        //if no call, force clear because subscription won't trigger
+        if (calls && !calls.length) setValue([] as T);
         subscribe(
           api,
           mountedRef,

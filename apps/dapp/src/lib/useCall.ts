@@ -267,5 +267,5 @@ export function useCall<T>(
     }
   }, [api, fn, options, mountedRef, params, setValueFromSubscription]);
 
-  return { data: value, isLoading };
+  return { data: value, isLoading: isLoading && !value };
 }

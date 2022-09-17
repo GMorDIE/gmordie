@@ -83,7 +83,7 @@ export const IdentityVerificationForm = () => {
           </button>
         </div>
       </form>
-      <IdentityDisplay address={isValid ? address : undefined} />
+      <IdentityDisplay address={isValid ? address : ""} />
     </div>
   );
 };

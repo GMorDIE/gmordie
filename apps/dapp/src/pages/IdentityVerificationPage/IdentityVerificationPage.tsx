@@ -1,7 +1,10 @@
 import { Layout } from "../../components/Layout";
+import { useForceDocumentScroll } from "../../lib/useForceDocumentScroll";
 import { IdentityVerificationForm } from "./IdentityVerificationForm";
 
 export const IdentityVerificationPage = () => {
+  useForceDocumentScroll();
+
   return (
     <Layout title="ID Verification" noPadding>
       <div className="container mx-auto max-w-2xl md:py-4">

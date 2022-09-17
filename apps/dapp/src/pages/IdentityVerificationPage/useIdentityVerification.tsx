@@ -1,88 +1,93 @@
-import { useApi } from "../../lib/ApiContext";
-import { useCall } from "../../lib/useCall";
-import { useRegistrations } from "../../lib/useRegistration";
+import { useRegistration, useRegistrations } from "../../lib/useRegistration";
 import { useRegistrars } from "./useRegistrars";
-import { Option } from "@polkadot/types-codec";
 import {
   RegistrarInfo,
   Registration,
 } from "@polkadot/types/interfaces/identity";
 import { useMemo } from "react";
 
-export type WellKnownJudgementRegistrar = {
+export type Judge = {
   registrar: RegistrarInfo;
   registration: Registration;
+  index: number;
 };
 
 export type IdentityVerification = {
   registration: Registration;
-  knownGoodRegistrars: WellKnownJudgementRegistrar[];
+  judges: Judge[];
 };
 
 export const useIdentityVerification = (address: string) => {
-  const api = useApi();
   const { data: registrars, isLoading: isLoadingRegistrars } = useRegistrars();
-  const { data: registration, isLoading: isLoadingRegistration } = useCall<
-    Option<Registration>
-  >(api?.query.identity.identityOf, [address]);
+  const { data: registration, isLoading: isLoadingRegistration } =
+    useRegistration(address);
 
-  const kgRegistrarsIndexs = useMemo(
-    () =>
-      registration?.value?.judgements
-        ?.filter(([, j]) => j.isKnownGood)
-        ?.map(([i]) => i) ?? [],
+  const judgesIndexs = useMemo(
+    () => registration?.value?.judgements?.map(([i]) => i) ?? [],
 
     [registration]
   );
 
-  const { kgRegistrars, kgRegistrarsAddresses } = useMemo(() => {
-    const kgRegistrars =
-      (kgRegistrarsIndexs
+  const { judges, judgesAddresses } = useMemo(() => {
+    const judges =
+      (judgesIndexs
         .map((ri) => {
           return registrars?.find((_, idx) => idx === ri.toNumber())?.value;
         })
         .filter(Boolean) as RegistrarInfo[]) ?? [];
     return {
-      kgRegistrars,
-      kgRegistrarsAddresses: kgRegistrars.map((r) => r.account.toString()),
+      judges,
+      judgesAddresses: judges.map((r) => r.account.toString()),
     };
-  }, [kgRegistrarsIndexs, registrars]);
+  }, [judgesIndexs, registrars]);
 
-  const {
-    data: kgRegistrarsIdentities,
-    isLoading: isLoadingRegistrarIdentities,
-  } = useRegistrations(kgRegistrarsAddresses);
+  const { data: judgesIdentities, isLoading: isLoadingJudgesIdentities } =
+    useRegistrations(judgesAddresses);
 
-  const isLoading = useMemo(
-    () =>
+  const isLoading = useMemo(() => {
+    const hasMissingIdentities = judges?.length !== judgesIdentities?.length;
+    return (
       isLoadingRegistrars ||
       isLoadingRegistration ||
-      isLoadingRegistrarIdentities,
-    [isLoadingRegistrarIdentities, isLoadingRegistrars, isLoadingRegistration]
-  );
+      isLoadingJudgesIdentities ||
+      hasMissingIdentities
+    );
+  }, [
+    isLoadingJudgesIdentities,
+    isLoadingRegistrars,
+    isLoadingRegistration,
+    judges?.length,
+    judgesIdentities,
+  ]);
 
   const data: IdentityVerification | undefined = useMemo(() => {
     if (isLoading) return undefined;
 
-    const arkgRegistrarIdentities = kgRegistrarsIdentities?.map((a) => a);
-    if (kgRegistrars?.length !== kgRegistrarsIdentities?.length)
-      return undefined;
+    const arkgRegistrarIdentities = judgesIdentities?.map((a) => a);
 
     return {
       registration: registration?.value,
-      knownGoodRegistrars:
-        kgRegistrars?.map((kgr, i) => ({
-          registrar: kgr,
+      judges:
+        judges?.map((registrar, i) => ({
+          registrar,
           registration: arkgRegistrarIdentities?.[i]?.value,
+          index: registrars?.findIndex((r) => r.value === registrar),
         })) ?? [],
     } as IdentityVerification;
-  }, [isLoading, kgRegistrars, kgRegistrarsIdentities, registration]);
+  }, [isLoading, judges, judgesIdentities, registrars, registration?.value]);
 
-  console.log("useID", address, isLoading, data, {
-    kgRegistrars,
-    kgRegistrarsIdentities,
-    registration,
-  });
+  // @devs keep for debugging
+  // console.log("useIdentityVerification", {
+  //   isLoading,
+  //   isLoadingRegistrarIdentities,
+  //   isLoadingRegistrars,
+  //   isLoadingRegistration,
+  //   registrars: registrars?.map((r) => r.toHuman()),
+  //   registration: registration?.toHuman(),
+  //   kgRegistrarsIndexs: kgRegistrarsIndexs?.map((r) => r.toHuman()),
+  //   kgRegistrarsIdentities: kgRegistrarsIdentities?.map((r) => r.toHuman()),
+  //   kgRegistrarsAddresses,
+  // });
 
   return { isLoading, data };
 };

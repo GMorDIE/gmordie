@@ -4,9 +4,6 @@ import { useCall } from "../../lib/useCall";
 import { IdentityJudgements } from "./IdentityJudgements";
 import { IdentityVerifyButton } from "./IdentityVerify";
 import { useIdentityVerification } from "./useIdentityVerification";
-import { ShieldCheckIcon } from "@heroicons/react/solid";
-import { Option } from "@polkadot/types-codec";
-import { Registration } from "@polkadot/types/interfaces/identity";
 import { useMemo } from "react";
 
 type IdentityDisplayProps = {
@@ -36,12 +33,14 @@ export const IdentityDisplay = ({ address }: IdentityDisplayProps) => {
   if (!data) return null;
 
   return (
-    <div className="flex flex-col gap-6 pb-8">
-      <div className="space-y-2">
-        <IdentityJudgements knownGoodRegistrars={data.knownGoodRegistrars} />
-        <pre className="bg-zinc-800 rounded p-2">{stringified}</pre>
-      </div>
-      {stringified !== "null" && <IdentityVerifyButton address={address} />}
+    <div className="flex flex-col pb-8 gap-2">
+      <IdentityJudgements
+        address={address}
+        registration={data.registration}
+        judges={data.judges}
+      />
+      <pre className="bg-zinc-800 rounded p-2">{stringified}</pre>
+      {/* {stringified !== "null" && <IdentityVerifyButton address={address} />} */}
     </div>
   );
 };

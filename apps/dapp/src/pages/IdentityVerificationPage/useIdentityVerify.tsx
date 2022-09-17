@@ -9,6 +9,7 @@ import { Vec } from "@polkadot/types/codec";
 import {
   RegistrarInfo,
   IdentityJudgement,
+  Registration,
 } from "@polkadot/types/interfaces/identity";
 import { encodeAddress } from "@polkadot/util-crypto";
 import { useQuery } from "@tanstack/react-query";
@@ -19,9 +20,11 @@ const DEFAULT_OPTIONS = {
   refetchOnWindowFocus: false,
 };
 
+export type JudgementType = "Unknown" | "Reasonable" | "KnownGood";
+
 export const useIdentityVerify = (
-  address?: string,
-  options = DEFAULT_OPTIONS
+  registration: Registration,
+  address?: string
 ) => {
   const { address: currentAddress } = useWallet();
   const { index } = useRegistrar(currentAddress);
@@ -42,21 +45,34 @@ export const useIdentityVerify = (
   //     //const registrar = Array.from(data?.values.).find
   //   }, [address, data]);
 
+  const judgement: JudgementType = useMemo(() => {
+    if (index === -1) return "Unknown";
+    const j = registration?.judgements?.find(
+      ([i]) => i.toNumber() === index
+    )?.[1];
+    if (j?.isKnownGood) return "KnownGood";
+    if (j?.isReasonable) return "Reasonable";
+    return "Unknown";
+  }, [registration, index]);
+
   const api = useApi();
   //const test:IdentityJudgement = ""
-  const verify = useCallback(async () => {
-    if (!api) throw new Error("Api is not defined");
-    if (!currentAddress) throw new Error("currentAddress is not defined");
-    if (index === -1) throw new Error("index not found");
+  const verify = useCallback(
+    async (type: JudgementType) => {
+      if (!api) throw new Error("Api is not defined");
+      if (!currentAddress) throw new Error("currentAddress is not defined");
+      if (index === -1) throw new Error("index not found");
 
-    await api.isReady;
-    await api.tx.identity
-      .provideJudgement(index, address, "KnownGood")
-      .signAndSend(
-        encodeAddress(currentAddress, SS58_PREFIX),
-        getSignAndSendCallback()
-      );
-  }, [address, api, currentAddress, index]);
+      await api.isReady;
+      await api.tx.identity
+        .provideJudgement(index, address, type)
+        .signAndSend(
+          encodeAddress(currentAddress, SS58_PREFIX),
+          getSignAndSendCallback()
+        );
+    },
+    [address, api, currentAddress, index]
+  );
 
-  return { canVerify: !!api && index !== -1, verify };
+  return { canVerify: !!api && index !== -1, verify, judgement };
 };

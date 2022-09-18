@@ -140,6 +140,7 @@ export const LeaderboardTable = () => {
               <LeaderboardRow
                 {...user.rankAccount.account}
                 address={address}
+                avatar={avatar}
                 rank={user.rankAccount.rank}
                 onClick={handleAccountClick(address)}
                 className="border-b-salmon-500 border-b-2"
@@ -151,6 +152,7 @@ export const LeaderboardTable = () => {
                   <LeaderboardRow
                     key={acc.id}
                     {...acc}
+                    avatar={avatar}
                     address={address}
                     rank={i * LEADERBOARD_PAGING_LIMIT + j + 1}
                     onClick={handleAccountClick(acc.id)}

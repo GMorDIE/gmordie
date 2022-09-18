@@ -1,8 +1,6 @@
 import { isValidAddress } from "../../lib/isValidAddress";
-import { useCall } from "../../lib/useCall";
 import { XIcon } from "@heroicons/react/outline";
 import clsx from "clsx";
-import copy from "copy-to-clipboard";
 import {
   ChangeEventHandler,
   FC,
@@ -47,6 +45,8 @@ export const TransactionsAddress: FC<TransactionsAddressProps> = ({
     }
   }, [isValid, onChange, value]);
 
+  console.log(value);
+
   return (
     <div
       className={clsx(
@@ -70,7 +70,10 @@ export const TransactionsAddress: FC<TransactionsAddressProps> = ({
       />
       <button
         type="button"
-        className="px-2 outline-none opacity-80 focus:opacity-100 hover:opacity-100 disabled:opacity-50"
+        className={clsx(
+          "hidden px-2 outline-none opacity-80 focus:opacity-100 hover:opacity-100 disabled:opacity-50",
+          value && "!block"
+        )}
         onClick={handleClearClick}
       >
         <XIcon className="w-5 h-5" />

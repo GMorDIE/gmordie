@@ -57,7 +57,8 @@ export const IdentityVerificationForm = () => {
           className={clsx(
             "flex w-full border rounded",
             "border-zinc-500 hover:border-zinc-400 focus-within:border-salmon-500 hover:focus-within:border-salmon-500 ",
-            errors.address &&
+            address &&
+              errors.address &&
               errors.address?.type !== "required" &&
               "!border-red-500"
           )}
@@ -75,7 +76,10 @@ export const IdentityVerificationForm = () => {
           />
           <button
             type="button"
-            className="px-2 outline-none opacity-80 focus:opacity-100 hover:opacity-100 disabled:opacity-50"
+            className={clsx(
+              "hidden px-2 outline-none opacity-80 focus:opacity-100 hover:opacity-100 disabled:opacity-50",
+              address && "!block"
+            )}
             onClick={handleClearClick}
           >
             <XIcon className="w-5 h-5" />

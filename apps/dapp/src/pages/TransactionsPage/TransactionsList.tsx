@@ -1,7 +1,9 @@
 import { Address } from "../../components/Address";
 import { Spinner } from "../../components/Spinner";
 import { TokenIcon } from "../../components/TokenIcon";
+import { useSendPane } from "../../features/send/context";
 import { useWallet } from "../../lib/WalletContext";
+import { copyToClipboard } from "../../lib/copyToClipboard";
 import {
   HistoryAccount,
   HistoryTx,
@@ -11,7 +13,7 @@ import { ArrowRightIcon } from "@heroicons/react/solid";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
 import { formatDistanceToNow } from "date-fns";
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useIntersection } from "react-use";
 
 const TransactionAccount = ({
@@ -21,10 +23,22 @@ const TransactionAccount = ({
   account: HistoryAccount;
   className?: string;
 }) => {
-  const { avatar, address } = useWallet();
   const { id, display, judgement } = account;
+  const { avatar, address } = useWallet();
+  const { isOpen, sendToAddress } = useSendPane();
+
+  const handleAccountClick = useCallback(() => {
+    if (!id) return false;
+    if (isOpen) sendToAddress(id);
+    else copyToClipboard(id);
+    return false;
+  }, [id, isOpen, sendToAddress]);
+
   return (
-    <div className={clsx("flex align-middle gap-2", className)}>
+    <button
+      className={clsx("flex align-middle gap-2", className)}
+      onClick={handleAccountClick}
+    >
       <div className="flex flex-col justify-center">
         {id === address && avatar ? (
           <img width={24} height={24} src={avatar} alt="" />
@@ -40,7 +54,7 @@ const TransactionAccount = ({
           judgement={judgement}
         />
       </div>
-    </div>
+    </button>
   );
 };
 
@@ -85,8 +99,9 @@ const TransactionListItem = ({ tx }: TransactionListItemProps) => {
           <DistanceToNow timestamp={tx.timestamp} />
         </div>
       </div>
-      <div className="hidden sm:block sm:invisible">
-        <TokenIcon className="h-12 w-12 sm:h-16 sm:w-16" symbol={tx.currency} />
+      <div className="hidden sm:block sm:invisible h-12 w-12 sm:h-16 sm:w-16">
+        {/* placeholder to ensure same size as left one */}
+        {/* <div className="h-12 w-12 sm:h-16 sm:w-16" /> */}
       </div>
     </div>
   );

@@ -3,14 +3,21 @@ import { Option } from "@polkadot/types-codec";
 import { Registration } from "@polkadot/types/interfaces/identity";
 import { useQuery } from "@tanstack/react-query";
 
-const DEFAULT_OPTIONS = {
+type QueryOptions = {
+  refetchOnReconnect: boolean;
+  refetchOnWindowFocus: boolean;
+  refetchInterval: number;
+};
+
+const DEFAULT_OPTIONS: QueryOptions = {
   refetchOnReconnect: false,
   refetchOnWindowFocus: false,
+  refetchInterval: 0,
 };
 
 export const useIdentityRegistration = (
   address?: string,
-  options = DEFAULT_OPTIONS
+  options: Partial<QueryOptions> = DEFAULT_OPTIONS
 ) => {
   const api = useApi();
 
@@ -23,6 +30,6 @@ export const useIdentityRegistration = (
       await api.isReady;
       return api.query.identity.identityOf<Option<Registration>>(address);
     },
-    options
+    { ...DEFAULT_OPTIONS, ...options }
   );
 };

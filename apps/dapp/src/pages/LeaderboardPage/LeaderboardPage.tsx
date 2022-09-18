@@ -1,21 +1,14 @@
 import { Layout } from "../../components/Layout";
+import { useForceDocumentScroll } from "../../lib/useForceDocumentScroll";
 import { LeaderboardHeader } from "./LeaderboardHeader";
 import { LeaderboardTable } from "./LeaderboardTable";
-import { useEffect } from "react";
 
 export const LeaderboardPage = () => {
-  useEffect(() => {
-    //force vertical scrollbar
-    document.documentElement.classList.add("overflow-y-scroll");
-
-    return () => {
-      document.documentElement.classList.remove("overflow-y-scroll");
-    };
-  }, []);
+  useForceDocumentScroll();
 
   return (
     <Layout title="Leaderboard" noPadding>
-      <div className="container py-4 mx-auto max-w-3xl md:py-4">
+      <div className="container py-4 mx-auto max-w-3xl">
         <LeaderboardHeader />
         <LeaderboardTable />
       </div>

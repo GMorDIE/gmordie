@@ -39,7 +39,7 @@ export const LeaderboardUserRow = ({
             keep={6}
             address={address}
             display={data.rankAccount.account.display}
-            verified={data.rankAccount.account.verified}
+            judgement={data.rankAccount.account.judgement}
           />
         </div>
       </BodyCell>

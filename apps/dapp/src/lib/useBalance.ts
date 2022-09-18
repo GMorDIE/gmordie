@@ -36,7 +36,7 @@ export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
         setFree(accountData.free.toString());
         setLocked(accountData.reserved.toString());
       });
-    else
+    else {
       api.query.tokens.accounts(address, tokenId).then((accountData) => {
         const { free, frozen, reserved } = api.createType<OrmlAccountData>(
           "OrmlAccountData",
@@ -45,6 +45,7 @@ export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
         setFree(free.toString());
         setLocked(frozen.add(reserved).toString());
       });
+    }
   }, [address, api, blockNumber, tokenId]);
 
   return { free, locked, decimals };

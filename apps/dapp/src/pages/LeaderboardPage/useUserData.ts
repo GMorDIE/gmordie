@@ -7,13 +7,13 @@ import { useMemo } from "react";
 type RequestResult = {
   rankAccount: {
     rank: number;
-    account: Omit<LeaderboardAccount, "id">;
+    account: LeaderboardAccount;
   };
 };
 
 export const useUserData = (
-  address: string,
-  sortBy: "sent" | "received",
+  address?: string,
+  sortBy: "sent" | "received" = "sent",
   ascending = false
 ) => {
   const orderDirection = useMemo(
@@ -22,6 +22,7 @@ export const useUserData = (
   );
 
   return useQuery(["userstats", address, sortBy, orderDirection], () => {
+    if (!address) return null;
     return request<RequestResult>(
       SUBSQUID_URL,
       gql`
@@ -29,10 +30,12 @@ export const useUserData = (
           rankAccount(id: "${address}", orderDirection: ${orderDirection}, rankedBy: ${sortBy}) {
             rank
             account {
-              receivedGMGN
-              sentGMGN
+              id
               display
               verified
+              sentGMGN
+              receivedGMGN
+              judgement
             }
           }
         }

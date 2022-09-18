@@ -2,6 +2,7 @@ import { DisplayJudgement } from "../../components/Address";
 import { SUBSQUID_URL } from "../../lib/settings";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import request, { gql } from "graphql-request";
+import { useMemo } from "react";
 
 export type HistoryAccount = {
   id: string;
@@ -38,6 +39,14 @@ type TransactionsRequestResult = {
 };
 
 export const useTransactions = (address?: string) => {
+  const where = useMemo(
+    () =>
+      address
+        ? `, AND: {from: {id_eq: "${address}"}, OR: {to: {id_eq: "${address}"}} }`
+        : "",
+    [address]
+  );
+
   return useInfiniteQuery(
     ["transactions", address],
     ({ pageParam = 0 }) => {
@@ -46,10 +55,11 @@ export const useTransactions = (address?: string) => {
         gql`
           query MyQuery {
             transfersConnection(
+              
               ${pageParam ? `after:"${pageParam}"` : ""}
               first: 20
               orderBy: timestamp_DESC
-              where: { currency_in: ["GM", "GN"] }
+              where: { currency_in: ["GM", "GN"]${where} }
             ) {
               pageInfo {
                 startCursor

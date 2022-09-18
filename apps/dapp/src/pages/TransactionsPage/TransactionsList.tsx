@@ -11,7 +11,7 @@ import { ArrowRightIcon } from "@heroicons/react/solid";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
 import { formatDistanceToNow } from "date-fns";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { useIntersection } from "react-use";
 
 const TransactionAccount = ({
@@ -92,7 +92,12 @@ const TransactionListItem = ({ tx }: TransactionListItemProps) => {
   );
 };
 
-export const TransactionsList = () => {
+type TransactionsListProps = {
+  address?: string;
+};
+
+export const TransactionsList: FC<TransactionsListProps> = ({ address }) => {
+  console.log({ address });
   const {
     data,
     error,
@@ -100,7 +105,7 @@ export const TransactionsList = () => {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-  } = useTransactions();
+  } = useTransactions(address);
 
   const intersectionRef = useRef<HTMLDivElement>(null);
   const intersection = useIntersection(intersectionRef, {

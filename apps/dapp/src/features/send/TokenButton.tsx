@@ -30,7 +30,7 @@ export const TokenButton = ({
   onClick,
 }: TokenButtonProps) => {
   const { address } = useWallet();
-  const { free, locked } = useBalance(symbol, address);
+  const { data } = useBalance(symbol, address);
 
   return (
     <button
@@ -49,10 +49,13 @@ export const TokenButton = ({
       </div>
       <div className="flex flex-col justify-center text-left">
         <div>
-          <span className="font-bold">{free}</span> Available
+          <span className="font-bold">
+            {data?.transferable?.toNumber() ?? "-"}
+          </span>{" "}
+          Available
         </div>
         <div>
-          <span className="font-bold">{locked}</span> Locked
+          <span className="font-bold">{data?.locked?.toNumber()}</span> Locked
         </div>
       </div>
     </button>

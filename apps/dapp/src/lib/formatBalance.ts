@@ -1,11 +1,11 @@
-import { formatBalance as formatBalancePjs } from "@polkadot/util";
+import { planckToTokens } from "./planckToTokens";
+import { BN } from "@polkadot/util";
 
-export const formatBalance = (planck: string, decimals: number) => {
-  const formatted = formatBalancePjs(planck, {
-    decimals,
-    withSi: false,
-    withUnit: false,
-    forceUnit: "unit",
-  });
-  return formatted.replace(/(\.|,)0+$/, "");
+export const formatBalance = (planck: BN, decimals: number) => {
+  const tokens = planckToTokens(planck, decimals);
+
+  return Intl.NumberFormat("en-US", {
+    notation: tokens >= 10000 ? "compact" : "standard",
+    maximumSignificantDigits: 4,
+  }).format(tokens);
 };

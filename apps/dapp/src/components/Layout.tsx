@@ -62,7 +62,7 @@ export const Layout = ({
       <div className="grow flex relative">
         <Navigation
           className={clsx(
-            "w-full w-max-full pointer-events-none  sm:w-72 z-[15] 2xl:z-10 transition-opacity duration-300 2xl:block 2xl:pointer-events-auto fixed top-12 bottom-0 left-0 drop-shadow-lg opacity-0",
+            "w-full w-max-full pointer-events-none sm:w-72 z-[15] 2xl:z-10 transition-opacity duration-300 2xl:block 2xl:pointer-events-auto fixed top-12 bottom-0 left-0 drop-shadow-lg opacity-0",
             (!requiresTime || time) && "2xl:opacity-100",
             isOpen && "opacity-100 pointer-events-auto"
           )}

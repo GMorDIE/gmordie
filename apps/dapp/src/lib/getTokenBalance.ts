@@ -11,11 +11,14 @@ export const getTokenBalance = async (
 ) => {
   if (tokenId === NATIVE_TOKEN) {
     const accountInfo = await api.query.system.account(address);
-    const { data: accountData } = api.createType<AccountInfo>(
-      "AccountInfo",
-      accountInfo
-    );
-    return { free: accountData.free as BN, locked: accountData.reserved as BN };
+    const {
+      data: { free, reserved, miscFrozen: frozen },
+    } = api.createType<AccountInfo>("AccountInfo", accountInfo);
+
+    return {
+      transferable: free.sub(frozen) as BN,
+      locked: frozen.add(reserved) as BN,
+    };
   }
 
   // ORML
@@ -24,5 +27,8 @@ export const getTokenBalance = async (
     "OrmlAccountData",
     accountData
   );
-  return { free: free as BN, locked: frozen.add(reserved) as BN };
+  return {
+    transferable: free.sub(frozen) as BN,
+    locked: frozen.add(reserved) as BN,
+  };
 };

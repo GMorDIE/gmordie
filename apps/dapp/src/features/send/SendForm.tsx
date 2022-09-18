@@ -77,8 +77,8 @@ export const SendForm = () => {
         if (!data.coin || !recipients?.length)
           throw new Error("Invalid form data");
 
-        const { free } = await getTokenBalance(api, data.coin, address);
-        if (free.toNumber() < recipients.length)
+        const { transferable } = await getTokenBalance(api, data.coin, address);
+        if (transferable.toNumber() < recipients.length)
           throw new Error(`Insufficient ${data.coin} balance`);
 
         // if more than 1 address, batch calls

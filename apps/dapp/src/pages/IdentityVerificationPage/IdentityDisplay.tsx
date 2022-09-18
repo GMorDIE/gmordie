@@ -37,7 +37,6 @@ export const IdentityDisplay = ({ address }: IdentityDisplayProps) => {
         judges={data.judges}
       />
       <pre className="bg-zinc-800 rounded p-2">{stringified}</pre>
-      {/* {stringified !== "null" && <IdentityVerifyButton address={address} />} */}
     </div>
   );
 };

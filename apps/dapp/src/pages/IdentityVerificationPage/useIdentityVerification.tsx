@@ -24,7 +24,6 @@ export const useIdentityVerification = (address: string) => {
 
   const judgesIndexs = useMemo(
     () => registration?.value?.judgements?.map(([i]) => i) ?? [],
-
     [registration]
   );
 
@@ -61,32 +60,32 @@ export const useIdentityVerification = (address: string) => {
   ]);
 
   const data: IdentityVerification | undefined = useMemo(() => {
-    if (isLoading) return undefined;
+    if (isLoading || registration?.isNone) return undefined;
 
-    const arkgRegistrarIdentities = judgesIdentities?.map((a) => a);
+    const arJudges = judgesIdentities?.map((a) => a);
 
     return {
       registration: registration?.value,
       judges:
         judges?.map((registrar, i) => ({
           registrar,
-          registration: arkgRegistrarIdentities?.[i]?.value,
+          registration: arJudges?.[i]?.value,
           index: registrars?.findIndex((r) => r.value === registrar),
         })) ?? [],
     } as IdentityVerification;
-  }, [isLoading, judges, judgesIdentities, registrars, registration?.value]);
+  }, [isLoading, judges, judgesIdentities, registrars, registration]);
 
-  // @devs keep for debugging
+  // //@devs keep for debugging
   // console.log("useIdentityVerification", {
   //   isLoading,
-  //   isLoadingRegistrarIdentities,
+  //   isLoadingJudgesIdentities,
   //   isLoadingRegistrars,
   //   isLoadingRegistration,
   //   registrars: registrars?.map((r) => r.toHuman()),
   //   registration: registration?.toHuman(),
-  //   kgRegistrarsIndexs: kgRegistrarsIndexs?.map((r) => r.toHuman()),
-  //   kgRegistrarsIdentities: kgRegistrarsIdentities?.map((r) => r.toHuman()),
-  //   kgRegistrarsAddresses,
+  //   judgesIndexs: judgesIndexs?.map((r) => r.toHuman()),
+  //   judgesIdentities: judgesIdentities?.map((r) => r.toHuman()),
+  //   judgesAddresses,
   // });
 
   return { isLoading, data };

@@ -36,16 +36,12 @@ export const TransactionsAddress: FC<TransactionsAddressProps> = ({
     if (!refInput.current) return;
     refInput.current.value = "";
     setValue("");
+    refInput.current.focus();
   }, []);
 
   useEffect(() => {
-    if (isValid) {
-      console.log("onChange", value);
-      onChange?.(value);
-    }
+    if (isValid) onChange?.(value);
   }, [isValid, onChange, value]);
-
-  console.log(value);
 
   return (
     <div

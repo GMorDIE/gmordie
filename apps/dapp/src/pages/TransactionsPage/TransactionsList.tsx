@@ -97,7 +97,6 @@ type TransactionsListProps = {
 };
 
 export const TransactionsList: FC<TransactionsListProps> = ({ address }) => {
-  console.log({ address });
   const {
     data,
     error,

@@ -40,10 +40,6 @@ export const IdentityVerificationForm = () => {
     setFocus("address");
   }, [setFocus, setValue]);
 
-  useEffect(() => {
-    if (isValid) console.log("Valid form");
-  }, [isValid]);
-
   const submit = useCallback(() => {
     // nothing, we use the form only for validation
   }, []);

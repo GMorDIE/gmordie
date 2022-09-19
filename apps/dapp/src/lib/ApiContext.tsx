@@ -1,8 +1,7 @@
-import { ApiPromise } from "@polkadot/api";
-import { useEffect, useState } from "react";
-
 import { getApi } from "./getApi";
 import { provideContext } from "./provideContext";
+import { ApiPromise } from "@polkadot/api";
+import { useEffect, useState } from "react";
 
 const useApiProvider = () => {
   const [api, setApi] = useState<ApiPromise>();

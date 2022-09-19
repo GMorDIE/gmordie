@@ -101,7 +101,6 @@ const TransactionListItem = ({ tx }: TransactionListItemProps) => {
       </div>
       <div className="hidden sm:block sm:invisible sm:min-w-[64px]">
         {/* placeholder to ensure same size as left one */}
-        {/* <div className="h-12 w-12 sm:h-16 sm:w-16" /> */}
       </div>
     </div>
   );

@@ -1,8 +1,7 @@
+import { Button } from "./Button";
 import { useCallback } from "react";
 import { ReactNode } from "react";
 import { ErrorBoundary as LibErrorBoundary } from "react-error-boundary";
-
-import { Button } from "./Button";
 
 const ErrorFallback = ({ error }: { error: Error }) => {
   const handleReload = useCallback(() => {

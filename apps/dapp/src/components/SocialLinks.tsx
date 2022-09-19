@@ -40,7 +40,7 @@ export const SocialLinks = ({ show }: { show: boolean }) => {
   return (
     <div
       className={clsx(
-        "flex gap-3 justify-center opacity-0 transition-opacity",
+        "mb-4 flex gap-3 justify-center opacity-0 transition-opacity",
         show && "opacity-100"
       )}
     >

@@ -1,4 +1,5 @@
 import { ReactComponent as ArrowIcon } from "../../assets/arrow.svg";
+import theproject from "../../assets/theproject.gif";
 import { Balances } from "../../components/Balances";
 import { BurnButton } from "../../components/BurnButton";
 import { Layout } from "../../components/Layout";
@@ -6,15 +7,48 @@ import { SocialLinks } from "../../components/SocialLinks";
 import { Wheel } from "../../components/Wheel";
 import { useGmTime } from "../../lib/GmTimeContext";
 import clsx from "clsx";
+import { FC, ReactNode, useEffect, useState } from "react";
+
+const TempWrap: FC<{ children: ReactNode; ready: boolean }> = ({
+  children,
+  ready,
+}) => {
+  const [showUp, setShowUp] = useState(false);
+
+  useEffect(() => {
+    setShowUp(true);
+  }, []);
+
+  return (
+    <div className="justify-start grow flex flex-col gap-12 text-xs text-center items-center sm:justify-center">
+      {children}
+      <div
+        className={clsx(
+          "overflow-hidden max-w-full xs:w-80 opacity-0 transition-opacity duration-1000",
+          showUp && "opacity-100",
+          ready && "hidden"
+        )}
+      >
+        <div className="text-white font-medium">
+          <img
+            src={theproject}
+            alt=""
+            className="aspect-auto w-80 mt-2 rounded-xl"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const HomePage = () => {
   const { time } = useGmTime();
 
   return (
     <Layout requiresTime title="Say it back!">
-      <div className="container py-4 mx-auto max-w-3xl md:py-8">
+      <div className="container py-4 mx-auto max-w-3xl md:py-8 min-h-full overflow-x-hidden">
         {/* horizontal layout on desktop, vertical on mobile */}
-        <div className="flex w-full text-center flex-col md:flex-row justify-center items-center">
+        <div className="flex w-full text-center flex-col md:flex-row justify-center items-center mt-8">
           {/* Block 1 */}
           <div
             className={clsx(
@@ -49,7 +83,9 @@ export const HomePage = () => {
             >
               <ArrowIcon className={"md:rotate-[270deg] w-16 "} />
             </div>
-            <Wheel className="xs:w-80 xs:h-80 md:rotate-[270deg]" />
+            <TempWrap ready={!!time}>
+              <Wheel className="xs:w-80 xs:h-80 md:rotate-[270deg]" />
+            </TempWrap>
           </div>
         </div>
         <SocialLinks show={Boolean(time)} />

@@ -1,6 +1,6 @@
 import { useApi } from "../lib/ApiContext";
 import { useWallet } from "../lib/WalletContext";
-import { SS58_PREFIX } from "../lib/constants";
+import { SS58_PREFIX, TOKEN_DECIMALS } from "../lib/constants";
 import { getSignAndSendCallback } from "../lib/getSignAndSendCallback";
 import { showToast } from "../lib/showToast";
 import { tokensToPlanck } from "../lib/tokensToPlanck";
@@ -13,7 +13,7 @@ import { useCallback, useMemo, useState } from "react";
 export const BurnButton = () => {
   const [working, setWorking] = useState(false);
   const { account, openConnectModal, isReady, address } = useWallet();
-  const { free, decimals } = useBalance("FREN", account?.address);
+  const { data } = useBalance("FREN", account?.address);
   const api = useApi();
 
   const handleBurn = useCallback(async () => {
@@ -27,10 +27,10 @@ export const BurnButton = () => {
         if (!address) throw new Error("Account not found");
 
         // always burn 10
-        const amountToBurn = tokensToPlanck("10", decimals);
+        const amountToBurn = tokensToPlanck("10", TOKEN_DECIMALS["FREN"]);
 
         // check if account has enough to burn
-        if (!free || new BN(free ?? "0").lte(amountToBurn))
+        if (new BN(data?.transferable ?? "0").lte(amountToBurn))
           throw new Error("You don't have enough FRENs!");
 
         await api.tx.currencies
@@ -52,7 +52,7 @@ export const BurnButton = () => {
       });
       setWorking(false);
     }
-  }, [account, address, api, decimals, free, openConnectModal]);
+  }, [account, address, api, data?.transferable, openConnectModal]);
 
   const label = useMemo(() => {
     if (!isReady) return null;

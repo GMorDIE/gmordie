@@ -54,21 +54,20 @@ export const IdentityForm = () => {
   const { close } = useIdentityPane();
   const { account } = useWallet();
   const [error, setError] = useState<string>();
-  const { free, locked } = useBalance("FREN", account?.address);
+  const { data } = useBalance("FREN", account?.address);
   const { data: registration, isFetched } = useIdentityRegistration(
     account?.address
   );
 
   const { insufficientBalance, balanceChecked } = useMemo(() => {
-    if (locked === undefined || free === undefined)
-      return { insufficientBalance: false, balanceChecked: false };
+    if (!data) return { insufficientBalance: false, balanceChecked: false };
     if (!registration?.isSome)
       return {
         balanceChecked: true,
-        insufficientBalance: new BN(free).lte(REGISTRATION_COST),
+        insufficientBalance: new BN(data.transferable).lte(REGISTRATION_COST),
       };
     return { balanceChecked: true, insufficientBalance: false };
-  }, [free, locked, registration?.isSome]);
+  }, [data, registration?.isSome]);
 
   const defaultValues: IdentityFormData = useMemo(() => {
     const [, discordValue] = registration?.value?.info?.additional?.find(

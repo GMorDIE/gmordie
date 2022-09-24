@@ -8,6 +8,5 @@ export const tokensToPlanck = (tokens: BNish, decimals: number) => {
   const tokenDecimals = new BN(decimals);
   const base = BN_TEN;
   const planck = tokenAmount.mul(base.pow(tokenDecimals));
-  console.log({ tokens: tokens.toString(), planck: planck.toString() });
   return planck;
 };

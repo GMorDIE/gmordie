@@ -5,6 +5,8 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import CountUp, { CountUpProps } from "react-countup";
 
+const formatNumber = (n: number) => n.toLocaleString();
+
 export const GMGNGrandTotal = () => {
   const { time } = useGmTime();
   const [props, setProps] = useState<CountUpProps>();
@@ -17,9 +19,9 @@ export const GMGNGrandTotal = () => {
         end: data.transfersConnection.totalCount,
       }));
   }, [data]);
-  console.log({ time, isLoading, error, props });
+
   if (!time || isLoading) return null;
-  //console.log({ data });
+
   return (
     <div
       className={clsx(
@@ -29,7 +31,8 @@ export const GMGNGrandTotal = () => {
     >
       {!error && (
         <div>
-          {props && <CountUp {...props} />} decentralized GMs &amp; GNs sent
+          {props && <CountUp {...props} formattingFn={formatNumber} />}{" "}
+          decentralized GMs &amp; GNs sent
         </div>
       )}
       <SocialLinks />

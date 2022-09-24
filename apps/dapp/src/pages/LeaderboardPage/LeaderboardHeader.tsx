@@ -16,7 +16,7 @@ export const LeaderboardHeader = () => {
       </h1>
       <p
         className={clsx(
-          "text-lg opacity-0 transition-opacity text-zinc-300 font-medium",
+          "text-lg opacity-0 transition-opacity text-zinc-400 font-medium",
           data && "opacity-100"
         )}
       >

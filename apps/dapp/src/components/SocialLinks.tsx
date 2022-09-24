@@ -27,7 +27,7 @@ const LinkButton = ({
   </a>
 );
 
-export const SocialLinks = ({ show }: { show: boolean }) => {
+export const SocialLinks = () => {
   const navigate = useNavigate();
 
   const handleLinkClick = useCallback(
@@ -38,12 +38,7 @@ export const SocialLinks = ({ show }: { show: boolean }) => {
   );
 
   return (
-    <div
-      className={clsx(
-        "mb-4 flex gap-3 justify-center opacity-0 transition-opacity",
-        show && "opacity-100"
-      )}
-    >
+    <div className="mb-4 flex gap-3 justify-center">
       <LinkButton onClick={handleLinkClick("/leaderboard")} title="Leaderboard">
         <IconLeaderboard />
       </LinkButton>

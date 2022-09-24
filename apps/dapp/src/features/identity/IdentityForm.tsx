@@ -193,6 +193,7 @@ export const IdentityForm = () => {
                 errors.display && "!border-red-500"
               )}
               {...register("display")}
+              placeholder="John Doe"
             />
           </div>
           <div>
@@ -204,6 +205,7 @@ export const IdentityForm = () => {
                 errors.discord && "!border-red-500"
               )}
               {...register("discord")}
+              placeholder="JohnDoe#0420"
             />
             <div className="text-xs text-zinc-400">
               GMs will be notified on{" "}
@@ -226,6 +228,7 @@ export const IdentityForm = () => {
                 errors.twitter && "!border-red-500"
               )}
               {...register("twitter")}
+              placeholder="@JohnDoe"
             />
             <div className="text-xs text-zinc-400">
               GMs will be notified on Twitter (coming soon)

@@ -22,22 +22,24 @@ export const LightClientConnecting = () => {
   if (!lightClient || api) return null;
 
   return (
-    <div className="w-64">
-      <p className="my-2 font-bold">🕵️ Connecting using light client...</p>
-      <p className="text-xs font-medium text-justify text-zinc-400">
-        Connecting to GM using light clients spawns a light blockchain node
-        right in your browser.
-        <br />
-        Synchronizing with other nodes may take between 2 and 5 minutes.
-        <br />
-        <br />
-        Please note that this feature is experimental, fully restarting your
-        browser (all windows) helps fixing connection issues.
-        <br />
+    <div className="w-64 text-left">
+      <div className="my-3 font-bold">🕵️ Connecting via light client</div>
+      <div className="text-xs font-medium text-left text-zinc-400">
+        This feature is experimental :<br />
+        <ul className="list-disc pl-4">
+          <li>
+            synchronizing with other parachain nodes may take between 2 and 5
+            minutes
+          </li>
+          <li>
+            fully restarting your browser (close all windows) should fix
+            connection issues
+          </li>
+        </ul>
         <br />
         If you&apos;re in a hurry,{" "}
         <LinkButton onClick={toggleLightClient}>connect via RPC</LinkButton>.
-      </p>
+      </div>
     </div>
   );
 };

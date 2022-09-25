@@ -56,6 +56,6 @@
     ]
   },
   "resolutions": {
-    "@substrate/smoldot-light": "0.6.32"
+    "@substrate/smoldot-light": "0.6.34"
   }
 }

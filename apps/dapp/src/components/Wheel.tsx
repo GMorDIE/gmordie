@@ -1,6 +1,6 @@
 import { ReactComponent as SvgWheel } from "../assets/wheel.svg";
+import { LightClientConnecting } from "../features/light-client/LightClientConnecting";
 import { useGmTime } from "../lib/GmTimeContext";
-import { LightClientConnecting } from "./LightClientConnecting";
 import clsx from "clsx";
 import { motion, useMotionValue } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";

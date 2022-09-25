@@ -30,7 +30,20 @@ const useSettingsProvider = () => {
     window.location.reload();
   }, [settings, setSettings]);
 
-  return { lightClient, toggleLightClient };
+  const setLightClient = useCallback(
+    (enable: boolean) => {
+      if (settings?.lightClient !== enable) {
+        setSettings({
+          ...settings,
+          lightClient: enable,
+        });
+        window.location.reload();
+      }
+    },
+    [setSettings, settings]
+  );
+
+  return { lightClient, toggleLightClient, setLightClient };
 };
 
 export const [SettingsProvider, useSettings] =

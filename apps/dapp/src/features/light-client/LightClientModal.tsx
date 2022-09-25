@@ -38,9 +38,9 @@ export const LightClientModal: FC<LightClientModalProps> = ({
       <div className="space-y-2 font-medium text-zinc-300">
         <p>Nothing shall stop you from GMing your frens!</p>
         <p>
-          Turning this experimental feature on will spawn a blockchain node
-          inside your browser to securely connect to the GM parachain without
-          relying on centralized 3rd parties.
+          Light client is a blockchain node that runs within your browser to
+          securely connect to the GM parachain without relying on centralized
+          3rd parties.
         </p>
         {!isSubstrateConnectInstalled() && (
           <p>

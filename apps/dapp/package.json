@@ -54,5 +54,8 @@
     "extends": [
       "gmordie"
     ]
+  },
+  "resolutions": {
+    "@substrate/smoldot-light": "0.6.34"
   }
 }

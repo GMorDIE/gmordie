@@ -1,3 +1,4 @@
+import { LightClientToggle } from "../features/light-client/LightClientToggle";
 import { SendButton } from "../features/send/SendButton";
 import { useGmTime } from "../lib/GmTimeContext";
 import { useNavigationMenu } from "../lib/NavigationMenuContext";
@@ -7,6 +8,7 @@ import { Button } from "./Button";
 import { ConnectModal } from "./ConnectModal";
 import { CopyAddressButton } from "./CopyAddressButton";
 import { Navigation } from "./Navigation";
+import { Spinner } from "./Spinner";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import clsx from "clsx";
 import { ReactNode } from "react";
@@ -47,17 +49,27 @@ export const Layout = ({
         <div className="grow px-1 2xl:px-4">
           <Link to="/">GM</Link>
         </div>
-        <div className="flex gap-2 items-center">
-          <div>
-            <CopyAddressButton />
+        {time ? (
+          <div className="flex gap-2 items-center">
+            <div>
+              <CopyAddressButton />
+            </div>
+            <div>
+              <SendButton />
+            </div>
+            <div>
+              <LightClientToggle />
+            </div>
+            <div>
+              <AccountButton />
+            </div>
           </div>
-          <div>
-            <SendButton />
+        ) : (
+          <div className="text-sm font-light px-4 flex items-center gap-2">
+            <div>Connecting</div>
+            <Spinner className="w-4 h-4" />
           </div>
-          <div>
-            <AccountButton />
-          </div>
-        </div>
+        )}
       </header>
       <div className="grow flex relative">
         <Navigation

@@ -28,8 +28,7 @@ export const LightClientConnecting = () => {
         This feature is experimental :<br />
         <ul className="list-disc pl-4">
           <li>
-            synchronizing with other parachain nodes may take between 2 and 5
-            minutes
+            synchronizing with other parachain nodes may take up to 5 minutes
           </li>
           <li>
             fully restarting your browser (close all windows) should fix

@@ -28,8 +28,9 @@ export const LightClientModal: FC<LightClientModalProps> = ({
   const handleSelect = useCallback(
     (withLightClient: boolean) => () => {
       setLightClient(withLightClient);
+      onClose();
     },
-    [setLightClient]
+    [onClose, setLightClient]
   );
 
   return (

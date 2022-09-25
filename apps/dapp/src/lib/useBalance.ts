@@ -1,44 +1,64 @@
 import { useApi } from "./ApiContext";
-import { useGmTime } from "./GmTimeContext";
 import { NATIVE_TOKEN, TOKEN_DECIMALS, TOKEN_ID } from "./constants";
+import { useCall } from "./useCall";
 import { OrmlAccountData } from "@open-web3/orml-types/interfaces/tokens";
 import { AccountInfo } from "@polkadot/types/interfaces/system";
-import { useState } from "react";
-import { useEffect } from "react";
+import { BN } from "@polkadot/util";
+import { useCallback } from "react";
 import { useMemo } from "react";
 
+export type TokenBalance = {
+  symbol: TOKEN_ID;
+  decimals: number;
+  transferable: BN;
+  locked: BN;
+};
+
+const getNativeTokenBalance = (value: unknown) => {
+  const accountInfo = value as AccountInfo;
+  const { free, reserved, miscFrozen: frozen } = accountInfo.data;
+  return { free, reserved, frozen };
+};
+
+const getORMLTokenBalance = (value: unknown) => {
+  const accountData = value as OrmlAccountData;
+  const { free, reserved, frozen } = accountData;
+
+  return { free, reserved, frozen };
+};
+
 export const useBalance = (tokenId: TOKEN_ID, address?: string) => {
-  const { blockNumber } = useGmTime();
   const api = useApi();
-  const [free, setFree] = useState<string>();
 
-  const decimals = useMemo(() => TOKEN_DECIMALS[tokenId], [tokenId]);
+  const transform = useCallback(
+    (value: unknown) => {
+      const { free, reserved, frozen } =
+        tokenId === "FREN"
+          ? getNativeTokenBalance(value)
+          : getORMLTokenBalance(value);
 
-  useEffect(() => {
-    // clear if address changes
-    setFree(undefined);
-  }, [address]);
+      return {
+        transferable: free.sub(frozen),
+        locked: reserved,
+        symbol: tokenId,
+        decimals: TOKEN_DECIMALS[tokenId],
+      } as TokenBalance;
+    },
+    [tokenId]
+  );
 
-  useEffect(() => {
-    if (!api || !address) return;
+  const { call, args } = useMemo(
+    () => ({
+      call:
+        tokenId === NATIVE_TOKEN
+          ? api?.query.system.account
+          : api?.query.tokens.accounts,
+      args: tokenId === NATIVE_TOKEN ? [address] : [address, tokenId],
+    }),
+    [address, api, tokenId]
+  );
 
-    if (tokenId === NATIVE_TOKEN)
-      api.query.system.account(address).then((accountInfo) => {
-        const { data: accountData } = api.createType<AccountInfo>(
-          "AccountInfo",
-          accountInfo
-        );
-        setFree(accountData.free.toString());
-      });
-    else
-      api.query.tokens.accounts(address, tokenId).then((accountData) => {
-        const { free } = api.createType<OrmlAccountData>(
-          "OrmlAccountData",
-          accountData
-        );
-        setFree(free.toString());
-      });
-  }, [address, api, blockNumber, tokenId]);
-
-  return { free, decimals };
+  return useCall<TokenBalance>(call, args, {
+    transform,
+  });
 };

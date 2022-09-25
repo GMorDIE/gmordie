@@ -1,17 +1,16 @@
+import { useIdentityPane } from "../features/identity/context";
 import { useWallet } from "../lib/WalletContext";
 import { useIsMounted } from "../lib/useIsMounted";
 import { Address } from "./Address";
 import { Button } from "./Button";
 import { Popover, Transition } from "@headlessui/react";
-import { LogoutIcon } from "@heroicons/react/solid";
+import { LogoutIcon, UserCircleIcon } from "@heroicons/react/solid";
 import { InjectedAccount } from "@polkadot/extension-inject/types";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
-import { CSSProperties, useMemo } from "react";
+import { useMemo } from "react";
 import { Fragment } from "react";
 import { useCallback } from "react";
-
-const identiconStyle: CSSProperties = { cursor: "inherit" };
 
 export const ConnectButton = () => {
   const { openConnectModal } = useWallet();
@@ -30,22 +29,23 @@ export const ConnectButton = () => {
   );
 };
 
-const AccountIcon = ({ account }: { account: InjectedAccount }) => {
+export const AccountIcon = ({
+  account,
+  size = 32,
+}: {
+  account: InjectedAccount;
+  size?: number;
+}) => {
   const acc = account as InjectedAccount & { avatar?: string };
   return acc?.avatar ? (
     <img
-      width={32}
-      height={32}
+      width={size}
+      height={size}
       src={acc.avatar}
       alt={acc.name ?? acc.address}
     />
   ) : (
-    <Identicon
-      value={acc.address}
-      size={32}
-      theme="polkadot"
-      style={identiconStyle}
-    />
+    <Identicon value={acc.address} size={size} theme="polkadot" />
   );
 };
 
@@ -57,6 +57,7 @@ export const AccountSwitchButton = () => {
     select,
     disconnect,
   } = useWallet();
+  const { open: openIdentityPane } = useIdentityPane();
 
   const handleSelectAccount = useCallback(
     (account: InjectedAccount, closePopover: () => void) => () => {
@@ -96,7 +97,7 @@ export const AccountSwitchButton = () => {
             <div className="hidden sm:flex max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap flex-col text-right">
               <div className="text-sm">{currentAccount.name}</div>
               <div className="text-xs opacity-50">
-                <Address address={currentAccount.address} />
+                <Address address={currentAccount.address} keep={4} />
               </div>
             </div>
             <AccountIcon account={currentAccount} />
@@ -115,7 +116,7 @@ export const AccountSwitchButton = () => {
                 <button
                   key={key}
                   className={clsx(
-                    "flex gap-3 items-center p-3 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base",
+                    "flex gap-3 items-center p-3 py-2 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base",
                     account.address === currentAccount?.address &&
                       wallet === currentAccount.source &&
                       "font-bold bg-zinc-800 cursor-default"
@@ -132,14 +133,32 @@ export const AccountSwitchButton = () => {
                       </div>
                     </div>
                     <div className="font-mono text-zinc-500">
-                      <Address address={account.address} keep={6} />
+                      <Address address={account.address} keep={4} />
                     </div>
                   </div>
                 </button>
               ))}
               <button
+                onClick={openIdentityPane}
+                className="flex gap-3 items-center p-3 py-2 text-sm font-bold text-left hover:bg-zinc-800 rounded-md sm:text-base"
+              >
+                <div className="flex flex-col justify-center relative min-w-fit">
+                  <UserCircleIcon className="h-8 text-zinc-300" />
+                </div>
+                <div className={clsx("flex overflow-hidden flex-col grow")}>
+                  <div className="overflow-hidden max-w-full text-ellipsis whitespace-nowrap flex items-center">
+                    <div className="grow overflow-hidden max-w-full text-ellipsis whitespace-nowrap ">
+                      Account ID
+                    </div>
+                  </div>
+                  <div className="font-mono text-zinc-500">
+                    On-chain identity
+                  </div>
+                </div>
+              </button>
+              <button
                 onClick={disconnect}
-                className="flex gap-3 items-center p-3 text-sm font-bold text-left hover:bg-zinc-800 rounded-md sm:text-base"
+                className="flex gap-3 items-center p-3 py-2 text-sm font-bold text-left hover:bg-zinc-800 rounded-md sm:text-base"
               >
                 <div className="flex flex-col justify-center relative min-w-fit">
                   <LogoutIcon className="h-8 text-zinc-300" />

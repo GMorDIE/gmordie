@@ -2,19 +2,19 @@ import { ReactComponent as ArrowIcon } from "../../assets/arrow.svg";
 import { Balances } from "../../components/Balances";
 import { BurnButton } from "../../components/BurnButton";
 import { Layout } from "../../components/Layout";
-import { SocialLinks } from "../../components/SocialLinks";
 import { Wheel } from "../../components/Wheel";
 import { useGmTime } from "../../lib/GmTimeContext";
+import { GMGNGrandTotal } from "./GMGNGrandTotal";
 import clsx from "clsx";
 
 export const HomePage = () => {
   const { time } = useGmTime();
 
   return (
-    <Layout>
-      <div className="container py-4 mx-auto max-w-3xl md:py-8">
+    <Layout requiresTime title="Say it back!">
+      <div className="container py-4 mx-auto max-w-3xl md:py-8 min-h-full overflow-x-hidden">
         {/* horizontal layout on desktop, vertical on mobile */}
-        <div className="flex w-full text-center flex-col md:flex-row justify-center items-center">
+        <div className="flex w-full text-center flex-col md:flex-row justify-center items-center mt-8">
           {/* Block 1 */}
           <div
             className={clsx(
@@ -52,7 +52,7 @@ export const HomePage = () => {
             <Wheel className="xs:w-80 xs:h-80 md:rotate-[270deg]" />
           </div>
         </div>
-        <SocialLinks show={Boolean(time)} />
+        <GMGNGrandTotal />
       </div>
     </Layout>
   );

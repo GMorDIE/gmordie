@@ -1,60 +1,80 @@
-import clsx from "clsx";
-import { AnchorHTMLAttributes } from "react";
-
 import {
+  IconBip,
   IconDiscord,
   IconLeaderboard,
   IconSubsocial,
   IconTwitter,
   IconWallet,
+  IconYoutube,
 } from "../assets/social";
+import clsx from "clsx";
+import { AnchorHTMLAttributes, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
-const THE_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-
-const Link = ({
+const LinkButton = ({
   className,
   children,
   ...props
 }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
   <a
     {...props}
-    className={clsx(className, "text-salmon hover:text-salmon-300")}
+    className={clsx(
+      className,
+      "text-salmon hover:text-salmon-300 cursor-pointer"
+    )}
   >
     {children}
   </a>
 );
 
-export const SocialLinks = ({ show }: { show: boolean }) => {
+export const SocialLinks = () => {
+  const navigate = useNavigate();
+
+  const handleLinkClick = useCallback(
+    (to: string) => () => {
+      navigate(to);
+    },
+    [navigate]
+  );
+
   return (
-    <div
-      className={clsx(
-        "flex gap-3 justify-center opacity-0 transition-opacity",
-        show && "opacity-100"
-      )}
-    >
-      <Link
-        href={THE_URL}
-        className="opacity-50"
-        title="Leaderboard - coming soon"
-      >
+    <div className="mb-4 flex gap-3 justify-center">
+      <LinkButton onClick={handleLinkClick("/leaderboard")} title="Leaderboard">
         <IconLeaderboard />
-      </Link>
-      <Link href={"https://talisman.xyz/"} title="Talisman">
+      </LinkButton>
+      <LinkButton href={"https://talisman.xyz/"} title="Talisman">
         <IconWallet />
-      </Link>
-      <Link href={"https://discord.gg/JFzD2b5P2B"} title="Join us on Discord !">
+      </LinkButton>
+      <LinkButton
+        href={"https://discord.gg/JFzD2b5P2B"}
+        title="Join us on Discord !"
+      >
         <IconDiscord />
-      </Link>
-      <Link href={"https://app.subsocial.network/6882"} title="Subsocial">
+      </LinkButton>
+      <LinkButton href={"https://app.subsocial.network/6882"} title="Subsocial">
         <IconSubsocial />
-      </Link>
-      <Link
+      </LinkButton>
+      <LinkButton
         href={"https://twitter.com/GmOrDie_"}
         className="text-salmon hover:text-salmon-300"
         title="Twitter"
       >
         <IconTwitter />
-      </Link>
+      </LinkButton>
+      <LinkButton
+        href={"https://www.youtube.com/channel/UChMjLOYCSZqEABkB_RfOC1Q"}
+        className="text-salmon hover:text-salmon-300"
+        title="Youtube"
+      >
+        <IconYoutube />
+      </LinkButton>
+      <LinkButton
+        href={"https://bip.so/@gmordie/What-is-the-GM-Parachain-LxOBJ"}
+        className="text-salmon hover:text-salmon-300"
+        title="Build In Public"
+      >
+        <IconBip />
+      </LinkButton>
     </div>
   );
 };

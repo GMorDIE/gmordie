@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "preview": "turbo run preview",
     "dev": "turbo run dev --parallel",
     "clean": "turbo run clean --parallel && rm -rf node_modules",
     "lint": "turbo run lint",
@@ -16,11 +17,11 @@
   },
   "devDependencies": {
     "prettier": "^2.7.1",
-    "turbo": "^1.2.16"
+    "turbo": "^1.4.6"
   },
   "engines": {
-    "npm": ">=7.0.0",
-    "node": ">=14.0.0"
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
   },
   "packageManager": "yarn@1.22.18",
   "dependencies": {

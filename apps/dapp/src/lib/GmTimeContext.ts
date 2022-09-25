@@ -1,13 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
-
 import { useApi } from "./ApiContext";
 import { provideContext } from "./provideContext";
+import { useEffect, useMemo, useState } from "react";
 
 const BLOCKS_PER_DAY = 690 * 4;
 
 const useGmTimeProvider = () => {
   const [blockNumber, setBlockNumber] = useState<number>();
-  const [period, setPeriod] = useState<string>();
   const api = useApi();
 
   useEffect(() => {
@@ -47,13 +45,7 @@ const useGmTimeProvider = () => {
     return { day, timeRatio, canGm, canGn, time };
   }, [blockNumber]);
 
-  useEffect(() => {
-    api?.query.currencies.currentTimePeriod().then((period) => {
-      setPeriod(period.toString());
-    });
-  }, [blockNumber, api]);
-
-  return { blockNumber, day, timeRatio, canGm, canGn, time, period };
+  return { blockNumber, day, timeRatio, canGm, canGn, time };
 };
 
 export const [GmTimeProvider, useGmTime] = provideContext(useGmTimeProvider);

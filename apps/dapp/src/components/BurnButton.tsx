@@ -1,126 +1,58 @@
 import { useApi } from "../lib/ApiContext";
 import { useWallet } from "../lib/WalletContext";
+import { SS58_PREFIX, TOKEN_DECIMALS } from "../lib/constants";
+import { getSignAndSendCallback } from "../lib/getSignAndSendCallback";
+import { showToast } from "../lib/showToast";
 import { tokensToPlanck } from "../lib/tokensToPlanck";
 import { useBalance } from "../lib/useBalance";
 import { Button } from "./Button";
-import { ToastContent } from "./ToastContent";
-import { encodeAddress } from "@polkadot/keyring";
 import { BN } from "@polkadot/util";
+import { encodeAddress } from "@polkadot/util-crypto";
 import { useCallback, useMemo, useState } from "react";
-import { toast } from "react-hot-toast";
 
 export const BurnButton = () => {
   const [working, setWorking] = useState(false);
-  const { account, openConnectModal, isReady } = useWallet();
-  const { free, decimals } = useBalance("FREN", account?.address);
+  const { account, openConnectModal, isReady, address } = useWallet();
+  const { data } = useBalance("FREN", account?.address);
   const api = useApi();
 
   const handleBurn = useCallback(async () => {
     if (!api) return;
+
     try {
       setWorking(true);
       if (!account) {
         await openConnectModal();
       } else {
+        if (!address) throw new Error("Account not found");
+
         // always burn 10
-        const amountToBurn = tokensToPlanck("10", decimals);
+        const amountToBurn = tokensToPlanck("10", TOKEN_DECIMALS["FREN"]);
 
         // check if account has enough to burn
-        if (!free || new BN(free ?? "0").lte(amountToBurn))
+        if (new BN(data?.transferable ?? "0").lte(amountToBurn))
           throw new Error("You don't have enough FRENs!");
 
-        let waitingToast = "";
-
-        //const test = await api.tx.currencies.burnFren(amountToBurn.toString()).sign()
-
-        const unsubscribe = await api.tx.currencies
+        await api.tx.currencies
           .burnFren(amountToBurn.toString())
-          .signAndSend(account.address, (result) => {
-            if (waitingToast) toast.dismiss(waitingToast);
-
-            if (result.status.isInBlock) {
-              waitingToast = toast.custom((t) => (
-                <ToastContent
-                  t={t}
-                  title="Success"
-                  description="Well done fren!"
-                  type="success"
-                />
-              ));
-              unsubscribe();
-            } else if (result.status.isFinalized) {
-              toast.custom((t) => (
-                <ToastContent
-                  t={t}
-                  title="Success"
-                  description="Well done fren!"
-                  type="success"
-                />
-              ));
-              unsubscribe();
-            } else if (result.status.isDropped) {
-              toast.custom((t) => (
-                <ToastContent
-                  t={t}
-                  title="Oops"
-                  description="Transaction was dropped"
-                  type="error"
-                />
-              ));
-              unsubscribe();
-            } else if (result.status.isFinalityTimeout) {
-              toast.custom((t) => (
-                <ToastContent
-                  t={t}
-                  title="Oops"
-                  description="This looks like a timeout"
-                  type="error"
-                />
-              ));
-              unsubscribe();
-            } else if (result.status.isInvalid) {
-              toast.custom((t) => (
-                <ToastContent type="error" t={t} title="Transaction invalid" />
-              ));
-              unsubscribe();
-            } else {
-              const fail = result.findRecord("system", "ExtrinsicFailed");
-              if (fail || result.dispatchError || result.isError) {
-                console.error(
-                  "Transaction failed",
-                  fail?.toHuman(true),
-                  result?.toHuman(true)
-                );
-                toast.custom((t) => (
-                  <ToastContent
-                    t={t}
-                    title="Doh !"
-                    description="Transaction failed 😭"
-                    type="error"
-                  />
-                ));
-                unsubscribe();
-                return;
-              }
-            }
-          });
+          .signAndSend(
+            encodeAddress(address, SS58_PREFIX),
+            getSignAndSendCallback()
+          );
       }
       setWorking(false);
     } catch (err) {
-      const { message, cause } = err as Error;
-      const description = typeof cause === "string" ? cause : cause?.message;
-      toast.custom((t) => (
-        <ToastContent
-          type="error"
-          t={t}
-          title={message}
-          description={description}
-        />
-      ));
       console.error(err);
+      const { message, cause } = err as Error;
+      const description = typeof cause === "string" ? cause : undefined;
+      showToast({
+        title: message,
+        description,
+        type: "error",
+      });
       setWorking(false);
     }
-  }, [account, api, decimals, free, openConnectModal]);
+  }, [account, address, api, data?.transferable, openConnectModal]);
 
   const label = useMemo(() => {
     if (!isReady) return null;

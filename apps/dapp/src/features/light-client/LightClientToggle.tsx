@@ -8,6 +8,9 @@ export const LightClientToggle = () => {
   const { lightClient, toggleLightClient } = useSettings();
   const { isOpen, open, close } = useOpenClose();
 
+  // TODO remove when it works again
+  return null;
+
   return (
     <>
       <Button

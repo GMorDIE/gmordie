@@ -1,5 +1,5 @@
 import { Transition } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { default as clsx } from "clsx";
 import { ReactNode } from "react";
 
@@ -59,7 +59,7 @@ export const Drawer = ({
                 onClick={onDismiss}
                 className="transition h-10 p-2 bg-opacity-0 hover:bg-opacity-20 active:bg-opacity-20"
               >
-                <XIcon className="w-6 h-6" />
+                <XMarkIcon className="w-6 h-6" />
               </button>
             )}
           </div>

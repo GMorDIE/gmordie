@@ -1,5 +1,5 @@
 import { isValidAddress } from "../../lib/isValidAddress";
-import { XIcon } from "@heroicons/react/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import {
   ChangeEventHandler,
@@ -72,7 +72,7 @@ export const TransactionsAddress: FC<TransactionsAddressProps> = ({
         )}
         onClick={handleClearClick}
       >
-        <XIcon className="w-5 h-5" />
+        <XMarkIcon className="w-5 h-5" />
       </button>
     </div>
   );

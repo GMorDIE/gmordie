@@ -9,7 +9,7 @@ import { ConnectModal } from "./ConnectModal";
 import { CopyAddressButton } from "./CopyAddressButton";
 import { Navigation } from "./Navigation";
 import { Spinner } from "./Spinner";
-import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
@@ -43,7 +43,11 @@ export const Layout = ({
       >
         <div>
           <Button className="2xl:hidden" onClick={toggle}>
-            {isOpen ? <XIcon className="w-8" /> : <MenuIcon className="w-8" />}
+            {isOpen ? (
+              <XMarkIcon className="w-8" />
+            ) : (
+              <Bars3Icon className="w-8" />
+            )}
           </Button>
         </div>
         <div className="grow px-1 2xl:px-4">

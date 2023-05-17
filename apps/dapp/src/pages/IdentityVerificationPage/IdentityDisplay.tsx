@@ -1,7 +1,7 @@
 import { Spinner } from "../../components/Spinner";
 import { IdentityJudgements } from "./IdentityJudgements";
 import { useIdentityVerification } from "./useIdentityVerification";
-import { ShieldCheckIcon } from "@heroicons/react/solid";
+import { ShieldCheckIcon } from "@heroicons/react/24/solid";
 import clsx from "clsx";
 import { useMemo } from "react";
 

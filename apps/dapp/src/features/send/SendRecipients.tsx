@@ -1,6 +1,6 @@
 import { useSendPane } from "./context";
 import { SendFormData } from "./shared";
-import { TrashIcon } from "@heroicons/react/solid";
+import { TrashIcon } from "@heroicons/react/24/solid";
 import { isAddress } from "@polkadot/util-crypto";
 import clsx from "clsx";
 import { useCallback, useEffect } from "react";

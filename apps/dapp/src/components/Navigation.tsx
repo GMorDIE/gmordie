@@ -1,6 +1,6 @@
 import { IconTransfers, IconTrophy } from "../assets/icons";
 import { useNavigationMenu } from "../lib/NavigationMenuContext";
-import { HomeIcon, ShieldCheckIcon } from "@heroicons/react/outline";
+import { HomeIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { FC, SVGProps, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
@@ -8,7 +8,7 @@ import { NavLink, useLocation } from "react-router-dom";
 type NavigationItemProps = {
   to: string;
   label: string;
-  icon: FC<SVGProps<SVGSVGElement>>;
+  icon: FC<Omit<SVGProps<SVGSVGElement>, "ref">>;
 };
 
 const getNavigationItemClassName = ({

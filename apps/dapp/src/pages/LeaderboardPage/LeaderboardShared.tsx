@@ -1,6 +1,6 @@
 import { Address, DisplayJudgement } from "../../components/Address";
 import { LeaderboardAccount } from "./useLeaderboard";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
 import {

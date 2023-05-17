@@ -1,5 +1,9 @@
 import { Spinner } from "./Spinner";
-import { XIcon, CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
+import {
+  XMarkIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/solid";
 import clsx from "clsx";
 import { ReactNode } from "react";
 import toast, { Toast } from "react-hot-toast";
@@ -72,7 +76,7 @@ export const ToastContent = ({
         onClick={() => toast.remove(t.id)}
         className="text-white outline-none"
       >
-        <XIcon className="h-6 w-6" />
+        <XMarkIcon className="h-6 w-6" />
       </button>
     </div>
   );

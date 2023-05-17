@@ -1,7 +1,7 @@
 import { useWallet } from "../lib/WalletContext";
 import { copyToClipboard } from "../lib/copyToClipboard";
 import { HeaderButton } from "./HeaderButton";
-import { DocumentDuplicateIcon } from "@heroicons/react/solid";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 import { useCallback } from "react";
 
 export const CopyAddressButton = () => {

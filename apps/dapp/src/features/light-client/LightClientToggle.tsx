@@ -2,7 +2,7 @@ import { Button } from "../../components/Button";
 import { useSettings } from "../../lib/SettingsContext";
 import { useOpenClose } from "../../lib/useOpenClose";
 import { LightClientModal } from "./LightClientModal";
-import { MoonIcon, SunIcon } from "@heroicons/react/solid";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 
 export const LightClientToggle = () => {
   const { lightClient, toggleLightClient } = useSettings();

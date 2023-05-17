@@ -4,7 +4,7 @@ import { useIsMounted } from "../lib/useIsMounted";
 import { Address } from "./Address";
 import { Button } from "./Button";
 import { Popover, Transition } from "@headlessui/react";
-import { LogoutIcon, UserCircleIcon } from "@heroicons/react/solid";
+import { XMarkIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { InjectedAccount } from "@polkadot/extension-inject/types";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
@@ -161,7 +161,7 @@ export const AccountSwitchButton = () => {
                 className="flex gap-3 items-center p-3 py-2 text-sm font-bold text-left hover:bg-zinc-800 rounded-md sm:text-base"
               >
                 <div className="flex flex-col justify-center relative min-w-fit">
-                  <LogoutIcon className="h-8 text-zinc-300" />
+                  <XMarkIcon className="h-8 text-zinc-300" />
                 </div>
                 <div className={clsx("flex overflow-hidden flex-col grow")}>
                   <div className="overflow-hidden max-w-full text-ellipsis whitespace-nowrap flex items-center">

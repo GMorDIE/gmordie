@@ -9,7 +9,7 @@ import {
   HistoryTx,
   useTransactions,
 } from "./useTransactionsList";
-import { ArrowRightIcon } from "@heroicons/react/solid";
+import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
 import { formatDistanceToNow } from "date-fns";
@@ -85,7 +85,7 @@ const TransactionListItem = ({ tx }: TransactionListItemProps) => {
       <div>
         <TokenIcon className="h-12 w-12 sm:h-16 sm:w-16" symbol={tx.currency} />
       </div>
-      <div className="grow grid font-bold gap-y-2 gap-x-4 sm:grid-cols-[1fr_24px_1fr]">
+      <div className="grow grid font-bold gap-y-2 gap-x-4 sm:grid-cols-[1fr_24px_1fr] items-center">
         <div className="sm:flex sm:justify-end">
           <TransactionAccount account={tx.from} />
         </div>

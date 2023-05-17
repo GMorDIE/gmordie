@@ -2,7 +2,7 @@ import { IconButton } from "../../components/IconButton";
 import { IdentityJudgement } from "./IdentityJudgement";
 import { IdentityVerification } from "./useIdentityVerification";
 import { JudgementType, useIdentityVerify } from "./useIdentityVerify";
-import { ShieldCheckIcon } from "@heroicons/react/solid";
+import { ShieldCheckIcon } from "@heroicons/react/24/solid";
 import { Registration } from "@polkadot/types/interfaces/identity";
 import clsx from "clsx";
 import { Fragment, useCallback } from "react";

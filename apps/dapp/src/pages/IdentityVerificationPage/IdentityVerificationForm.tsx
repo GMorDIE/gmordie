@@ -1,9 +1,9 @@
 import { isValidAddress } from "../../lib/isValidAddress";
 import { IdentityDisplay } from "./IdentityDisplay";
-import { XIcon } from "@heroicons/react/solid";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
@@ -78,7 +78,7 @@ export const IdentityVerificationForm = () => {
             )}
             onClick={handleClearClick}
           >
-            <XIcon className="w-5 h-5" />
+            <XMarkIcon className="w-5 h-5" />
           </button>
         </div>
       </form>

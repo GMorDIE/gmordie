@@ -3,7 +3,7 @@ import { FC, SVGProps } from "react";
 
 type HeaderButtonProps = {
   text: string;
-  icon: FC<SVGProps<SVGSVGElement>>;
+  icon: FC<Omit<SVGProps<SVGSVGElement>, "ref">>;
   title?: string;
   onClick?: () => void;
 };

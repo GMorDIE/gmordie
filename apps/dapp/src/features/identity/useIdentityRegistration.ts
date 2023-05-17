@@ -22,7 +22,7 @@ export const useIdentityRegistration = (
   const api = useApi();
 
   return useQuery(
-    ["identity", address, api],
+    ["identity", address, !!api],
     async () => {
       if (!address) return null;
       if (!api) return null;

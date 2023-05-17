@@ -23,7 +23,7 @@
     "npm": ">=8.0.0",
     "node": ">=16.0.0"
   },
-  "packageManager": "yarn@1.22.18",
+  "packageManager": "yarn@3.5.1",
   "dependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.3.1"
   }

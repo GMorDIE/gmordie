@@ -1,24 +1,23 @@
 import { useApi } from "./ApiContext";
 import { SS58_PREFIX } from "./constants";
-import { injectedWindow } from "./injectedWindow";
 import { provideContext } from "./provideContext";
 import { APP_NAME } from "./settings";
 import { useOpenClose } from "./useOpenClose";
-import { Injected, InjectedAccount } from "@polkadot/extension-inject/types";
+import { web3Enable, web3AccountsSubscribe } from "@polkadot/extension-dapp";
+import {
+  InjectedExtension,
+  InjectedAccountWithMeta, //Injected, InjectedAccount
+} from "@polkadot/extension-inject/types";
 import { encodeAddress } from "@polkadot/util-crypto";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "react-use";
 
 type SignerAccount = {
-  walletKey: string;
+  source: string;
   address: string;
 };
 
 const useWalletProvider = () => {
-  // keys of wallets to enable
-  const [connectedWallets = [], setConnectedWallets, clearConnectedWallets] =
-    useLocalStorage<string[]>("gmordie.wallets", []);
-
   // main account used to sign transactions
   const [signerAccount, setSignerAccount, clearSignerAccount] =
     useLocalStorage<SignerAccount | null>("gmordie.account");
@@ -29,129 +28,106 @@ const useWalletProvider = () => {
     close: closeConnectModal,
   } = useOpenClose();
 
-  const [enabledWallets, setEnabledWallets] =
-    useState<Record<string, Injected>>();
+  const [enabledExtensions, setEnabledExtensions] =
+    useState<InjectedExtension[]>();
 
-  const [connectedAccounts = {}, setConnectedAccounts] =
-    useState<Record<string, InjectedAccount[]>>();
+  const [connectedAccounts, setConnectedAccounts] =
+    useState<InjectedAccountWithMeta[]>();
 
   // assign signer account to api
   const api = useApi();
-  useEffect(() => {
-    if (!enabledWallets || !signerAccount || !api) return;
-    const injectedWallet = enabledWallets[signerAccount.walletKey];
-    if (!injectedWallet) clearSignerAccount();
-    else api.setSigner(injectedWallet.signer);
-  }, [api, clearSignerAccount, enabledWallets, signerAccount]);
 
   const select = useCallback(
-    (account: InjectedAccount) => {
+    (account: InjectedAccountWithMeta) => {
       if (!account) clearSignerAccount();
       else {
-        const { address } = account;
-        const [walletKey] =
-          Object.entries(connectedAccounts ?? {}).find(([, accounts]) =>
-            accounts.includes(account)
-          ) ?? [];
-        if (!walletKey) clearSignerAccount();
-        else setSignerAccount({ walletKey, address });
+        const { address, meta } = account;
+        if (meta.source) {
+          setSignerAccount({ address, source: meta.source });
+        } else clearSignerAccount();
       }
     },
-    [clearSignerAccount, connectedAccounts, setSignerAccount]
+    [clearSignerAccount, setSignerAccount]
   );
 
-  const connect = useCallback(
-    async (key: string) => {
-      const injectedWallet = injectedWindow.injectedWeb3[key];
-      if (!injectedWallet?.enable) {
-        console.error("Wallet not found", key);
-      } else {
-        const enabledWallet = await injectedWallet.enable(APP_NAME);
-        setConnectedWallets((prev = []) => [
-          ...prev.filter((k) => k !== key),
-          key,
-        ]);
-        setEnabledWallets((prev = {}) => ({ ...prev, [key]: enabledWallet }));
-        const accounts = await enabledWallet.accounts.get();
-        const validAccounts = accounts.filter(
-          ({ type }) => type !== "ethereum"
-        );
-        // select first account if none is selected
-        if (
-          validAccounts.length &&
-          !validAccounts.some((va) => va.address === signerAccount?.address)
-        )
-          setSignerAccount({
-            walletKey: key,
-            address: validAccounts[0].address,
-          });
-        closeConnectModal();
-      }
-    },
-    [
-      closeConnectModal,
-      setConnectedWallets,
-      setSignerAccount,
-      signerAccount?.address,
-    ]
-  );
-
-  const [isReady, setIsReady] = useState(false);
-  const initialize = useCallback(async () => {
-    if (isReady || !api) return;
-    if (connectedWallets.length)
-      await Promise.allSettled(connectedWallets.map(connect));
-    setIsReady(true);
-  }, [api, connect, connectedWallets, isReady]);
+  const connect = useCallback(async () => {
+    const extensions = await web3Enable(APP_NAME);
+    setEnabledExtensions(extensions);
+    closeConnectModal();
+  }, [closeConnectModal]);
 
   // auto connect (only once)
+  const [isReady, setIsReady] = useState(false);
   useEffect(() => {
-    initialize();
-  }, [initialize]);
+    if (isReady || !api) return;
+    if (signerAccount) connect().then(() => setIsReady(true));
+    setIsReady(true);
+  }, [isReady, api, connect, signerAccount]);
 
   // maintain connected accounts object
   useEffect(() => {
-    if (!enabledWallets) return;
+    // web3Enable(originName) needs to be called before web3AccountsSubscribe
+    if (!enabledExtensions?.length)
+      return () => {
+        // user didn't enable any extension
+      };
 
-    // remove accounts from wallets that are not enabled
-    const validKeys = Object.keys(enabledWallets);
-    setConnectedAccounts((prev = {}) => {
-      for (const key of Object.keys(prev))
-        if (!validKeys.includes(key)) delete prev[key];
-      return prev;
-    });
-
-    // subscribe to accounts of each connected wallet
-    const unsubscribes = Object.entries(enabledWallets).map(([key, wallet]) =>
-      wallet.accounts.subscribe((accounts) => {
-        setConnectedAccounts((prev = {}) => ({
-          ...prev,
-          [key]: accounts.filter(({ type }) => type !== "ethereum"),
-        }));
-      })
+    const promUnsubscribe = web3AccountsSubscribe(
+      (accounts) => {
+        setConnectedAccounts(accounts);
+      },
+      {
+        accountType: ["sr25519"],
+        genesisHash: api?.genesisHash.toHex(),
+      }
     );
 
     // clear subscriptions
     return () => {
-      unsubscribes.forEach((unsubscribe) => unsubscribe());
+      promUnsubscribe.then((unsub) => unsub());
     };
-  }, [enabledWallets]);
+  }, [api?.genesisHash, enabledExtensions?.length]);
 
   // currently selected account
   const account = useMemo(() => {
     if (!signerAccount || !connectedAccounts) return null;
-    const acc = connectedAccounts?.[signerAccount.walletKey]?.find(
-      (acc) => acc.address === signerAccount.address
+    const acc = connectedAccounts?.find(
+      (acc) =>
+        acc.address === signerAccount.address &&
+        acc.meta.source === signerAccount.source
     );
-    return acc ? { ...acc, source: signerAccount.walletKey } : null;
+    return acc ?? null;
   }, [connectedAccounts, signerAccount]);
 
   const disconnect = useCallback(() => {
     setSignerAccount(null);
-    clearConnectedWallets();
-    setEnabledWallets({});
-  }, [clearConnectedWallets, setSignerAccount]);
+    setEnabledExtensions([]);
+  }, [setSignerAccount]);
 
+  useEffect(() => {
+    if (!enabledExtensions || !signerAccount || !api) return;
+    const injectedWallet = enabledExtensions.find(
+      (ext) => ext.name === signerAccount.source
+    );
+    if (!injectedWallet) clearSignerAccount();
+    else api.setSigner(injectedWallet.signer);
+  }, [api, clearSignerAccount, enabledExtensions, signerAccount]);
+
+  // auto connect first account
+  useEffect(() => {
+    if (
+      !signerAccount &&
+      enabledExtensions?.length &&
+      connectedAccounts?.length
+    ) {
+      setSignerAccount({
+        address: connectedAccounts[0].address,
+        source: connectedAccounts[0].meta.source,
+      });
+    }
+  });
+
+  // accounts obtained with web3AccountsSubscribe don't have avatar :(
   const avatar = useMemo(
     () => (account ? (account as { avatar?: string })?.avatar : undefined),
     [account]
@@ -173,7 +149,7 @@ const useWalletProvider = () => {
     isConnectModalOpen,
     closeConnectModal,
     openConnectModal,
-    isReady,
+    isReady: true,
   };
 };
 

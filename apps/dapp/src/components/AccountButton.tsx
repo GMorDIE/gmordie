@@ -5,10 +5,9 @@ import { Address } from "./Address";
 import { Button } from "./Button";
 import { Popover, Transition } from "@headlessui/react";
 import { XMarkIcon, UserCircleIcon } from "@heroicons/react/24/solid";
-import { InjectedAccount } from "@polkadot/extension-inject/types";
+import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 import Identicon from "@polkadot/react-identicon";
 import clsx from "clsx";
-import { useMemo } from "react";
 import { Fragment } from "react";
 import { useCallback } from "react";
 
@@ -33,16 +32,16 @@ export const AccountIcon = ({
   account,
   size = 32,
 }: {
-  account: InjectedAccount;
+  account: InjectedAccountWithMeta;
   size?: number;
 }) => {
-  const acc = account as InjectedAccount & { avatar?: string };
+  const acc = account as InjectedAccountWithMeta & { avatar?: string };
   return acc?.avatar ? (
     <img
       width={size}
       height={size}
       src={acc.avatar}
-      alt={acc.name ?? acc.address}
+      alt={acc.meta.name ?? acc.address}
     />
   ) : (
     <Identicon value={acc.address} size={size} theme="polkadot" />
@@ -60,26 +59,12 @@ export const AccountSwitchButton = () => {
   const { open: openIdentityPane } = useIdentityPane();
 
   const handleSelectAccount = useCallback(
-    (account: InjectedAccount, closePopover: () => void) => () => {
+    (account: InjectedAccountWithMeta, closePopover: () => void) => () => {
       select(account);
       closePopover();
     },
     [select]
   );
-
-  const walletAccounts = useMemo(() => {
-    if (!connectedAccounts) return [];
-    return Object.entries(connectedAccounts)
-      .map(([wallet, accounts]) =>
-        accounts.map((account) => ({
-          key: `${account.name}-${wallet}-${account.address}`,
-          wallet,
-          account,
-        }))
-      )
-      .flat()
-      .sort((a, b) => a.key.localeCompare(b.key));
-  }, [connectedAccounts]);
 
   // this won't happen, this is only for ts
   if (!currentAccount) return null;
@@ -95,7 +80,7 @@ export const AccountSwitchButton = () => {
             )}
           >
             <div className="hidden sm:flex max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap flex-col text-right">
-              <div className="text-sm">{currentAccount.name}</div>
+              <div className="text-sm">{currentAccount.meta.name}</div>
               <div className="text-xs opacity-50">
                 <Address address={currentAccount.address} keep={4} />
               </div>
@@ -112,13 +97,13 @@ export const AccountSwitchButton = () => {
             leaveTo="opacity-0 translate-y-1"
           >
             <Popover.Panel className="flex fixed right-1 z-10 flex-col max-w-[250px] bg-zinc-900 rounded-md sm:max-w-[300px] max-h-[calc(100%_-_3rem)] overflow-auto">
-              {walletAccounts?.map(({ key, wallet, account }) => (
+              {connectedAccounts?.map((account) => (
                 <button
-                  key={key}
+                  key={`${account.meta.source}-${account.address}`}
                   className={clsx(
                     "flex gap-3 items-center p-3 py-2 text-sm font-bold  text-left hover:bg-zinc-800 rounded-md sm:text-base",
                     account.address === currentAccount?.address &&
-                      wallet === currentAccount.source &&
+                      account.meta.source === currentAccount.meta.source &&
                       "font-bold bg-zinc-800 cursor-default"
                   )}
                   onClick={handleSelectAccount(account, close)}
@@ -129,7 +114,7 @@ export const AccountSwitchButton = () => {
                   <div className={clsx("flex overflow-hidden flex-col grow")}>
                     <div className="overflow-hidden max-w-full text-ellipsis whitespace-nowrap flex items-center">
                       <div className="grow overflow-hidden max-w-full text-ellipsis whitespace-nowrap ">
-                        {account.name}
+                        {account.meta.name} ({account.meta.source})
                       </div>
                     </div>
                     <div className="font-mono text-zinc-500">

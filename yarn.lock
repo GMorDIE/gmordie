@@ -983,7 +983,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/extension-inject@npm:^0.46.3":
+"@polkadot/extension-dapp@npm:^0.46.3":
+  version: 0.46.3
+  resolution: "@polkadot/extension-dapp@npm:0.46.3"
+  dependencies:
+    "@polkadot/extension-inject": 0.46.3
+    "@polkadot/util": ^12.2.1
+    "@polkadot/util-crypto": ^12.2.1
+    tslib: ^2.5.0
+  peerDependencies:
+    "@polkadot/api": "*"
+    "@polkadot/util": "*"
+    "@polkadot/util-crypto": "*"
+  checksum: d87db4c48ad981fbc11563f54e0dc4f4d2bdd07803dda8ef76785a5fae83eeaf088cdd9cabe2daf27e3e35fe8a34a6dc940706e5bd1cd2d1c4251a795cbe96b5
+  languageName: node
+  linkType: hard
+
+"@polkadot/extension-inject@npm:0.46.3, @polkadot/extension-inject@npm:^0.46.3":
   version: 0.46.3
   resolution: "@polkadot/extension-inject@npm:0.46.3"
   dependencies:
@@ -2642,6 +2658,7 @@ __metadata:
     "@hookform/resolvers": ^3.1.0
     "@open-web3/orml-types": ^2.0.1
     "@polkadot/api": ^10.7.1
+    "@polkadot/extension-dapp": ^0.46.3
     "@polkadot/extension-inject": ^0.46.3
     "@polkadot/react-identicon": ^3.4.1
     "@tailwindcss/forms": ^0.5.3

@@ -1,63 +1,10 @@
 import { useWallet } from "../lib/WalletContext";
-import { injectedWindow } from "../lib/injectedWindow";
-import { KnownWallet, knownWallets } from "../lib/knownWallets";
-import { showToast } from "../lib/showToast";
 import { Button } from "./Button";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useCallback, useMemo } from "react";
+import { Fragment } from "react";
 
 export const ConnectModal = () => {
   const { connect, isConnectModalOpen, closeConnectModal } = useWallet();
-
-  const connectWallet = useCallback(
-    (wallet: KnownWallet) => async () => {
-      // if there is a condition, check for it
-      if (wallet.condition !== undefined && !wallet.condition) {
-        window.open(wallet.downloadUrl, "_blank");
-      }
-      // if wallet isn't injected, redirect to download url
-      else if (!injectedWindow.injectedWeb3[wallet.injectedKey]) {
-        window.open(wallet.downloadUrl, "_blank");
-      } else {
-        try {
-          await connect(wallet.injectedKey);
-        } catch (err) {
-          console.error(err);
-          showToast({
-            title: "Failed to connect",
-            description: (err as Error).message,
-            type: "error",
-          });
-        }
-      }
-    },
-    [connect]
-  );
-
-  const connectTo = useCallback(
-    (walletKey: string) => async () => {
-      try {
-        await connect(walletKey);
-      } catch (err) {
-        console.error(err);
-        showToast({
-          title: "Failed to connect",
-          description: (err as Error).message,
-          type: "error",
-        });
-      }
-    },
-    [connect]
-  );
-
-  const unknownWalletKeys = useMemo(() => {
-    return Object.keys(injectedWindow.injectedWeb3 ?? {}).filter(
-      (key) => !knownWallets.find((wallet) => wallet.injectedKey === key)
-    );
-    // some wallets (ex parallel) inject after this component renders
-    // adding this dep ensures the list is up to date when displayed
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isConnectModalOpen]);
 
   return (
     <Transition appear show={isConnectModalOpen} as={Fragment}>
@@ -87,34 +34,32 @@ export const ConnectModal = () => {
             >
               <Dialog.Panel className="w-full max-w-sm overflow-hidden rounded-md bg-background p-6 text-left align-middle shadow-xl transition-all">
                 <Dialog.Title as="h3" className="text-2xl font-bold leading-6">
-                  Connect Wallet
+                  Connect your Wallet
                 </Dialog.Title>
-                <p className="py-4 text-lg">
-                  Best frens connect using Talisman!
-                </p>
-                <div className="flex flex-col gap-4">
-                  {knownWallets.map((wallet) => {
-                    const { id, name, logo: Logo } = wallet;
-                    return (
-                      <Button
-                        key={id}
-                        onClick={connectWallet(wallet)}
-                        className="h-12 text-xl normal-case flex items-center justify-center gap-2 px-3 "
-                      >
-                        {Logo ? <Logo className="text-2xl w-6 h-6" /> : null}{" "}
-                        {name}
-                      </Button>
-                    );
-                  })}
-                  {unknownWalletKeys.map((key, idx) => (
-                    <Button
-                      key={`${key}-${idx}`}
-                      onClick={connectTo(key)}
-                      className="h-12 text-xl normal-case  flex items-center justify-center gap-2 px-3 "
-                    >
-                      {key}
-                    </Button>
-                  ))}
+                <div className="flex flex-col gap-4 mt-4">
+                  <Button
+                    onClick={connect}
+                    className="min-h-[4rem] normal-case flex flex-col items-start justify-center px-3 "
+                  >
+                    <div className="text-lg font-bold text-left">
+                      Injected Wallet
+                    </div>
+                    <div className="text-sm font-semibold opacity-80 text-left">
+                      Talisman, Polkadot.js, Nova, SubWallet, etc.
+                    </div>
+                  </Button>
+                  <Button
+                    onClick={connect}
+                    disabled
+                    className="min-h-[4rem] normal-case flex flex-col items-start justify-center px-3 "
+                  >
+                    <div className="text-lg font-bold  text-left">
+                      Wallet Connect
+                    </div>
+                    <div className="text-sm font-semibold opacity-80  text-left">
+                      Coming soon...
+                    </div>
+                  </Button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

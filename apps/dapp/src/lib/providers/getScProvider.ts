@@ -1,16 +1,20 @@
 import { gmChainSpec } from "../../chainSpecs";
 import { sleep } from "../sleep";
 import { ScProvider } from "@polkadot/api";
-import { WellKnownChain } from "@substrate/connect";
+import * as Sc from "@substrate/connect";
 
 // cache provider in an object to prevent closure issues
 const PROVIDER_CACHE: Record<string, Promise<ScProvider> | undefined> = {};
 const PROVIDER_KEY = "provider";
 
 export const getScProviderInner = async () => {
-  const relayProvider = new ScProvider(WellKnownChain.ksmcc3);
+  const relayProvider = new ScProvider(Sc, Sc.WellKnownChain.ksmcc3);
 
-  const gmProvider = new ScProvider(JSON.stringify(gmChainSpec), relayProvider);
+  const gmProvider = new ScProvider(
+    Sc,
+    JSON.stringify(gmChainSpec),
+    relayProvider
+  );
   await gmProvider.connect();
 
   while (!gmProvider.isConnected) await sleep(50);

@@ -63,7 +63,7 @@ const useWalletProvider = () => {
   const connect = useCallback(
     async (key: string) => {
       const injectedWallet = injectedWindow.injectedWeb3[key];
-      if (!injectedWallet) {
+      if (!injectedWallet?.enable) {
         console.error("Wallet not found", key);
       } else {
         const enabledWallet = await injectedWallet.enable(APP_NAME);
